@@ -15,6 +15,7 @@ export default defineConfig(({ command }) => ({
         rollupOptions: {
             input: {
                 home: resolve(process.cwd(), "index.html"),
+                clock: resolve(process.cwd(), "clock/index.html"),
                 btc: resolve(process.cwd(), "btc/index.html"),
                 bible: resolve(process.cwd(), "bible/index.html"),
             },

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Clock · Open oEmbed Widget</title>
+        <meta
+            name="description"
+            content="A flip-clock showing the current time and date — a monochrome widget you can embed in Notion or any oEmbed consumer."
+        />
+        <link rel="icon" href="/favicon.ico" />
+
+        <!-- oEmbed discovery: consumers (e.g. Notion via Iframely) fetch this -->
+        <link
+            rel="alternate"
+            type="application/json+oembed"
+            href="https://vzsoares.github.io/open-oembed-widgets/clock/oembed.json"
+            title="Clock"
+        />
+
+        <!-- Open Graph fallback for consumers that don't use oEmbed -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Clock" />
+        <meta
+            property="og:description"
+            content="A flip-clock showing the current time and date."
+        />
+        <meta
+            property="og:url"
+            content="https://vzsoares.github.io/open-oembed-widgets/clock/"
+        />
+        <meta name="twitter:card" content="summary" />
+
+        <link rel="stylesheet" href="/src/styles.css" />
+        <script type="module" src="/src/widgets/clock/index.ts"></script>
+
+        <style>
+            /* Condensed, web-safe display face (no font shipping). */
+            .clock-num {
+                font-family:
+                    Impact, "Haettenschweiler", "Franklin Gothic Bold",
+                    "Arial Narrow Bold", sans-serif;
+                line-height: 1;
+                letter-spacing: 0.03em;
+                /* Re-keyed on every value change, so this plays per flip. */
+                animation: clock-flip 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            }
+
+            @keyframes clock-flip {
+                0% {
+                    transform: translateY(-60%);
+                    opacity: 0;
+                }
+                55% {
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(0);
+                }
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                .clock-num {
+                    animation: none;
+                }
+            }
+        </style>
+    </head>
+    <body class="font-sans">
+        <main
+            x-data="clockWidget"
+            x-cloak
+            class="flex min-h-screen w-full flex-col items-center justify-center gap-4 p-5 text-fg"
+        >
+            <!-- Time: one rounded tile per unit, separated by a colon -->
+            <div x-show="showTime" class="flex items-end gap-2">
+                <div class="flex items-center gap-2">
+                    <template x-for="(t, i) in parts.tiles" :key="i">
+                        <div class="flex items-center gap-2">
+                            <span
+                                x-show="i > 0"
+                                class="text-4xl font-bold text-fg/70"
+                                aria-hidden="true"
+                                >:</span
+                            >
+                            <div
+                                class="overflow-hidden rounded-lg bg-fg px-3 py-1.5 text-bg shadow-lg"
+                            >
+                                <!-- Keyed on the value so Alpine recreates the
+                                     node (and replays the flip) only on change. -->
+                                <template x-for="v in [t]" :key="t">
+                                    <span
+                                        class="clock-num block text-6xl tabular-nums"
+                                        x-text="v"
+                                    ></span>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <span
+                    x-show="parts.meridiem"
+                    class="mb-1 font-mono text-xs uppercase tracking-widest text-muted"
+                    x-text="parts.meridiem"
+                ></span>
+            </div>
+
+            <!-- Caption: Weekday | Month D, YYYY -->
+            <p
+                x-show="showDate"
+                class="text-[17px] font-bold tracking-tight text-fg"
+                x-text="parts.caption"
+            ></p>
+        </main>
+    </body>
+</html>

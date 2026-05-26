@@ -61,6 +61,44 @@ export const widgets: WidgetDef[] = [
         ],
     },
     {
+        id: "clock",
+        title: "Clock",
+        description:
+            "A flip-clock showing the current time and date, with timezone and 24-hour options.",
+        width: 360,
+        height: 160,
+        params: [
+            {
+                key: "show",
+                label: "Show",
+                options: [
+                    { id: "both", label: "Both" },
+                    { id: "time", label: "Time" },
+                    { id: "date", label: "Date" },
+                ],
+                default: "both",
+            },
+            {
+                key: "seconds",
+                label: "Seconds",
+                options: [
+                    { id: "0", label: "Off" },
+                    { id: "1", label: "On" },
+                ],
+                default: "0",
+            },
+            {
+                key: "h24",
+                label: "Hours",
+                options: [
+                    { id: "0", label: "12H" },
+                    { id: "1", label: "24H" },
+                ],
+                default: "0",
+            },
+        ],
+    },
+    {
         id: "bible",
         title: "Bible Verse",
         description: "A random Bible verse in English or Portuguese.",

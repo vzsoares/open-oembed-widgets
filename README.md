@@ -13,6 +13,7 @@ No backend — everything runs in the browser and is hosted on GitHub Pages.
 | Widget        | URL       | Description                                        |
 | ------------- | --------- | -------------------------------------------------- |
 | Bitcoin Price | `/btc/`   | Live BTC/USD price + sparkline, range 1D–1Y, ~60s. |
+| Clock         | `/clock/` | Flip-clock with time + date, timezone & 24h options. |
 | Bible Verse   | `/bible/` | Random verse in English or Portuguese.             |
 
 ## Embed
@@ -33,6 +34,9 @@ Notion's (Iframely) get a proper `rich` embed.
   when the iframe context doesn't inherit it: `?theme=dark` / `?theme=light`.
 - **Range** (BTC) — initial chart window: `?range=1d|1w|1m|3m|1y` (default `1m`).
   The range buttons inside the widget stay interactive inside the embed too.
+- **Clock** — `?show=time|date|both` (default `both`), `?seconds=1` for a
+  seconds tile, `?h24=1` for a 24-hour clock (default: locale), and
+  `?tz=Area/City` for an IANA timezone (default: viewer's local).
 - **Language** (Bible) — `?lang=en|pt` (default: viewer's locale). EN/PT buttons
   stay interactive in the embed.
 
@@ -54,6 +58,7 @@ Notion's (Iframely) get a proper `rich` embed.
 /
 ├── index.html                # widget gallery (home)
 ├── btc/index.html            # BTC widget page (embeddable)
+├── clock/index.html          # Clock widget page (embeddable)
 ├── bible/index.html          # Bible widget page (embeddable)
 ├── src/
 │   ├── home.ts               # gallery logic
@@ -62,6 +67,7 @@ Notion's (Iframely) get a proper `rich` embed.
 │   └── widgets/
 │       ├── manifest.ts       # widgets + params (single source)
 │       ├── btc/              # index.ts, price.ts, chart.ts, *.test.ts
+│       ├── clock/            # index.ts, time.ts, time.test.ts
 │       └── bible/            # index.ts, verse.ts, fallback.json, *.test.ts
 ├── scripts/gen-oembed.ts     # post-build oEmbed JSON generator
 └── vite.config.js

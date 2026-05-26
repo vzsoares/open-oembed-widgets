@@ -11,34 +11,6 @@ widgets are monochrome, transparent-background, and support `?theme=light|dark`.
 
 ---
 
-## ⏰ Clock / Date — `clock`
-
-Current date + time. No API — uses the device clock, ticks via `setInterval`.
-
-**Design** — flip-clock, modeled on
-[indify's clock widget](https://indify.co/widgets/live/clock/mDWwIPcjPWCByrEcRYqM):
-
-- Hours and minutes each render as their **own rounded tile** (one tile per
-  unit, not per digit), separated by a centered `:`.
-- Tiles are dark (`~#222`), with **white condensed display numerals**
-  (Impact-style face), rounded corners (`~8px`), and a soft drop shadow below.
-- On each change the unit **flips** — the new value animates in over the old
-  (top-half/bottom-half flip, or a simpler slide for v1).
-- Below the tiles, a single caption line — `Weekday | Month D, YYYY`
-  (e.g. `Tuesday | May 26, 2026`) — in the UI sans-serif, bold (`700`), `~17px`.
-- Honor `?theme=light|dark` via `src/lib/theme.ts`: invert tile/text so the dark
-  tiles become light on dark backgrounds. Widget background stays transparent.
-
-- **Config**
-    - `?show=time|date|both` (default `both`)
-    - `?seconds=1` — include seconds (adds a third tile)
-    - `?tz=Area/City` — IANA timezone (default: viewer's local)
-    - `?h24=1` — 24-hour clock (default: locale)
-- **Notes** — format with `Intl.DateTimeFormat` (+ `timeZone`). Tick every 1s
-  if seconds shown, else align to the next minute. Trigger the flip only when a
-  unit's value actually changes. Impact is web-safe; no font shipping needed.
-- **Size** — ~360×160.
-
 ## ⏳ Countdown — `countdown`
 
 Counts **down** to a target datetime. Shows days / hours / minutes / seconds.
