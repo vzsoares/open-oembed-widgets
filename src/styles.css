@@ -47,10 +47,16 @@
 
     body {
         margin: 0;
-        background: var(--bg);
+        /* Transparent by default so widgets blend into the embedding page
+           (e.g. Notion). The gallery opts back in with `bg-bg`. */
+        background: transparent;
         color: var(--fg);
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
+    }
+
+    html {
+        background: transparent;
     }
 
     [x-cloak] {

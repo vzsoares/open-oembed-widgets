@@ -21,16 +21,16 @@
         <script type="module" src="/src/home.ts"></script>
     </head>
     <body class="bg-bg font-sans text-fg" x-data="home" x-cloak>
-        <div class="mx-auto max-w-3xl px-6 py-12">
+        <div class="mx-auto max-w-2xl px-6 py-12 sm:py-16">
             <header class="flex items-start justify-between gap-4">
                 <div>
                     <h1 class="text-2xl font-semibold tracking-tight">
                         Notion oEmbed Widgets
                     </h1>
-                    <p class="mt-2 max-w-prose text-sm text-muted">
+                    <p class="mt-2 max-w-prose text-sm leading-relaxed text-muted">
                         Tiny, monochrome, client-side widgets you can embed in
-                        Notion (or any oEmbed consumer). Copy a widget URL,
-                        paste it into Notion, and choose “Embed”.
+                        Notion (or any oEmbed consumer). Pick a theme and range,
+                        copy the URL, paste it into Notion, and choose “Embed”.
                     </p>
                 </div>
                 <button
@@ -44,16 +44,18 @@
 
             <section class="mt-10 space-y-6">
                 <template x-for="w in widgets" :key="w.id">
-                    <article class="rounded-xl border border-border p-5">
+                    <article
+                        class="rounded-xl border border-border p-5 transition-colors hover:border-fg/40"
+                    >
                         <div class="flex items-baseline justify-between gap-3">
                             <h2
                                 class="text-base font-medium"
                                 x-text="w.title"
                             ></h2>
                             <a
-                                :href="w.id + '/'"
+                                :href="widgetUrl(w)"
                                 target="_blank"
-                                class="text-xs text-muted underline underline-offset-4 hover:text-fg"
+                                class="text-xs text-muted underline underline-offset-4 transition-colors hover:text-fg"
                                 >Open ↗</a
                             >
                         </div>
@@ -62,13 +64,34 @@
                             x-text="w.description"
                         ></p>
 
+                        <!-- Range selector (chart widgets) -->
+                        <template x-if="w.ranges">
+                            <div class="mt-4 flex flex-wrap items-center gap-1">
+                                <span class="mr-1 text-xs text-muted"
+                                    >Range</span
+                                >
+                                <template
+                                    x-for="r in w.ranges"
+                                    :key="r.id"
+                                >
+                                    <button
+                                        type="button"
+                                        @click="setRange(w, r.id)"
+                                        class="rounded px-2 py-1 font-mono text-[0.7rem] uppercase tracking-wide transition-colors"
+                                        :class="r.id === selected[w.id] ? 'bg-fg text-bg' : 'border border-border text-muted hover:text-fg'"
+                                        x-text="r.label"
+                                    ></button>
+                                </template>
+                            </div>
+                        </template>
+
                         <!-- Live preview of the actual embed -->
                         <div
                             class="mt-4 overflow-hidden rounded-lg border border-border"
                         >
                             <iframe
                                 title="Widget preview"
-                                :src="w.id + '/'"
+                                :src="widgetUrl(w)"
                                 :title="w.title + ' preview'"
                                 :height="w.height"
                                 class="block w-full"
@@ -99,7 +122,7 @@
                 <a
                     href="https://github.com/vzsoares/notion-oembed-widgets"
                     target="_blank"
-                    class="underline underline-offset-4 hover:text-fg"
+                    class="underline underline-offset-4 transition-colors hover:text-fg"
                     >Source on GitHub</a
                 >
                 · oEmbed-compliant · client-side only

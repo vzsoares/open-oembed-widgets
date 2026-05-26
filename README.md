@@ -10,26 +10,27 @@ the browser and is hosted on GitHub Pages.
 
 ## Widgets
 
-| Widget        | URL     | Description                                 |
-| ------------- | ------- | ------------------------------------------- |
-| Bitcoin Price | `/btc/` | Live BTC/USD price + 24h change, every 60s. |
+| Widget        | URL     | Description                                          |
+| ------------- | ------- | ---------------------------------------------------- |
+| Bitcoin Price | `/btc/` | Live BTC/USD price + sparkline, range 1D–1Y, ~60s.   |
 
 ## Embed in Notion
 
-1. Open the gallery, copy a widget URL (e.g. `…/notion-oembed-widgets/btc/`).
+1. Open the gallery, pick a theme + range, copy the URL
+   (e.g. `…/notion-oembed-widgets/btc/?theme=dark&range=1w`).
 2. In Notion: paste the link → **Create embed** (or type `/embed`).
 
+Widgets have **transparent** backgrounds so they blend into the embedding page.
 Each widget page advertises a static oEmbed document via
 `<link rel="alternate" type="application/json+oembed">`, so resolvers like
 Notion's (Iframely) get a proper `rich` embed.
 
-### Theme
+### Config (query params)
 
-Widgets are monochrome and follow the viewer's OS light/dark preference. Pin a
-theme with a query param when the iframe context doesn't inherit it:
-
-- `…/btc/?theme=dark`
-- `…/btc/?theme=light`
+- **Theme** — monochrome, follows the viewer's OS light/dark preference. Pin it
+  when the iframe context doesn't inherit it: `?theme=dark` / `?theme=light`.
+- **Range** (BTC) — initial chart window: `?range=1d|1w|1m|3m|1y` (default `1m`).
+  The range buttons inside the widget stay interactive inside the embed too.
 
 ## Architecture
 
@@ -37,8 +38,10 @@ theme with a query param when the iframe context doesn't inherit it:
   embed URL (`/btc/`).
 - **Static oEmbed** — `scripts/gen-oembed.ts` reads `src/widgets/manifest.ts`
   and writes `dist/<id>/oembed.json` after the Vite build.
-- **Resilient data** — the BTC widget tries CoinGecko → Binance → Coinbase →
-  Kraken (all public, key-less, CORS-enabled) and shows the first that answers.
+- **Resilient data** — the BTC chart tries CoinGecko → Binance → Coinbase
+  (all public, key-less, CORS-enabled) and uses the first that answers, so a
+  rate-limited provider transparently falls through to the next.
+- **No-dependency chart** — a hand-built SVG sparkline (`chart.ts`), monochrome.
 
 ```
 /
@@ -49,11 +52,12 @@ theme with a query param when the iframe context doesn't inherit it:
 │   ├── styles.css            # Tailwind + monochrome theme vars
 │   ├── lib/theme.ts          # light/dark resolution
 │   └── widgets/
-│       ├── manifest.ts       # single source of truth for widgets
+│       ├── manifest.ts       # widgets + range options (single source)
 │       └── btc/
-│           ├── index.ts      # Alpine component
-│           ├── price.ts      # provider chain + fallback
-│           └── price.test.ts # bun tests
+│           ├── index.ts      # Alpine component (price + chart + ranges)
+│           ├── price.ts      # series provider chain + fallback
+│           ├── chart.ts      # SVG sparkline path builder
+│           └── *.test.ts     # bun tests
 ├── scripts/gen-oembed.ts     # post-build oEmbed JSON generator
 └── vite.config.js
 ```

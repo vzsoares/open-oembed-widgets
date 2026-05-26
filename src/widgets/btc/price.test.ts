@@ -1,13 +1,13 @@
 import { describe, expect, test } from "bun:test";
 import {
     type FetchLike,
-    fetchBtcPrice,
-    PROVIDERS,
-    type PriceProvider,
+    fetchBtcSeries,
+    SERIES_PROVIDERS,
+    type SeriesProvider,
 } from "./price";
 
-function provider(name: string): PriceProvider {
-    const found = PROVIDERS.find((p) => p.name === name);
+function provider(name: string): SeriesProvider {
+    const found = SERIES_PROVIDERS.find((p) => p.name === name);
     if (!found) throw new Error(`no provider named ${name}`);
     return found;
 }
@@ -16,36 +16,37 @@ function jsonFetch(body: unknown): FetchLike {
     return async () => new Response(JSON.stringify(body), { status: 200 });
 }
 
-describe("provider parsers", () => {
-    test("CoinGecko reads price and 24h change", () => {
+describe("series provider parsers", () => {
+    test("CoinGecko maps [ms, price] pairs", () => {
         expect(
             provider("CoinGecko").parse({
-                bitcoin: { usd: 67000, usd_24h_change: 2.5 },
+                prices: [
+                    [1000, 50],
+                    [2000, 60],
+                ],
             }),
-        ).toEqual({ priceUsd: 67000, change24hPct: 2.5 });
+        ).toEqual([
+            { t: 1000, p: 50 },
+            { t: 2000, p: 60 },
+        ]);
     });
 
-    test("Binance coerces string fields", () => {
+    test("Binance reads close (index 4)", () => {
         expect(
-            provider("Binance").parse({
-                lastPrice: "67000.50",
-                priceChangePercent: "-1.25",
-            }),
-        ).toEqual({ priceUsd: 67000.5, change24hPct: -1.25 });
+            provider("Binance").parse([
+                [1000, "1", "2", "0", "55", "9"],
+                [2000, "1", "2", "0", "66", "9"],
+            ]),
+        ).toEqual([
+            { t: 1000, p: 55 },
+            { t: 2000, p: 66 },
+        ]);
     });
 
-    test("Coinbase derives change from open/last", () => {
-        expect(
-            provider("Coinbase").parse({ last: "110", open: "100" }),
-        ).toEqual({ priceUsd: 110, change24hPct: 10 });
-    });
-
-    test("Kraken reads close array and open", () => {
-        const result = provider("Kraken").parse({
-            result: { XXBTZUSD: { c: ["110.0", "1.0"], o: "100.0" } },
-        });
-        expect(result.priceUsd).toBe(110);
-        expect(result.change24hPct).toBeCloseTo(10);
+    test("Coinbase converts seconds to ms and reads close", () => {
+        expect(provider("Coinbase").parse([[1, 1, 2, 3, 55, 9]])).toEqual([
+            { t: 1000, p: 55 },
+        ]);
     });
 
     test("a malformed payload throws", () => {
@@ -54,36 +55,53 @@ describe("provider parsers", () => {
 });
 
 describe("fallback chain", () => {
-    const failing: PriceProvider = {
+    const failing: SeriesProvider = {
         name: "Failing",
-        url: "https://example.test/a",
+        url: () => "https://example.test/a",
         parse() {
             throw new Error("nope");
         },
     };
-    const working: PriceProvider = {
+    const working: SeriesProvider = {
         name: "Working",
-        url: "https://example.test/b",
+        url: () => "https://example.test/b",
         parse() {
-            return { priceUsd: 100, change24hPct: 1 };
+            return [
+                { t: 2000, p: 60 },
+                { t: 1000, p: 50 },
+            ];
         },
     };
 
-    test("falls through to the next provider on failure", async () => {
-        const quote = await fetchBtcPrice({
+    test("falls through and returns points sorted by time", async () => {
+        const series = await fetchBtcSeries(30, {
             providers: [failing, working],
             fetchImpl: jsonFetch({}),
         });
-        expect(quote.source).toBe("Working");
-        expect(quote.priceUsd).toBe(100);
+        expect(series.source).toBe("Working");
+        expect(series.points.map((pt) => pt.t)).toEqual([1000, 2000]);
+    });
+
+    test("a single-point series is rejected", async () => {
+        const onePoint: SeriesProvider = {
+            name: "One",
+            url: () => "https://example.test/c",
+            parse: () => [{ t: 1000, p: 50 }],
+        };
+        await expect(
+            fetchBtcSeries(30, {
+                providers: [onePoint],
+                fetchImpl: jsonFetch({}),
+            }),
+        ).rejects.toThrow(/all series providers failed/);
     });
 
     test("throws when every provider fails", async () => {
         await expect(
-            fetchBtcPrice({
+            fetchBtcSeries(30, {
                 providers: [failing],
                 fetchImpl: jsonFetch({}),
             }),
-        ).rejects.toThrow(/all price providers failed/);
+        ).rejects.toThrow(/all series providers failed/);
     });
 });
