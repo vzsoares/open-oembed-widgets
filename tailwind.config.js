@@ -20,6 +20,13 @@ export default {
                     "Roboto",
                     "sans-serif",
                 ],
+                serif: [
+                    "ui-serif",
+                    "Georgia",
+                    "Cambria",
+                    "Times New Roman",
+                    "serif",
+                ],
                 mono: [
                     "ui-monospace",
                     "SFMono-Regular",

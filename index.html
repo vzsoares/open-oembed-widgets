@@ -64,23 +64,33 @@
                             x-text="w.description"
                         ></p>
 
-                        <!-- Range selector (chart widgets) -->
-                        <template x-if="w.ranges">
-                            <div class="mt-4 flex flex-wrap items-center gap-1">
-                                <span class="mr-1 text-xs text-muted"
-                                    >Range</span
-                                >
+                        <!-- Config selectors (range, language, …) -->
+                        <template x-if="w.params">
+                            <div class="mt-4 space-y-2">
                                 <template
-                                    x-for="r in w.ranges"
-                                    :key="r.id"
+                                    x-for="param in w.params"
+                                    :key="param.key"
                                 >
-                                    <button
-                                        type="button"
-                                        @click="setRange(w, r.id)"
-                                        class="rounded px-2 py-1 font-mono text-[0.7rem] uppercase tracking-wide transition-colors"
-                                        :class="r.id === selected[w.id] ? 'bg-fg text-bg' : 'border border-border text-muted hover:text-fg'"
-                                        x-text="r.label"
-                                    ></button>
+                                    <div
+                                        class="flex flex-wrap items-center gap-1"
+                                    >
+                                        <span
+                                            class="mr-1 text-xs text-muted"
+                                            x-text="param.label"
+                                        ></span>
+                                        <template
+                                            x-for="opt in param.options"
+                                            :key="opt.id"
+                                        >
+                                            <button
+                                                type="button"
+                                                @click="setParam(w, param.key, opt.id)"
+                                                class="rounded px-2 py-1 font-mono text-[0.7rem] uppercase tracking-wide transition-colors"
+                                                :class="paramValue(w, param.key) === opt.id ? 'bg-fg text-bg' : 'border border-border text-muted hover:text-fg'"
+                                                x-text="opt.label"
+                                            ></button>
+                                        </template>
+                                    </div>
                                 </template>
                             </div>
                         </template>

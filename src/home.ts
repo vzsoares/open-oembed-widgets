@@ -9,13 +9,16 @@ import { type WidgetDef, widgets } from "./widgets/manifest";
 
 applyThemeFromQuery();
 
-type RangeMap = Record<string, string>;
+/** widgetId -> { paramKey: selectedOptionId } */
+type ParamMap = Record<string, Record<string, string>>;
 
-function defaultRanges(): RangeMap {
-    const map: RangeMap = {};
+function defaultParams(): ParamMap {
+    const map: ParamMap = {};
     for (const w of widgets) {
-        const fallback = w.defaultRange ?? w.ranges?.[0]?.id;
-        if (fallback) map[w.id] = fallback;
+        if (!w.params?.length) continue;
+        const group: Record<string, string> = {};
+        for (const p of w.params) group[p.key] = p.default;
+        map[w.id] = group;
     }
     return map;
 }
@@ -24,11 +27,12 @@ interface Home {
     widgets: WidgetDef[];
     copiedId: string;
     theme: Theme;
-    selected: RangeMap;
+    selected: ParamMap;
+    paramValue(w: WidgetDef, key: string): string;
     query(w: WidgetDef): string;
     widgetUrl(w: WidgetDef): string;
     embedUrl(w: WidgetDef): string;
-    setRange(w: WidgetDef, id: string): void;
+    setParam(w: WidgetDef, key: string, id: string): void;
     copy(w: WidgetDef): Promise<void>;
     toggle(): void;
     readonly themeLabel: string;
@@ -40,13 +44,22 @@ Alpine.data(
         widgets,
         copiedId: "",
         theme: getResolvedTheme(),
-        selected: defaultRanges(),
+        selected: defaultParams(),
 
-        // The embed config (theme + range) baked into the URL. Reactive, so
-        // toggling the theme or range updates the preview and copied link.
+        paramValue(w, key) {
+            return this.selected[w.id]?.[key] ?? "";
+        },
+
+        // The embed config (theme + each param) baked into the URL. Reactive,
+        // so changing the theme or a param updates the preview and copied link.
         query(w) {
             const q = new URLSearchParams({ theme: this.theme });
-            if (w.ranges?.length) q.set("range", this.selected[w.id] ?? "");
+            const group = this.selected[w.id];
+            if (group) {
+                for (const [key, value] of Object.entries(group)) {
+                    q.set(key, value);
+                }
+            }
             return q.toString();
         },
 
@@ -58,8 +71,9 @@ Alpine.data(
             return new URL(this.widgetUrl(w), window.location.href).toString();
         },
 
-        setRange(w, id) {
-            this.selected[w.id] = id;
+        setParam(w, key, id) {
+            const group = this.selected[w.id];
+            if (group) group[key] = id;
         },
 
         async copy(w) {

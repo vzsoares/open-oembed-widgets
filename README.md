@@ -10,9 +10,10 @@ the browser and is hosted on GitHub Pages.
 
 ## Widgets
 
-| Widget        | URL     | Description                                          |
-| ------------- | ------- | ---------------------------------------------------- |
-| Bitcoin Price | `/btc/` | Live BTC/USD price + sparkline, range 1D–1Y, ~60s.   |
+| Widget        | URL       | Description                                        |
+| ------------- | --------- | -------------------------------------------------- |
+| Bitcoin Price | `/btc/`   | Live BTC/USD price + sparkline, range 1D–1Y, ~60s. |
+| Bible Verse   | `/bible/` | Random verse in English or Portuguese.             |
 
 ## Embed in Notion
 
@@ -31,6 +32,8 @@ Notion's (Iframely) get a proper `rich` embed.
   when the iframe context doesn't inherit it: `?theme=dark` / `?theme=light`.
 - **Range** (BTC) — initial chart window: `?range=1d|1w|1m|3m|1y` (default `1m`).
   The range buttons inside the widget stay interactive inside the embed too.
+- **Language** (Bible) — `?lang=en|pt` (default: viewer's locale). EN/PT buttons
+  stay interactive in the embed.
 
 ## Architecture
 
@@ -39,25 +42,26 @@ Notion's (Iframely) get a proper `rich` embed.
 - **Static oEmbed** — `scripts/gen-oembed.ts` reads `src/widgets/manifest.ts`
   and writes `dist/<id>/oembed.json` after the Vite build.
 - **Resilient data** — the BTC chart tries CoinGecko → Binance → Coinbase
-  (all public, key-less, CORS-enabled) and uses the first that answers, so a
-  rate-limited provider transparently falls through to the next.
+  (all public, key-less, CORS-enabled) and uses the first that answers. The
+  Bible widget uses bible-api.com and falls back to a bundled verse list if the
+  API is unreachable, so it always renders.
 - **No-dependency chart** — a hand-built SVG sparkline (`chart.ts`), monochrome.
+- **Config via manifest** — each widget declares `params` (range, language, …);
+  the gallery renders selectors and bakes them into the embed URL.
 
 ```
 /
 ├── index.html                # widget gallery (home)
 ├── btc/index.html            # BTC widget page (embeddable)
+├── bible/index.html          # Bible widget page (embeddable)
 ├── src/
 │   ├── home.ts               # gallery logic
 │   ├── styles.css            # Tailwind + monochrome theme vars
 │   ├── lib/theme.ts          # light/dark resolution
 │   └── widgets/
-│       ├── manifest.ts       # widgets + range options (single source)
-│       └── btc/
-│           ├── index.ts      # Alpine component (price + chart + ranges)
-│           ├── price.ts      # series provider chain + fallback
-│           ├── chart.ts      # SVG sparkline path builder
-│           └── *.test.ts     # bun tests
+│       ├── manifest.ts       # widgets + params (single source)
+│       ├── btc/              # index.ts, price.ts, chart.ts, *.test.ts
+│       └── bible/            # index.ts, verse.ts, fallback.json, *.test.ts
 ├── scripts/gen-oembed.ts     # post-build oEmbed JSON generator
 └── vite.config.js
 ```

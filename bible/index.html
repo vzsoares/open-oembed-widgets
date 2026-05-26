@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bible Verse · Notion oEmbed Widget</title>
+        <meta
+            name="description"
+            content="A random Bible verse in English or Portuguese — a monochrome widget you can embed in Notion."
+        />
+        <link rel="icon" href="/favicon.ico" />
+
+        <!-- oEmbed discovery: consumers (e.g. Notion via Iframely) fetch this -->
+        <link
+            rel="alternate"
+            type="application/json+oembed"
+            href="https://vzsoares.github.io/notion-oembed-widgets/bible/oembed.json"
+            title="Bible Verse"
+        />
+
+        <!-- Open Graph fallback for consumers that don't use oEmbed -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Bible Verse" />
+        <meta
+            property="og:description"
+            content="A random Bible verse in English or Portuguese."
+        />
+        <meta
+            property="og:url"
+            content="https://vzsoares.github.io/notion-oembed-widgets/bible/"
+        />
+        <meta name="twitter:card" content="summary" />
+
+        <link rel="stylesheet" href="/src/styles.css" />
+        <script type="module" src="/src/widgets/bible/index.ts"></script>
+    </head>
+    <body class="font-sans">
+        <main
+            x-data="bibleWidget"
+            x-cloak
+            class="flex min-h-screen w-full items-center justify-center p-5 text-fg"
+        >
+            <section class="w-full max-w-md" aria-live="polite">
+                <div class="flex items-center justify-between gap-3">
+                    <!-- Language selector -->
+                    <div class="flex gap-1">
+                        <template x-for="l in langs" :key="l.id">
+                            <button
+                                type="button"
+                                @click="setLang(l.id)"
+                                class="rounded px-2 py-1 font-mono text-[0.7rem] uppercase tracking-wide transition-colors"
+                                :class="l.id === lang ? 'bg-fg text-bg' : 'text-muted hover:text-fg'"
+                                x-text="l.label"
+                            ></button>
+                        </template>
+                    </div>
+                    <!-- New verse -->
+                    <button
+                        type="button"
+                        @click="refresh()"
+                        :disabled="loading"
+                        :class="loading && 'opacity-50'"
+                        class="rounded-full border border-border px-2.5 py-1 text-xs transition-colors hover:bg-fg hover:text-bg"
+                        aria-label="New verse"
+                        title="New verse"
+                    >
+                        ↻
+                    </button>
+                </div>
+
+                <!-- Loading -->
+                <template x-if="!verse">
+                    <div class="mt-5 animate-pulse space-y-2.5">
+                        <div class="h-4 w-full rounded bg-border"></div>
+                        <div class="h-4 w-11/12 rounded bg-border"></div>
+                        <div class="h-4 w-2/3 rounded bg-border"></div>
+                        <div class="mt-4 h-3 w-28 rounded bg-border"></div>
+                    </div>
+                </template>
+
+                <!-- Verse -->
+                <template x-if="verse">
+                    <figure :class="loading && 'opacity-60'">
+                        <blockquote
+                            class="mt-5 font-serif text-lg leading-snug"
+                            x-text="quote"
+                        ></blockquote>
+                        <figcaption
+                            class="mt-4 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-muted"
+                        >
+                            <span x-text="verse.reference"></span>
+                            <span aria-hidden="true"> · </span>
+                            <span x-text="verse.translation"></span>
+                        </figcaption>
+                    </figure>
+                </template>
+            </section>
+        </main>
+    </body>
+</html>

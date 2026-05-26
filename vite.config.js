@@ -16,6 +16,7 @@ export default defineConfig(({ command }) => ({
             input: {
                 home: resolve(process.cwd(), "index.html"),
                 btc: resolve(process.cwd(), "btc/index.html"),
+                bible: resolve(process.cwd(), "bible/index.html"),
             },
         },
     },
