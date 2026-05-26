@@ -12,13 +12,6 @@ widgets are monochrome, transparent-background, and support `?theme=light|dark`.
 
 ---
 
-## 💡 Future widget ideas
-
-- **Image rotator `?album=`** — point at a hosted JSON list of URLs instead of
-  inlining them in `?src=`, to dodge URL-length limits for large albums.
-
----
-
 ### Shared building blocks (available to reuse)
 
 - `src/lib/duration.ts` — d/h/m/s splitting + display segments (used by `timer`).
@@ -32,10 +25,10 @@ widgets are monochrome, transparent-background, and support `?theme=light|dark`.
 
 Non-widget tasks for project health and tooling.
 
-- **Sync with the template** — align project with the upstream
-  [vite-alpine-tailwind-temaplate](https://github.com/vzsoares/vite-alpine-tailwind-temaplate):
-  e2e tests, biome config, and any other tooling/structure that has drifted.
 - **Contribution guide** — add a `CONTRIBUTING.md` covering the widget-adding
   workflow (manifest → page → vite input) and the quality checks to run.
 - **Configure the GitHub repo** — set the About description, topics, and enable
   the wiki.
+- **(Deferred) Major dependency upgrades** — the upstream template has since
+  moved to Vite 8, Tailwind 4, TypeScript 6, and vitest. Left for a separate
+  pass: Tailwind 3→4 in particular is a breaking migration of the styling setup.

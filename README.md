@@ -88,7 +88,9 @@ Notion's (Iframely) get a proper `rich` embed.
 │       ├── timer/            # index.ts, config.ts, config.test.ts
 │       ├── images/           # index.ts, config.ts, config.test.ts
 │       └── bible/            # index.ts, verse.ts, fallback.json, *.test.ts
+├── e2e/                      # Playwright end-to-end specs
 ├── scripts/gen-oembed.ts     # post-build oEmbed JSON generator
+├── playwright.config.ts
 └── vite.config.js
 ```
 
@@ -99,15 +101,17 @@ Requires [Bun](https://bun.sh).
 ```bash
 bun install
 bun run dev          # http://localhost:5173  (and /btc/)
-bun test             # unit tests
+bun run test         # unit tests (bun:test, src/)
+bun run test:e2e     # Playwright e2e (uses your system Chrome locally)
 bun run typecheck    # tsc, both app + tooling configs
-bun run format       # prettier
+bun run lint         # biome check
+bun run format       # biome check --write
 bun run build        # vite build + oEmbed generation -> dist/
 bun run preview      # serve the production build
 ```
 
-Deploys automatically to GitHub Pages on push to `main`
-(`.github/workflows/deploy.yml`).
+On push to `main`, CI runs lint, typecheck, unit + e2e tests, and only then
+builds and deploys to GitHub Pages (`.github/workflows/deploy.yml`).
 
 ## Add a widget
 
