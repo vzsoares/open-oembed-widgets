@@ -1,0 +1,56 @@
+{
+    "name": "vite-alpine-tailwind-temaplate",
+    "version": "1.0.0",
+    "description": "A lightweight starter template combining Vite, Alpine.js and Tailwind CSS for building modern, interactive web applications",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build --base='/vite-alpine-tailwind-temaplate'",
+        "preview": "vite preview",
+        "release": "release-it"
+    },
+    "release-it": {
+        "git": {
+            "push": true
+        },
+        "github": {
+            "release": true,
+            "releaseName": "Release ${version}"
+        },
+        "npm": {
+            "publish": false
+        }
+    },
+    "keywords": [
+        "vite",
+        "alpinejs",
+        "tailwindcss",
+        "template",
+        "starter",
+        "frontend",
+        "spa",
+        "web-development",
+        "typescript"
+    ],
+    "author": "vzsoares",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/vzsoares/vite-alpine-tailwind-temaplate.git"
+    },
+    "homepage": "https://github.com/vzsoares/vite-alpine-tailwind-temaplate",
+    "bugs": {
+        "url": "https://github.com/vzsoares/vite-alpine-tailwind-temaplate/issues"
+    },
+    "devDependencies": {
+        "@tailwindcss/postcss": "^4.0.13",
+        "@types/alpinejs": "^3.13.11",
+        "alpinejs": "^3.13.0",
+        "autoprefixer": "^10.4.14",
+        "postcss": "^8.4.24",
+        "release-it": "^19.0.4",
+        "tailwindcss": "^3.3.2",
+        "typescript": "^5.8.2",
+        "vite": "^4.3.9"
+    },
+    "dependencies": {}
+}
