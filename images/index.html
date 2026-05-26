@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Image Rotator · Open oEmbed Widget</title>
+        <meta
+            name="description"
+            content="Cross-fades through a list of images on a timer — a widget you can embed in Notion or any oEmbed consumer."
+        />
+        <link rel="icon" href="/favicon.ico" />
+
+        <!-- oEmbed discovery: consumers (e.g. Notion via Iframely) fetch this -->
+        <link
+            rel="alternate"
+            type="application/json+oembed"
+            href="https://vzsoares.github.io/open-oembed-widgets/images/oembed.json"
+            title="Image Rotator"
+        />
+
+        <!-- Open Graph fallback for consumers that don't use oEmbed -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Image Rotator" />
+        <meta
+            property="og:description"
+            content="Cross-fades through a list of images on a timer."
+        />
+        <meta
+            property="og:url"
+            content="https://vzsoares.github.io/open-oembed-widgets/images/"
+        />
+        <meta name="twitter:card" content="summary" />
+
+        <link rel="stylesheet" href="/src/styles.css" />
+        <script type="module" src="/src/widgets/images/index.ts"></script>
+    </head>
+    <body class="font-sans">
+        <main
+            x-data="imagesWidget"
+            x-cloak
+            @mouseenter="pause()"
+            @mouseleave="start()"
+            class="relative h-screen w-screen overflow-hidden"
+        >
+            <!-- Two stacked layers cross-fade between the current and next image -->
+            <img
+                :src="slots[0]"
+                :class="layerClass(0)"
+                class="absolute inset-0 h-full w-full transition-opacity duration-700 ease-in-out"
+                alt=""
+                draggable="false"
+            />
+            <img
+                :src="slots[1]"
+                :class="layerClass(1)"
+                class="absolute inset-0 h-full w-full transition-opacity duration-700 ease-in-out"
+                alt=""
+                draggable="false"
+            />
+        </main>
+    </body>
+</html>

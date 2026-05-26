@@ -22,9 +22,10 @@ export interface ParamOption {
 
 /**
  * How a param is rendered in the gallery: a row of option buttons (`select`,
- * the default) or a free `datetime-local` picker (`datetime`).
+ * the default), a free `datetime-local` picker (`datetime`), or a free
+ * `text` field (`text`).
  */
-export type ParamType = "select" | "datetime";
+export type ParamType = "select" | "datetime" | "text";
 
 /** A configurable widget option surfaced as a query param + gallery selector. */
 export interface WidgetParam {
@@ -34,9 +35,11 @@ export interface WidgetParam {
     label: string;
     /** Defaults to "select". */
     type?: ParamType;
-    /** Required for `select`; omitted for `datetime`. */
+    /** Required for `select`; omitted for `datetime`/`text`. */
     options?: ParamOption[];
-    /** Default option id, or "" for an unset datetime (widget picks a default). */
+    /** Placeholder for a `text` input. */
+    placeholder?: string;
+    /** Default option id, or "" for an unset datetime/text (widget picks one). */
     default: string;
 }
 
@@ -50,6 +53,25 @@ export interface WidgetDef {
     height: number;
     /** Configurable options (rendered as selectors in the gallery). */
     params?: WidgetParam[];
+}
+
+export interface Dimensions {
+    width: number;
+    height: number;
+}
+
+/**
+ * A widget's embed dimensions. The widget fills whatever box it's given, so an
+ * `orient=portrait` selection simply swaps width/height (e.g. 480×270 → 270×480).
+ */
+export function dimensionsFor(
+    w: WidgetDef,
+    params?: Record<string, string>,
+): Dimensions {
+    if (params?.orient === "portrait") {
+        return { width: w.height, height: w.width };
+    }
+    return { width: w.width, height: w.height };
 }
 
 /** Single source of truth: the gallery, previews and oEmbed JSON all use it. */
@@ -157,6 +179,60 @@ export const widgets: WidgetDef[] = [
                     { id: "pt", label: "PT" },
                 ],
                 default: "en",
+            },
+        ],
+    },
+    {
+        id: "images",
+        title: "Image Rotator",
+        description:
+            "Cross-fades through a list of images on a timer (set ?src= to a comma-separated list).",
+        width: 480,
+        height: 270,
+        params: [
+            {
+                key: "src",
+                label: "Images",
+                type: "text",
+                placeholder: "https://…/a.jpg, https://…/b.jpg",
+                default: "",
+            },
+            {
+                key: "orient",
+                label: "Orientation",
+                options: [
+                    { id: "landscape", label: "Landscape" },
+                    { id: "portrait", label: "Portrait" },
+                ],
+                default: "landscape",
+            },
+            {
+                key: "mode",
+                label: "Order",
+                options: [
+                    { id: "sequential", label: "Sequential" },
+                    { id: "random", label: "Random" },
+                ],
+                default: "sequential",
+            },
+            {
+                key: "every",
+                label: "Every",
+                options: [
+                    { id: "4", label: "4s" },
+                    { id: "8", label: "8s" },
+                    { id: "12", label: "12s" },
+                ],
+                default: "8",
+            },
+            {
+                key: "fit",
+                label: "Fit",
+                options: [
+                    { id: "cover", label: "Cover" },
+                    { id: "contain", label: "Contain" },
+                ],
+                default: "cover",
             },
         ],
     },

@@ -98,13 +98,18 @@
                                                 </template>
                                             </span>
                                         </template>
-                                        <!-- datetime: a free date/time picker -->
-                                        <template x-if="param.type === 'datetime'">
+                                        <!-- datetime / text: a free input.
+                                             Commit on change (not per keystroke)
+                                             so the preview doesn't reload mid-edit. -->
+                                        <template
+                                            x-if="param.type === 'datetime' || param.type === 'text'"
+                                        >
                                             <input
-                                                type="datetime-local"
+                                                :type="param.type === 'datetime' ? 'datetime-local' : 'text'"
                                                 :value="paramValue(w, param.key)"
-                                                @input="setParam(w, param.key, $event.target.value)"
-                                                class="rounded border border-border bg-transparent px-2 py-1 font-mono text-[0.7rem] text-fg"
+                                                :placeholder="param.placeholder ?? ''"
+                                                @change="setParam(w, param.key, $event.target.value)"
+                                                class="min-w-0 flex-1 rounded border border-border bg-transparent px-2 py-1 font-mono text-[0.7rem] text-fg placeholder:text-muted"
                                             />
                                         </template>
                                     </div>
@@ -112,15 +117,19 @@
                             </div>
                         </template>
 
-                        <!-- Live preview of the actual embed -->
+                        <!-- Live preview of the actual embed. Portrait shapes
+                             (width < height) are width-capped and centered; the
+                             rest stay full-width as before. -->
                         <div
                             class="mt-4 overflow-hidden rounded-lg border border-border"
+                            :class="dims(w).width < dims(w).height && 'mx-auto'"
+                            :style="dims(w).width < dims(w).height ? `width:${dims(w).width}px;max-width:100%` : ''"
                         >
                             <iframe
                                 title="Widget preview"
                                 :src="widgetUrl(w)"
                                 :title="w.title + ' preview'"
-                                :height="w.height"
+                                :height="dims(w).height"
                                 class="block w-full"
                                 loading="lazy"
                             ></iframe>

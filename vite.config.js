@@ -17,6 +17,7 @@ export default defineConfig(({ command }) => ({
                 home: resolve(process.cwd(), "index.html"),
                 clock: resolve(process.cwd(), "clock/index.html"),
                 timer: resolve(process.cwd(), "timer/index.html"),
+                images: resolve(process.cwd(), "images/index.html"),
                 btc: resolve(process.cwd(), "btc/index.html"),
                 bible: resolve(process.cwd(), "bible/index.html"),
             },

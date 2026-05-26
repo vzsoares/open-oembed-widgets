@@ -1,6 +1,7 @@
 # Widget backlog
 
-Planned widgets. Each is **client-side only** and follows the existing pattern:
+All originally planned widgets have shipped (clock, timer, image rotator).
+New widgets are **client-side only** and follow the existing pattern:
 
 1. add an entry to `src/widgets/manifest.ts`
 2. create `<id>/index.html` + `src/widgets/<id>/index.ts`
@@ -11,21 +12,10 @@ widgets are monochrome, transparent-background, and support `?theme=light|dark`.
 
 ---
 
-## 🖼️ Image rotator — `images`
+## 💡 Future widget ideas
 
-Cycles through a list of images — "one then the other", sequentially or
-randomly, every X seconds.
-
-- **Config**
-    - `?src=url1,url2,url3` — comma-separated image URLs (required)
-      _(or `?album=` pointing at a hosted JSON list, TBD)_
-    - `?mode=sequential|random` (default `sequential`)
-    - `?every=8` — seconds per image (default ~8)
-    - `?fit=cover|contain` (default `cover`)
-- **Notes** — preload the next image; cross-fade on swap; pause on hover.
-  Watch URL length limits when many images are inlined → the hosted-list option
-  is the scalable path. CORS only matters if we read pixels (we don't).
-- **Size** — ~480×270 (16:9).
+- **Image rotator `?album=`** — point at a hosted JSON list of URLs instead of
+  inlining them in `?src=`, to dodge URL-length limits for large albums.
 
 ---
 

@@ -5,7 +5,12 @@ import {
     type Theme,
     toggleTheme,
 } from "./lib/theme";
-import { type WidgetDef, widgets } from "./widgets/manifest";
+import {
+    type Dimensions,
+    dimensionsFor,
+    type WidgetDef,
+    widgets,
+} from "./widgets/manifest";
 
 applyThemeFromQuery();
 
@@ -29,6 +34,7 @@ interface Home {
     theme: Theme;
     selected: ParamMap;
     paramValue(w: WidgetDef, key: string): string;
+    dims(w: WidgetDef): Dimensions;
     query(w: WidgetDef): string;
     widgetUrl(w: WidgetDef): string;
     embedUrl(w: WidgetDef): string;
@@ -48,6 +54,11 @@ Alpine.data(
 
         paramValue(w, key) {
             return this.selected[w.id]?.[key] ?? "";
+        },
+
+        // Preview/embed dimensions, honoring the orientation selection.
+        dims(w) {
+            return dimensionsFor(w, this.selected[w.id]);
         },
 
         // The embed config (theme + each param) baked into the URL. Reactive,

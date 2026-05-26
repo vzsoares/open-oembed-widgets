@@ -15,6 +15,7 @@ No backend — everything runs in the browser and is hosted on GitHub Pages.
 | Bitcoin Price | `/btc/`   | Live BTC/USD price + sparkline, range 1D–1Y, ~60s. |
 | Clock         | `/clock/` | Flip-clock with time + date, timezone & 24h options. |
 | Timer         | `/timer/` | Countdown or count-up in days/hours/minutes/seconds. |
+| Image Rotator | `/images/`| Cross-fades through a list of images on a timer.   |
 | Bible Verse   | `/bible/` | Random verse in English or Portuguese.             |
 
 ## Embed
@@ -43,6 +44,13 @@ Notion's (Iframely) get a proper `rich` embed.
   New Year if unset. The gallery's date picker emits the mode-neutral `?date=ISO`
   (used when `?to`/`?from` are absent). Also `?units=dhms|dhm`, `?label=...`
   caption, and `?done=...` text shown when a countdown hits zero.
+- **Image Rotator** — `?src=url1,url2,url3` (comma-separated image URLs; falls
+  back to bundled demo images if unset), `?mode=sequential|random` (default
+  `sequential`), `?every=8` seconds per image, and `?fit=cover|contain`
+  (default `cover`). Hover to pause. `?orient=landscape|portrait` picks the box
+  shape — the widget fills either; the gallery sizes the preview and copy URL to
+  match (portrait swaps to 270×480). oEmbed advertises the landscape default, so
+  portrait embeds may need the iframe sized manually in strict oEmbed consumers.
 - **Language** (Bible) — `?lang=en|pt` (default: viewer's locale). EN/PT buttons
   stay interactive in the embed.
 
@@ -66,7 +74,9 @@ Notion's (Iframely) get a proper `rich` embed.
 ├── btc/index.html            # BTC widget page (embeddable)
 ├── clock/index.html          # Clock widget page (embeddable)
 ├── timer/index.html          # Timer widget page (embeddable)
+├── images/index.html         # Image Rotator widget page (embeddable)
 ├── bible/index.html          # Bible widget page (embeddable)
+├── public/demo/              # bundled demo images for the rotator
 ├── src/
 │   ├── home.ts               # gallery logic
 │   ├── styles.css            # Tailwind + monochrome theme vars
@@ -76,6 +86,7 @@ Notion's (Iframely) get a proper `rich` embed.
 │       ├── btc/              # index.ts, price.ts, chart.ts, *.test.ts
 │       ├── clock/            # index.ts, time.ts, time.test.ts
 │       ├── timer/            # index.ts, config.ts, config.test.ts
+│       ├── images/           # index.ts, config.ts, config.test.ts
 │       └── bible/            # index.ts, verse.ts, fallback.json, *.test.ts
 ├── scripts/gen-oembed.ts     # post-build oEmbed JSON generator
 └── vite.config.js

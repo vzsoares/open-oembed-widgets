@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="270" viewBox="0 0 480 270">
+  <rect width="480" height="270" fill="#454545"/>
+  <polygon points="240,60 300,168 180,168" fill="none" stroke="#fafafa" stroke-width="10" stroke-linejoin="round"/>
+  <text x="240" y="232" font-family="ui-sans-serif, system-ui, sans-serif" font-size="20" font-weight="700" letter-spacing="6" fill="#d4d4d4" text-anchor="middle">DEMO 03</text>
+</svg>
