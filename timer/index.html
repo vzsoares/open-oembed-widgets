@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Timer · Open oEmbed Widget</title>
+        <meta
+            name="description"
+            content="A countdown or count-up timer in days, hours, minutes and seconds — a monochrome widget you can embed in Notion or any oEmbed consumer."
+        />
+        <link rel="icon" href="/favicon.ico" />
+
+        <!-- oEmbed discovery: consumers (e.g. Notion via Iframely) fetch this -->
+        <link
+            rel="alternate"
+            type="application/json+oembed"
+            href="https://vzsoares.github.io/open-oembed-widgets/timer/oembed.json"
+            title="Timer"
+        />
+
+        <!-- Open Graph fallback for consumers that don't use oEmbed -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Timer" />
+        <meta
+            property="og:description"
+            content="A countdown or count-up timer in days, hours, minutes and seconds."
+        />
+        <meta
+            property="og:url"
+            content="https://vzsoares.github.io/open-oembed-widgets/timer/"
+        />
+        <meta name="twitter:card" content="summary" />
+
+        <link rel="stylesheet" href="/src/styles.css" />
+        <script type="module" src="/src/widgets/timer/index.ts"></script>
+    </head>
+    <body class="font-sans">
+        <main
+            x-data="timerWidget"
+            x-cloak
+            class="flex min-h-screen w-full flex-col items-center justify-center gap-4 p-5 text-fg"
+            aria-live="polite"
+        >
+            <!-- Countdown reached zero -->
+            <template x-if="done">
+                <div class="flex flex-col items-center gap-2">
+                    <p
+                        class="text-4xl font-bold tracking-tight"
+                        x-text="config.doneText"
+                    ></p>
+                    <p
+                        x-show="config.label"
+                        class="font-mono text-xs uppercase tracking-[0.15em] text-muted"
+                        x-text="config.label"
+                    ></p>
+                </div>
+            </template>
+
+            <!-- Running: one segment per unit (days / hrs / min / sec) -->
+            <template x-if="!done">
+                <div class="flex flex-col items-center gap-4">
+                    <div class="flex items-start gap-5">
+                        <template x-for="s in segments" :key="s.label">
+                            <div class="flex flex-col items-center">
+                                <span
+                                    class="text-5xl font-bold leading-none tabular-nums"
+                                    x-text="s.value"
+                                ></span>
+                                <span
+                                    class="mt-2 font-mono text-[0.65rem] uppercase tracking-[0.15em] text-muted"
+                                    x-text="s.label"
+                                ></span>
+                            </div>
+                        </template>
+                    </div>
+                    <p
+                        x-show="config.label"
+                        class="text-[15px] font-bold tracking-tight"
+                        x-text="config.label"
+                    ></p>
+                </div>
+            </template>
+        </main>
+    </body>
+</html>

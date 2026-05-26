@@ -20,13 +20,23 @@ export interface ParamOption {
     label: string;
 }
 
+/**
+ * How a param is rendered in the gallery: a row of option buttons (`select`,
+ * the default) or a free `datetime-local` picker (`datetime`).
+ */
+export type ParamType = "select" | "datetime";
+
 /** A configurable widget option surfaced as a query param + gallery selector. */
 export interface WidgetParam {
     /** Query-param name, e.g. "range" or "lang". */
     key: string;
     /** Gallery label, e.g. "Range". */
     label: string;
-    options: ParamOption[];
+    /** Defaults to "select". */
+    type?: ParamType;
+    /** Required for `select`; omitted for `datetime`. */
+    options?: ParamOption[];
+    /** Default option id, or "" for an unset datetime (widget picks a default). */
     default: string;
 }
 
@@ -95,6 +105,40 @@ export const widgets: WidgetDef[] = [
                     { id: "1", label: "24H" },
                 ],
                 default: "0",
+            },
+        ],
+    },
+    {
+        id: "timer",
+        title: "Timer",
+        description:
+            "A countdown or count-up in days/hours/minutes/seconds (set ?to= or ?from=).",
+        width: 420,
+        height: 160,
+        params: [
+            {
+                key: "mode",
+                label: "Mode",
+                options: [
+                    { id: "down", label: "Down" },
+                    { id: "up", label: "Up" },
+                ],
+                default: "down",
+            },
+            {
+                key: "date",
+                label: "Date",
+                type: "datetime",
+                default: "",
+            },
+            {
+                key: "units",
+                label: "Units",
+                options: [
+                    { id: "dhms", label: "D H M S" },
+                    { id: "dhm", label: "D H M" },
+                ],
+                default: "dhms",
             },
         ],
     },

@@ -14,6 +14,7 @@ No backend — everything runs in the browser and is hosted on GitHub Pages.
 | ------------- | --------- | -------------------------------------------------- |
 | Bitcoin Price | `/btc/`   | Live BTC/USD price + sparkline, range 1D–1Y, ~60s. |
 | Clock         | `/clock/` | Flip-clock with time + date, timezone & 24h options. |
+| Timer         | `/timer/` | Countdown or count-up in days/hours/minutes/seconds. |
 | Bible Verse   | `/bible/` | Random verse in English or Portuguese.             |
 
 ## Embed
@@ -37,6 +38,11 @@ Notion's (Iframely) get a proper `rich` embed.
 - **Clock** — `?show=time|date|both` (default `both`), `?seconds=1` for a
   seconds tile, `?h24=1` for a 24-hour clock (default: locale), and
   `?tz=Area/City` for an IANA timezone (default: viewer's local).
+- **Timer** — `?mode=down|up` (default `down`). Down counts to `?to=ISO`, up
+  counts from `?from=ISO` (e.g. `?to=2026-12-31T23:59:59Z`); both default to the
+  New Year if unset. The gallery's date picker emits the mode-neutral `?date=ISO`
+  (used when `?to`/`?from` are absent). Also `?units=dhms|dhm`, `?label=...`
+  caption, and `?done=...` text shown when a countdown hits zero.
 - **Language** (Bible) — `?lang=en|pt` (default: viewer's locale). EN/PT buttons
   stay interactive in the embed.
 
@@ -59,15 +65,17 @@ Notion's (Iframely) get a proper `rich` embed.
 ├── index.html                # widget gallery (home)
 ├── btc/index.html            # BTC widget page (embeddable)
 ├── clock/index.html          # Clock widget page (embeddable)
+├── timer/index.html          # Timer widget page (embeddable)
 ├── bible/index.html          # Bible widget page (embeddable)
 ├── src/
 │   ├── home.ts               # gallery logic
 │   ├── styles.css            # Tailwind + monochrome theme vars
-│   ├── lib/theme.ts          # light/dark resolution
+│   ├── lib/                  # theme.ts, duration.ts, interval.ts (+ *.test.ts)
 │   └── widgets/
 │       ├── manifest.ts       # widgets + params (single source)
 │       ├── btc/              # index.ts, price.ts, chart.ts, *.test.ts
 │       ├── clock/            # index.ts, time.ts, time.test.ts
+│       ├── timer/            # index.ts, config.ts, config.test.ts
 │       └── bible/            # index.ts, verse.ts, fallback.json, *.test.ts
 ├── scripts/gen-oembed.ts     # post-build oEmbed JSON generator
 └── vite.config.js

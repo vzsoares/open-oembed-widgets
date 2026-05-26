@@ -79,17 +79,33 @@
                                             class="mr-1 text-xs text-muted"
                                             x-text="param.label"
                                         ></span>
+                                        <!-- select: a row of option buttons -->
                                         <template
-                                            x-for="opt in param.options"
-                                            :key="opt.id"
+                                            x-if="(param.type ?? 'select') === 'select'"
                                         >
-                                            <button
-                                                type="button"
-                                                @click="setParam(w, param.key, opt.id)"
-                                                class="rounded px-2 py-1 font-mono text-[0.7rem] uppercase tracking-wide transition-colors"
-                                                :class="paramValue(w, param.key) === opt.id ? 'bg-fg text-bg' : 'border border-border text-muted hover:text-fg'"
-                                                x-text="opt.label"
-                                            ></button>
+                                            <span class="contents">
+                                                <template
+                                                    x-for="opt in param.options"
+                                                    :key="opt.id"
+                                                >
+                                                    <button
+                                                        type="button"
+                                                        @click="setParam(w, param.key, opt.id)"
+                                                        class="rounded px-2 py-1 font-mono text-[0.7rem] uppercase tracking-wide transition-colors"
+                                                        :class="paramValue(w, param.key) === opt.id ? 'bg-fg text-bg' : 'border border-border text-muted hover:text-fg'"
+                                                        x-text="opt.label"
+                                                    ></button>
+                                                </template>
+                                            </span>
+                                        </template>
+                                        <!-- datetime: a free date/time picker -->
+                                        <template x-if="param.type === 'datetime'">
+                                            <input
+                                                type="datetime-local"
+                                                :value="paramValue(w, param.key)"
+                                                @input="setParam(w, param.key, $event.target.value)"
+                                                class="rounded border border-border bg-transparent px-2 py-1 font-mono text-[0.7rem] text-fg"
+                                            />
                                         </template>
                                     </div>
                                 </template>

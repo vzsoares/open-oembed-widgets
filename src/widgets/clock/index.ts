@@ -1,4 +1,5 @@
 import Alpine from "alpinejs";
+import { alignedInterval } from "../../lib/interval";
 import { applyThemeFromQuery } from "../../lib/theme";
 import {
     type ClockConfig,
@@ -14,10 +15,9 @@ const config = parseClockConfig(window.location.search);
 interface ClockWidget {
     config: ClockConfig;
     now: Date;
-    timer: ReturnType<typeof setTimeout> | null;
+    stop: (() => void) | null;
     init(): void;
     destroy(): void;
-    tick(): void;
     readonly parts: ClockParts;
     readonly showTime: boolean;
     readonly showDate: boolean;
@@ -28,24 +28,19 @@ Alpine.data(
     (): ClockWidget => ({
         config,
         now: new Date(),
-        timer: null,
+        stop: null,
 
+        // Tick on the second boundary when seconds show, else the minute
+        // boundary — aligned and self-correcting (see lib/interval).
         init() {
-            this.tick();
+            const step = this.config.seconds ? 1000 : 60_000;
+            this.stop = alignedInterval(step, () => {
+                this.now = new Date();
+            });
         },
 
         destroy() {
-            if (this.timer !== null) clearTimeout(this.timer);
-        },
-
-        // Self-correcting: align the next tick to the upcoming second (or
-        // minute) boundary so the display doesn't drift and survives tab
-        // throttling instead of accumulating late timers.
-        tick() {
-            this.now = new Date();
-            const step = this.config.seconds ? 1000 : 60_000;
-            const delay = step - (Date.now() % step);
-            this.timer = setTimeout(() => this.tick(), delay);
+            this.stop?.();
         },
 
         get parts() {

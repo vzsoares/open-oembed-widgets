@@ -57,7 +57,9 @@ Alpine.data(
             const group = this.selected[w.id];
             if (group) {
                 for (const [key, value] of Object.entries(group)) {
-                    q.set(key, value);
+                    // Skip blanks (e.g. an unset datetime) so the widget keeps
+                    // its own default rather than receiving an empty param.
+                    if (value !== "") q.set(key, value);
                 }
             }
             return q.toString();

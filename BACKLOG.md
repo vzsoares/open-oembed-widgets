@@ -11,30 +11,6 @@ widgets are monochrome, transparent-background, and support `?theme=light|dark`.
 
 ---
 
-## ⏳ Countdown — `countdown`
-
-Counts **down** to a target datetime. Shows days / hours / minutes / seconds.
-
-- **Config**
-    - `?to=ISO` — target instant, e.g. `?to=2026-12-31T23:59:59Z` (required)
-    - `?label=New%20Year` — caption
-    - `?units=dhms|dhm` — granularity
-- **Notes** — when it reaches zero, show a "done" state (`?done=...` text).
-  Reuse a shared `src/lib/duration.ts` with count-up.
-- **Size** — ~420×160.
-
-## ⏱️ Count-up — `countup`
-
-Counts **up** (elapsed) from a start datetime. Same UI as countdown, opposite
-direction.
-
-- **Config**
-    - `?from=ISO` — start instant (required)
-    - `?label=...`, `?units=dhms|dhm`
-- **Notes** — share duration formatting + the tick loop with `countdown`
-  (consider one `timer` widget with `?mode=up|down`).
-- **Size** — ~420×160.
-
 ## 🖼️ Image rotator — `images`
 
 Cycles through a list of images — "one then the other", sequentially or
@@ -53,11 +29,12 @@ randomly, every X seconds.
 
 ---
 
-### Shared building blocks to extract as these land
+### Shared building blocks (available to reuse)
 
-- `src/lib/duration.ts` — humanized d/h/m/s formatting (countdown + count-up).
-- `src/lib/interval.ts` — a self-correcting tick that survives tab throttling.
-- A `?theme=` is already handled by `src/lib/theme.ts`.
+- `src/lib/duration.ts` — d/h/m/s splitting + display segments (used by `timer`).
+- `src/lib/interval.ts` — a self-correcting tick that survives tab throttling
+  (used by `clock` and `timer`).
+- `src/lib/theme.ts` — `?theme=light|dark` resolution.
 
 ---
 
