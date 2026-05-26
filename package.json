@@ -1,8 +1,8 @@
 {
-    "name": "notion-oembed-widgets",
+    "name": "open-oembed-widgets",
     "version": "1.1.0",
     "type": "module",
-    "description": "Tiny, monochrome, client-side widgets you can embed in Notion via oEmbed. Deployed to GitHub Pages.",
+    "description": "Tiny, monochrome, client-side widgets you can embed in Notion or any oEmbed consumer. Deployed to GitHub Pages.",
     "scripts": {
         "dev": "vite",
         "build": "vite build && bun scripts/gen-oembed.ts",
@@ -26,11 +26,11 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/vzsoares/notion-oembed-widgets.git"
+        "url": "https://github.com/vzsoares/open-oembed-widgets.git"
     },
-    "homepage": "https://vzsoares.github.io/notion-oembed-widgets/",
+    "homepage": "https://vzsoares.github.io/open-oembed-widgets/",
     "bugs": {
-        "url": "https://github.com/vzsoares/notion-oembed-widgets/issues"
+        "url": "https://github.com/vzsoares/open-oembed-widgets/issues"
     },
     "dependencies": {
         "alpinejs": "^3.13.0"

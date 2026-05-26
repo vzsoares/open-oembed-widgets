@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "notion-oembed-widgets",
+      "name": "open-oembed-widgets",
       "dependencies": {
         "alpinejs": "^3.13.0",
       },

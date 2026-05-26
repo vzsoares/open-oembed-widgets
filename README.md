@@ -1,12 +1,12 @@
-# Notion oEmbed Widgets
+# Open oEmbed Widgets
 
 ![License](https://img.shields.io/badge/license-MIT-black)
 
-Tiny, monochrome, **client-side** widgets you can embed in [Notion](https://notion.so)
-(or any [oEmbed](https://oembed.com/) consumer). No backend — everything runs in
-the browser and is hosted on GitHub Pages.
+Tiny, monochrome, **client-side** widgets you can embed in any
+[oEmbed](https://oembed.com/) consumer — [Notion](https://notion.so) and others.
+No backend — everything runs in the browser and is hosted on GitHub Pages.
 
-**Live:** https://vzsoares.github.io/notion-oembed-widgets/
+**Live:** https://vzsoares.github.io/open-oembed-widgets/
 
 ## Widgets
 
@@ -15,11 +15,12 @@ the browser and is hosted on GitHub Pages.
 | Bitcoin Price | `/btc/`   | Live BTC/USD price + sparkline, range 1D–1Y, ~60s. |
 | Bible Verse   | `/bible/` | Random verse in English or Portuguese.             |
 
-## Embed in Notion
+## Embed
 
 1. Open the gallery, pick a theme + range, copy the URL
-   (e.g. `…/notion-oembed-widgets/btc/?theme=dark&range=1w`).
-2. In Notion: paste the link → **Create embed** (or type `/embed`).
+   (e.g. `…/open-oembed-widgets/btc/?theme=dark&range=1w`).
+2. Paste the link into your tool's embed block
+   (in Notion: **Create embed**, or type `/embed`).
 
 Widgets have **transparent** backgrounds so they blend into the embedding page.
 Each widget page advertises a static oEmbed document via

@@ -86,3 +86,17 @@ randomly, every X seconds.
 - `src/lib/duration.ts` — humanized d/h/m/s formatting (countdown + count-up).
 - `src/lib/interval.ts` — a self-correcting tick that survives tab throttling.
 - A `?theme=` is already handled by `src/lib/theme.ts`.
+
+---
+
+## Project / repo chores
+
+Non-widget tasks for project health and tooling.
+
+- **Sync with the template** — align project with the upstream
+  [vite-alpine-tailwind-temaplate](https://github.com/vzsoares/vite-alpine-tailwind-temaplate):
+  e2e tests, biome config, and any other tooling/structure that has drifted.
+- **Contribution guide** — add a `CONTRIBUTING.md` covering the widget-adding
+  workflow (manifest → page → vite input) and the quality checks to run.
+- **Configure the GitHub repo** — set the About description, topics, and enable
+  the wiki.

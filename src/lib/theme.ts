@@ -25,8 +25,9 @@ export function toggleTheme(): Theme {
 }
 
 /**
- * Apply a `?theme=light|dark` override. Notion iframes don't reliably inherit
- * the page color scheme, so the embed URL can pin one explicitly.
+ * Apply a `?theme=light|dark` override. Embed iframes (e.g. Notion) don't
+ * reliably inherit the page color scheme, so the embed URL can pin one
+ * explicitly.
  */
 export function applyThemeFromQuery(): void {
     const param = new URLSearchParams(window.location.search).get("theme");

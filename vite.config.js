@@ -1,8 +1,8 @@
 import { resolve } from "node:path";
 import { defineConfig, searchForWorkspaceRoot } from "vite";
 
-// Deployed under https://vzsoares.github.io/notion-oembed-widgets/
-const REPO_BASE = "/notion-oembed-widgets/";
+// Deployed under https://vzsoares.github.io/open-oembed-widgets/
+const REPO_BASE = "/open-oembed-widgets/";
 
 export default defineConfig(({ command }) => ({
     // Each widget is its own page, so dev/preview must serve real files

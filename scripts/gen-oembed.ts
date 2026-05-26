@@ -5,7 +5,7 @@ import { widgets } from "../src/widgets/manifest";
 // Static oEmbed: with no backend we can't host a dynamic endpoint, so we
 // pre-generate one JSON document per widget. The widget pages link to these
 // via <link rel="alternate" type="application/json+oembed">.
-const SITE_URL = "https://vzsoares.github.io/notion-oembed-widgets";
+const SITE_URL = "https://vzsoares.github.io/open-oembed-widgets";
 const DIST = resolve(process.cwd(), "dist");
 
 for (const w of widgets) {
@@ -18,7 +18,7 @@ for (const w of widgets) {
     const oembed = {
         version: "1.0",
         type: "rich",
-        provider_name: "Notion oEmbed Widgets",
+        provider_name: "Open oEmbed Widgets",
         provider_url: SITE_URL,
         title: w.title,
         html,
