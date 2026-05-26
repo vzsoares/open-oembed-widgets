@@ -119,7 +119,9 @@ builds and deploys to GitHub Pages (`.github/workflows/deploy.yml`).
 2. Create `<id>/index.html` + `src/widgets/<id>/index.ts`.
 3. Register the page in `vite.config.js` (`build.rollupOptions.input`).
 
-oEmbed JSON and the gallery card are generated from the manifest.
+oEmbed JSON and the gallery card are generated from the manifest. See
+[CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow, config-param types,
+and the quality checks to run.
 
 ## License
 

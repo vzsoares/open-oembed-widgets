@@ -25,8 +25,6 @@ widgets are monochrome, transparent-background, and support `?theme=light|dark`.
 
 Non-widget tasks for project health and tooling.
 
-- **Contribution guide** — add a `CONTRIBUTING.md` covering the widget-adding
-  workflow (manifest → page → vite input) and the quality checks to run.
 - **Configure the GitHub repo** — set the About description, topics, and enable
   the wiki.
 - **(Deferred) Major dependency upgrades** — the upstream template has since
