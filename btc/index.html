@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bitcoin Price · Notion oEmbed Widget</title>
+        <meta
+            name="description"
+            content="Live BTC/USD price and 24h change — a monochrome widget you can embed in Notion."
+        />
+        <link rel="icon" href="/favicon.ico" />
+
+        <!-- oEmbed discovery: consumers (e.g. Notion via Iframely) fetch this -->
+        <link
+            rel="alternate"
+            type="application/json+oembed"
+            href="https://vzsoares.github.io/notion-oembed-widgets/btc/oembed.json"
+            title="Bitcoin Price"
+        />
+
+        <!-- Open Graph fallback for consumers that don't use oEmbed -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Bitcoin Price" />
+        <meta
+            property="og:description"
+            content="Live BTC/USD price and 24h change."
+        />
+        <meta
+            property="og:url"
+            content="https://vzsoares.github.io/notion-oembed-widgets/btc/"
+        />
+        <meta name="twitter:card" content="summary" />
+
+        <link rel="stylesheet" href="/src/styles.css" />
+        <script type="module" src="/src/widgets/btc/index.ts"></script>
+    </head>
+    <body class="font-sans">
+        <main
+            x-data="btcWidget"
+            x-cloak
+            class="flex min-h-screen w-full select-none items-center justify-center bg-bg p-5 text-fg"
+        >
+            <section class="w-full max-w-sm" aria-live="polite">
+                <!-- Loading -->
+                <template x-if="status === 'loading'">
+                    <div class="animate-pulse space-y-3">
+                        <div class="h-3 w-24 rounded bg-border"></div>
+                        <div class="h-10 w-40 rounded bg-border"></div>
+                        <div class="h-6 w-24 rounded-full bg-border"></div>
+                    </div>
+                </template>
+
+                <!-- Error -->
+                <template x-if="status === 'error'">
+                    <div class="space-y-3">
+                        <p class="text-sm text-muted">
+                            Couldn't load the Bitcoin price.
+                        </p>
+                        <button
+                            type="button"
+                            @click="load()"
+                            class="rounded border border-border px-3 py-1.5 text-sm transition-colors hover:bg-fg hover:text-bg"
+                        >
+                            Retry
+                        </button>
+                    </div>
+                </template>
+
+                <!-- Ready -->
+                <template x-if="status === 'ready'">
+                    <div>
+                        <div class="flex items-baseline justify-between gap-3">
+                            <h1
+                                class="text-[0.7rem] font-medium uppercase tracking-[0.18em] text-muted"
+                            >
+                                BTC / USD
+                            </h1>
+                            <span
+                                class="text-[0.7rem] text-muted"
+                                x-text="updatedText"
+                            ></span>
+                        </div>
+
+                        <p
+                            class="mt-3 font-mono text-[2.75rem] font-semibold leading-none tabular-nums"
+                            x-text="priceText"
+                        ></p>
+
+                        <div class="mt-3 flex items-center gap-2">
+                            <span
+                                class="inline-flex items-center gap-1 rounded-full border border-fg px-2.5 py-1 font-mono text-sm tabular-nums"
+                                :class="direction === 'up' && 'bg-fg text-bg'"
+                            >
+                                <span
+                                    class="text-[0.65rem] leading-none"
+                                    x-text="arrow"
+                                ></span>
+                                <span x-text="changeText"></span>
+                            </span>
+                            <span class="text-xs text-muted">24h change</span>
+                        </div>
+                    </div>
+                </template>
+            </section>
+        </main>
+    </body>
+</html>

@@ -1,56 +1,48 @@
 {
-    "name": "vite-alpine-tailwind-temaplate",
+    "name": "notion-oembed-widgets",
     "version": "1.0.0",
-    "description": "A lightweight starter template combining Vite, Alpine.js and Tailwind CSS for building modern, interactive web applications",
+    "type": "module",
+    "description": "Tiny, monochrome, client-side widgets you can embed in Notion via oEmbed. Deployed to GitHub Pages.",
     "scripts": {
         "dev": "vite",
-        "build": "vite build --base='/vite-alpine-tailwind-temaplate'",
+        "build": "vite build && bun scripts/gen-oembed.ts",
         "preview": "vite preview",
-        "release": "release-it"
-    },
-    "release-it": {
-        "git": {
-            "push": true
-        },
-        "github": {
-            "release": true,
-            "releaseName": "Release ${version}"
-        },
-        "npm": {
-            "publish": false
-        }
+        "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.tools.json",
+        "test": "bun test",
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
     },
     "keywords": [
+        "notion",
+        "oembed",
+        "widgets",
+        "bitcoin",
         "vite",
         "alpinejs",
         "tailwindcss",
-        "template",
-        "starter",
-        "frontend",
-        "spa",
-        "web-development",
-        "typescript"
+        "github-pages"
     ],
     "author": "vzsoares",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/vzsoares/vite-alpine-tailwind-temaplate.git"
+        "url": "https://github.com/vzsoares/notion-oembed-widgets.git"
     },
-    "homepage": "https://github.com/vzsoares/vite-alpine-tailwind-temaplate",
+    "homepage": "https://vzsoares.github.io/notion-oembed-widgets/",
     "bugs": {
-        "url": "https://github.com/vzsoares/vite-alpine-tailwind-temaplate/issues"
+        "url": "https://github.com/vzsoares/notion-oembed-widgets/issues"
+    },
+    "dependencies": {
+        "alpinejs": "^3.13.0"
     },
     "devDependencies": {
-        "@tailwindcss/postcss": "^4.0.13",
         "@types/alpinejs": "^3.13.11",
-        "alpinejs": "^3.13.0",
+        "@types/bun": "^1.1.0",
         "autoprefixer": "^10.4.14",
         "postcss": "^8.4.24",
-        "release-it": "^19.0.4",
-        "tailwindcss": "^3.3.2",
+        "prettier": "^3.3.0",
+        "tailwindcss": "^3.4.0",
         "typescript": "^5.8.2",
-        "vite": "^4.3.9"
-    },
-    "dependencies": {}
+        "vite": "^5.4.0"
+    }
 }

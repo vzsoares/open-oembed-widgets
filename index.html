@@ -3,309 +3,106 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Vite Alpine Tailwind Template</title>
+        <title>Notion oEmbed Widgets</title>
         <meta
             name="description"
-            content="A starter template using Vite, Alpine.js and Tailwind CSS"
-        />
-        <meta
-            name="keywords"
-            content="vite, alpine.js, tailwind css, template, starter"
+            content="Tiny, monochrome, client-side widgets you can embed in Notion via oEmbed."
         />
         <meta name="author" content="vzsoares" />
-
-        <!-- Open Graph meta tags for social sharing -->
-        <meta property="og:title" content="Vite Alpine Tailwind Template" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Notion oEmbed Widgets" />
         <meta
             property="og:description"
-            content="A modern starter template with Vite, Alpine.js and Tailwind CSS"
+            content="Tiny, monochrome, client-side widgets you can embed in Notion via oEmbed."
         />
-        <meta property="og:type" content="website" />
         <link rel="icon" href="/favicon.ico" />
 
-        <!-- Styles -->
-        <link rel="stylesheet" href="./src/styles.css" />
-        <script type="module" src="./src/app.ts"></script>
+        <link rel="stylesheet" href="/src/styles.css" />
+        <script type="module" src="/src/home.ts"></script>
     </head>
-    <body
-        x-data="{
-            darkMode: window.matchMedia('(prefers-color-scheme: dark)').matches
-        }"
-        :class="darkMode ? 'dark bg-gray-900 text-white' : 'bg-white text-gray-900'"
-        class="m-0 p-0 font-sans transition-colors duration-300"
-        x-cloak
-    >
-        <!-- Hero section -->
-        <div class="min-h-screen flex flex-col">
-            <!-- Navigation -->
-            <nav class="py-6 px-8 flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <!-- Logo/Brand -->
-                    <div class="flex items-center">
-                        <span
-                            class="text-2xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 text-transparent bg-clip-text"
-                            >VAT</span
-                        >
-                        <span class="text-lg ml-2 opacity-80">Template</span>
-                    </div>
-                </div>
-
-                <!-- Navigation links -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a
-                        href="https://vitejs.dev"
-                        target="_blank"
-                        class="hover:text-purple-500 transition-colors"
-                        >Vite</a
-                    >
-                    <a
-                        href="https://alpinejs.dev"
-                        target="_blank"
-                        class="hover:text-blue-500 transition-colors"
-                        >Alpine.js</a
-                    >
-                    <a
-                        href="https://tailwindcss.com"
-                        target="_blank"
-                        class="hover:text-teal-500 transition-colors"
-                        >Tailwind</a
-                    >
-                    <a
-                        href="https://github.com/vzsoares/vite-alpine-tailwind-temaplate"
-                        target="_blank"
-                        class="hover:text-gray-500 transition-colors"
-                        >GitHub</a
-                    >
-                </div>
-
-                <!-- Theme toggle -->
-                <button
-                    @click="darkMode = !darkMode"
-                    class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
-                    aria-label="Toggle dark mode"
-                >
-                    <svg
-                        x-show="!darkMode"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                    >
-                        <path
-                            d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
-                        />
-                    </svg>
-                    <svg
-                        x-show="darkMode"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                    >
-                        <path
-                            fill-rule="evenodd"
-                            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                            clip-rule="evenodd"
-                        />
-                    </svg>
-                </button>
-            </nav>
-
-            <!-- Hero content -->
-            <div
-                class="flex-1 flex flex-col items-center justify-center px-4 relative overflow-hidden"
-            >
-                <!-- Gradient background -->
-                <div class="absolute inset-0 overflow-hidden z-0">
-                    <div
-                        class="absolute -inset-[10%] opacity-50 dark:opacity-30 bg-gradient-to-r from-purple-100 via-blue-100 to-teal-100 dark:from-purple-900/30 dark:via-blue-900/30 dark:to-teal-900/30 blur-3xl"
-                    ></div>
-                    <!-- Grid background pattern -->
-                    <div
-                        class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9InJnYmEoMTI4LCAxMjgsIDEyOCwgMC4xKSI+PHBhdGggZD0iTTAgMGg0MHY0MEgwVjB6bTQwIDQwVjBoNDB2NDBINDBeiS8+PC9nPjwvZz48L3N2Zz4=')] opacity-10"
-                    ></div>
-                </div>
-
-                <div class="relative z-10 text-center max-w-3xl mx-auto">
-                    <!-- Logo group -->
-                    <div
-                        class="flex items-center justify-center space-x-8 mb-8"
-                    >
-                        <img
-                            src="https://vitejs.dev/logo.svg"
-                            alt="Vite logo"
-                            class="h-16 w-16 animate-pulse"
-                            style="animation-duration: 3s"
-                        />
-                        <div class="text-4xl font-light">+</div>
-                        <img
-                            src="https://alpinejs.dev/alpine_long.svg"
-                            alt="Alpine.js logo"
-                            class="h-10 dark:invert"
-                        />
-                        <div class="text-4xl font-light">+</div>
-                        <img
-                            src="https://tailwindcss.com/favicons/apple-touch-icon.png"
-                            alt="Tailwind CSS logo"
-                            class="h-14 w-14"
-                        />
-                    </div>
-
-                    <!-- Headline -->
-                    <h1
-                        class="text-5xl font-bold mb-6 bg-gradient-to-r from-purple-600 via-blue-600 to-teal-600 text-transparent bg-clip-text"
-                    >
-                        Vite + Alpine + Tailwind
+    <body class="bg-bg font-sans text-fg" x-data="home" x-cloak>
+        <div class="mx-auto max-w-3xl px-6 py-12">
+            <header class="flex items-start justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl font-semibold tracking-tight">
+                        Notion oEmbed Widgets
                     </h1>
-
-                    <!-- Description -->
-                    <p class="text-xl opacity-80 mb-8 max-w-2xl mx-auto">
-                        A lightweight and powerful starter template for building
-                        modern, interactive web applications with speed and
-                        simplicity.
+                    <p class="mt-2 max-w-prose text-sm text-muted">
+                        Tiny, monochrome, client-side widgets you can embed in
+                        Notion (or any oEmbed consumer). Copy a widget URL,
+                        paste it into Notion, and choose “Embed”.
                     </p>
-
-                    <!-- CTA Buttons -->
-                    <div class="flex flex-wrap justify-center gap-4">
-                        <a
-                            href="https://github.com/vzsoares/vite-alpine-tailwind-temaplate"
-                            target="_blank"
-                            class="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md shadow-lg hover:shadow-xl transition-all duration-200"
-                        >
-                            Get Started
-                        </a>
-                        <a
-                            href="https://github.com/vzsoares/vite-alpine-tailwind-temaplate"
-                            target="_blank"
-                            class="px-6 py-3 border border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 rounded-md font-medium transition-colors duration-200"
-                        >
-                            View on GitHub
-                        </a>
-                    </div>
                 </div>
-            </div>
+                <button
+                    type="button"
+                    @click="toggle()"
+                    class="shrink-0 rounded-full border border-border px-3 py-1.5 text-xs transition-colors hover:bg-fg hover:text-bg"
+                    aria-label="Toggle theme"
+                    x-text="themeLabel"
+                ></button>
+            </header>
 
-            <!-- Features section -->
-            <div class="py-16 px-8">
-                <div class="max-w-6xl mx-auto">
-                    <h2 class="text-3xl font-bold text-center mb-12">
-                        Features
-                    </h2>
+            <section class="mt-10 space-y-6">
+                <template x-for="w in widgets" :key="w.id">
+                    <article class="rounded-xl border border-border p-5">
+                        <div class="flex items-baseline justify-between gap-3">
+                            <h2
+                                class="text-base font-medium"
+                                x-text="w.title"
+                            ></h2>
+                            <a
+                                :href="w.id + '/'"
+                                target="_blank"
+                                class="text-xs text-muted underline underline-offset-4 hover:text-fg"
+                                >Open ↗</a
+                            >
+                        </div>
+                        <p
+                            class="mt-1 text-sm text-muted"
+                            x-text="w.description"
+                        ></p>
 
-                    <div class="grid md:grid-cols-3 gap-8">
-                        <!-- Vite -->
+                        <!-- Live preview of the actual embed -->
                         <div
-                            class="p-6 rounded-xl bg-white/10 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 transition-all hover:shadow-lg"
+                            class="mt-4 overflow-hidden rounded-lg border border-border"
                         >
-                            <div class="flex items-center mb-4">
-                                <img
-                                    src="https://vitejs.dev/logo.svg"
-                                    alt="Vite"
-                                    class="h-8 w-8 mr-3"
-                                />
-                                <h3 class="text-xl font-semibold">Vite</h3>
-                            </div>
-                            <p class="opacity-80">
-                                Lightning fast development server and optimized
-                                builds with hot module replacement and true ESM
-                                support.
-                            </p>
+                            <iframe
+                                :src="w.id + '/'"
+                                :title="w.title + ' preview'"
+                                :height="w.height"
+                                class="block w-full"
+                                loading="lazy"
+                            ></iframe>
                         </div>
 
-                        <!-- Alpine.js -->
-                        <div
-                            class="p-6 rounded-xl bg-white/10 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 transition-all hover:shadow-lg"
-                        >
-                            <div class="flex items-center mb-4">
-                                <img
-                                    src="https://alpinejs.dev/favicon.png"
-                                    alt="Alpine.js"
-                                    class="h-8 w-8 mr-3"
-                                />
-                                <h3 class="text-xl font-semibold">Alpine.js</h3>
-                            </div>
-                            <p class="opacity-80">
-                                Minimal JavaScript framework for adding
-                                interactive behavior to your markup with simple
-                                directives.
-                            </p>
+                        <!-- Copyable embed URL -->
+                        <div class="mt-4 flex items-center gap-2">
+                            <code
+                                class="flex-1 truncate rounded border border-border px-2.5 py-1.5 font-mono text-xs text-muted"
+                                x-text="embedUrl(w)"
+                            ></code>
+                            <button
+                                type="button"
+                                @click="copy(w)"
+                                class="shrink-0 rounded border border-border px-3 py-1.5 text-xs transition-colors hover:bg-fg hover:text-bg"
+                                x-text="copiedId === w.id ? 'Copied' : 'Copy'"
+                            ></button>
                         </div>
+                    </article>
+                </template>
+            </section>
 
-                        <!-- Tailwind CSS -->
-                        <div
-                            class="p-6 rounded-xl bg-white/10 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 transition-all hover:shadow-lg"
-                        >
-                            <div class="flex items-center mb-4">
-                                <img
-                                    src="https://tailwindcss.com/favicons/apple-touch-icon.png"
-                                    alt="Tailwind CSS"
-                                    class="h-8 w-8 mr-3"
-                                />
-                                <h3 class="text-xl font-semibold">
-                                    Tailwind CSS
-                                </h3>
-                            </div>
-                            <p class="opacity-80">
-                                Utility-first CSS framework for rapidly building
-                                custom user interfaces without leaving your
-                                HTML.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Footer -->
             <footer
-                class="py-8 px-8 border-t border-gray-200 dark:border-gray-800 mt-auto"
+                class="mt-12 border-t border-border pt-6 text-xs text-muted"
             >
-                <div
-                    class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center"
+                <a
+                    href="https://github.com/vzsoares/notion-oembed-widgets"
+                    target="_blank"
+                    class="underline underline-offset-4 hover:text-fg"
+                    >Source on GitHub</a
                 >
-                    <div class="mb-4 md:mb-0">
-                        <span class="opacity-70">Created by </span>
-                        <a
-                            href="https://github.com/vzsoares"
-                            target="_blank"
-                            class="font-medium hover:text-purple-500"
-                            >vzsoares</a
-                        >
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <a
-                            href="https://vitejs.dev"
-                            target="_blank"
-                            class="opacity-70 hover:opacity-100 transition-opacity"
-                            >Vite</a
-                        >
-                        <a
-                            href="https://alpinejs.dev"
-                            target="_blank"
-                            class="opacity-70 hover:opacity-100 transition-opacity"
-                            >Alpine.js</a
-                        >
-                        <a
-                            href="https://tailwindcss.com"
-                            target="_blank"
-                            class="opacity-70 hover:opacity-100 transition-opacity"
-                            >Tailwind</a
-                        >
-                        <a
-                            href="https://github.com/vzsoares/vite-alpine-tailwind-temaplate"
-                            target="_blank"
-                            class="opacity-70 hover:opacity-100 transition-opacity"
-                            >GitHub</a
-                        >
-                    </div>
-                </div>
+                · oEmbed-compliant · client-side only
             </footer>
         </div>
-
-        <!-- Add this style to prevent FOUC (Flash Of Unstyled Content) -->
-        <style>
-            [x-cloak] {
-                display: none !important;
-            }
-        </style>
     </body>
 </html>

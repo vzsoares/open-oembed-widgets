@@ -1,10 +1,28 @@
+import { resolve } from "node:path";
 import { defineConfig, searchForWorkspaceRoot } from "vite";
 
-export default defineConfig({
+// Deployed under https://vzsoares.github.io/notion-oembed-widgets/
+const REPO_BASE = "/notion-oembed-widgets/";
+
+export default defineConfig(({ command }) => ({
+    // Each widget is its own page, so dev/preview must serve real files
+    // instead of falling back to index.html.
+    appType: "mpa",
+    // Dev stays at "/" for convenience; the GitHub Pages base is only
+    // applied to the production build.
+    base: command === "build" ? REPO_BASE : "/",
+    build: {
+        rollupOptions: {
+            input: {
+                home: resolve(process.cwd(), "index.html"),
+                btc: resolve(process.cwd(), "btc/index.html"),
+            },
+        },
+    },
     server: {
         fs: {
             allow: [searchForWorkspaceRoot(process.cwd())],
-            strict: false, // Disable strict file serving restrictions
+            strict: false,
         },
     },
-});
+}));

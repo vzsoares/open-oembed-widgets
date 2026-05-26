@@ -1,3 +1,59 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    /* Light is the default; dark follows the OS unless an explicit
+       data-theme is set (e.g. via ?theme=dark). */
+    :root {
+        --bg: #ffffff;
+        --fg: #0a0a0a;
+        --muted: #737373;
+        --border: #e5e5e5;
+        color-scheme: light;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --bg: #000000;
+            --fg: #fafafa;
+            --muted: #a3a3a3;
+            --border: #262626;
+            color-scheme: dark;
+        }
+    }
+
+    /* Explicit overrides win over the OS preference. */
+    [data-theme="light"] {
+        --bg: #ffffff;
+        --fg: #0a0a0a;
+        --muted: #737373;
+        --border: #e5e5e5;
+        color-scheme: light;
+    }
+
+    [data-theme="dark"] {
+        --bg: #000000;
+        --fg: #fafafa;
+        --muted: #a3a3a3;
+        --border: #262626;
+        color-scheme: dark;
+    }
+
+    html,
+    body {
+        height: 100%;
+    }
+
+    body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}

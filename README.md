@@ -1,62 +1,88 @@
-# Vite + Alpine.js + Tailwind CSS Template
+# Notion oEmbed Widgets
 
-![Template Stack](https://img.shields.io/badge/stack-Vite%20%7C%20Alpine.js%20%7C%20Tailwind%20CSS-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
+![License](https://img.shields.io/badge/license-MIT-black)
 
-A lightweight starter template combining Vite, Alpine.js, and Tailwind CSS for building modern, interactive web applications.
+Tiny, monochrome, **client-side** widgets you can embed in [Notion](https://notion.so)
+(or any [oEmbed](https://oembed.com/) consumer). No backend — everything runs in
+the browser and is hosted on GitHub Pages.
 
-## Features
+**Live:** https://vzsoares.github.io/notion-oembed-widgets/
 
-- ⚡️ **Vite** - Lightning fast development server with HMR
-- 🗻 **Alpine.js** - Minimal JavaScript framework for adding interactivity
-- 🎨 **Tailwind CSS** - Utility-first CSS framework
-- 📦 **TypeScript** - Type safety for your JavaScript
+## Widgets
 
-## Quick Start
+| Widget        | URL     | Description                                 |
+| ------------- | ------- | ------------------------------------------- |
+| Bitcoin Price | `/btc/` | Live BTC/USD price + 24h change, every 60s. |
 
-```bash
-# Clone the repository
-git clone https://github.com/vzsoares/vite-alpine-tailwind-temaplate.git my-project
+## Embed in Notion
 
-# Navigate to the directory
-cd my-project
+1. Open the gallery, copy a widget URL (e.g. `…/notion-oembed-widgets/btc/`).
+2. In Notion: paste the link → **Create embed** (or type `/embed`).
 
-# Install dependencies
-npm install
+Each widget page advertises a static oEmbed document via
+`<link rel="alternate" type="application/json+oembed">`, so resolvers like
+Notion's (Iframely) get a proper `rich` embed.
 
-# Start development server
-npm run dev
-```
+### Theme
 
-## Build for Production
+Widgets are monochrome and follow the viewer's OS light/dark preference. Pin a
+theme with a query param when the iframe context doesn't inherit it:
 
-```bash
-npm run build
-```
+- `…/btc/?theme=dark`
+- `…/btc/?theme=light`
 
-## Preview Production Build
+## Architecture
 
-```bash
-npm run preview
-```
-
-## Project Structure
+- **Multi-page** Vite build — one HTML entry per widget gives each a stable
+  embed URL (`/btc/`).
+- **Static oEmbed** — `scripts/gen-oembed.ts` reads `src/widgets/manifest.ts`
+  and writes `dist/<id>/oembed.json` after the Vite build.
+- **Resilient data** — the BTC widget tries CoinGecko → Binance → Coinbase →
+  Kraken (all public, key-less, CORS-enabled) and shows the first that answers.
 
 ```
 /
-├── public/        # Static assets
-├── src/           # Source files
-│   ├── app.ts     # Main Alpine.js application
-│   └── styles.css # Main CSS file with Tailwind imports
-├── index.html     # Entry HTML file
-├── vite.config.js # Vite configuration
-└── tailwind.config.js # Tailwind configuration
+├── index.html                # widget gallery (home)
+├── btc/index.html            # BTC widget page (embeddable)
+├── src/
+│   ├── home.ts               # gallery logic
+│   ├── styles.css            # Tailwind + monochrome theme vars
+│   ├── lib/theme.ts          # light/dark resolution
+│   └── widgets/
+│       ├── manifest.ts       # single source of truth for widgets
+│       └── btc/
+│           ├── index.ts      # Alpine component
+│           ├── price.ts      # provider chain + fallback
+│           └── price.test.ts # bun tests
+├── scripts/gen-oembed.ts     # post-build oEmbed JSON generator
+└── vite.config.js
 ```
+
+## Develop
+
+Requires [Bun](https://bun.sh).
+
+```bash
+bun install
+bun run dev          # http://localhost:5173  (and /btc/)
+bun test             # unit tests
+bun run typecheck    # tsc, both app + tooling configs
+bun run format       # prettier
+bun run build        # vite build + oEmbed generation -> dist/
+bun run preview      # serve the production build
+```
+
+Deploys automatically to GitHub Pages on push to `main`
+(`.github/workflows/deploy.yml`).
+
+## Add a widget
+
+1. Add an entry to `src/widgets/manifest.ts`.
+2. Create `<id>/index.html` + `src/widgets/<id>/index.ts`.
+3. Register the page in `vite.config.js` (`build.rollupOptions.input`).
+
+oEmbed JSON and the gallery card are generated from the manifest.
 
 ## License
 
-[MIT License](LICENSE)
-
----
-
-Created by [vzsoares](https://github.com/vzsoares)
+[MIT](LICENSE) · Created by [vzsoares](https://github.com/vzsoares)
