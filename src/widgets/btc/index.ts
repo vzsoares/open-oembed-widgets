@@ -1,20 +1,37 @@
 import Alpine from "alpinejs";
 import { applyThemeFromQuery } from "../../lib/theme";
 import { btcRanges, type RangeOption } from "../manifest";
-import { buildChartPaths, type ChartPaths } from "./chart";
+import { buildChartPaths, type ChartPaths, chartPoints } from "./chart";
 import { type BtcSeries, fetchBtcSeries } from "./price";
 
 applyThemeFromQuery();
 
 const REFRESH_MS = 60_000;
 const DEFAULT_RANGE = "1m";
+const VIEW_W = 300;
+const VIEW_H = 96;
 
 type Direction = "up" | "down" | "flat";
+
+interface HoverInfo {
+    /** Position on the chart, as a percentage of its box. */
+    xPct: number;
+    yPct: number;
+    priceText: string;
+    dateText: string;
+}
 
 const priceFmt = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
     maximumFractionDigits: 2,
+});
+
+const dateFmt = new Intl.DateTimeFormat([], {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
 });
 
 function initialRange(): string {
@@ -33,17 +50,20 @@ interface BtcWidget {
     series: BtcSeries | null;
     loading: boolean;
     failed: boolean;
+    hoverIndex: number | null;
     timer: ReturnType<typeof setInterval> | null;
     init(): void;
     destroy(): void;
     load(): Promise<void>;
     setRange(id: string): void;
+    onHover(event: MouseEvent): void;
     readonly priceText: string;
     readonly changePct: number;
     readonly changeText: string;
     readonly direction: Direction;
     readonly arrow: string;
     readonly chart: ChartPaths;
+    readonly hover: HoverInfo | null;
     readonly updatedText: string;
 }
 
@@ -55,6 +75,7 @@ Alpine.data(
         series: null,
         loading: true,
         failed: false,
+        hoverIndex: null,
         timer: null,
 
         init() {
@@ -83,7 +104,21 @@ Alpine.data(
             this.range = id;
             this.series = null; // show the skeleton while the new window loads
             this.failed = false;
+            this.hoverIndex = null;
             void this.load();
+        },
+
+        onHover(event) {
+            const pts = this.series?.points;
+            const target = event.currentTarget;
+            if (!pts || pts.length === 0 || !(target instanceof HTMLElement)) {
+                return;
+            }
+            const rect = target.getBoundingClientRect();
+            const frac =
+                rect.width > 0 ? (event.clientX - rect.left) / rect.width : 0;
+            const clamped = Math.min(1, Math.max(0, frac));
+            this.hoverIndex = Math.round(clamped * (pts.length - 1));
         },
 
         get priceText() {
@@ -121,6 +156,25 @@ Alpine.data(
             const pts = this.series?.points;
             if (!pts) return { line: "", area: "" };
             return buildChartPaths(pts.map((pt) => pt.p));
+        },
+
+        get hover() {
+            const pts = this.series?.points;
+            if (!pts || this.hoverIndex === null) return null;
+            const i = Math.min(Math.max(this.hoverIndex, 0), pts.length - 1);
+            const point = pts[i];
+            const coord = chartPoints(
+                pts.map((pt) => pt.p),
+                VIEW_W,
+                VIEW_H,
+            )[i];
+            if (!point || !coord) return null;
+            return {
+                xPct: (coord.x / VIEW_W) * 100,
+                yPct: (coord.y / VIEW_H) * 100,
+                priceText: priceFmt.format(point.p),
+                dateText: dateFmt.format(new Date(point.t)),
+            };
         },
 
         get updatedText() {

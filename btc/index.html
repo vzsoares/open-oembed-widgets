@@ -102,28 +102,58 @@
                             </span>
                         </div>
 
-                        <!-- Sparkline -->
-                        <svg
-                            class="mt-4 h-24 w-full overflow-visible text-fg"
-                            viewBox="0 0 300 96"
-                            preserveAspectRatio="none"
-                            aria-hidden="true"
+                        <!-- Sparkline + hover -->
+                        <div
+                            class="relative mt-4 h-24"
+                            @mousemove="onHover($event)"
+                            @mouseleave="hoverIndex = null"
                         >
-                            <path
-                                :d="chart.area"
-                                fill="currentColor"
-                                class="opacity-[0.08]"
-                            />
-                            <path
-                                :d="chart.line"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                                stroke-linejoin="round"
-                                stroke-linecap="round"
-                                vector-effect="non-scaling-stroke"
-                            />
-                        </svg>
+                            <svg
+                                class="h-full w-full overflow-visible text-fg"
+                                viewBox="0 0 300 96"
+                                preserveAspectRatio="none"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    :d="chart.area"
+                                    fill="currentColor"
+                                    class="opacity-[0.08]"
+                                />
+                                <path
+                                    :d="chart.line"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linejoin="round"
+                                    stroke-linecap="round"
+                                    vector-effect="non-scaling-stroke"
+                                />
+                            </svg>
+
+                            <!-- Hover indicators -->
+                            <template x-if="hover">
+                                <div class="pointer-events-none absolute inset-0">
+                                    <div
+                                        class="absolute top-0 bottom-0 w-px bg-muted"
+                                        :style="`left: ${hover.xPct}%`"
+                                    ></div>
+                                    <div
+                                        class="absolute h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-fg"
+                                        :style="`left: ${hover.xPct}%; top: ${hover.yPct}%`"
+                                    ></div>
+                                    <div
+                                        class="absolute top-0 -translate-x-1/2 whitespace-nowrap rounded border border-border bg-bg px-1.5 py-0.5 font-mono text-[0.65rem] leading-tight tabular-nums"
+                                        :style="`left: clamp(2.75rem, ${hover.xPct}%, calc(100% - 2.75rem))`"
+                                    >
+                                        <span x-text="hover.priceText"></span>
+                                        <span
+                                            class="ml-1 text-muted"
+                                            x-text="hover.dateText"
+                                        ></span>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
 
                         <!-- Range selector -->
                         <div class="mt-3 flex gap-1">

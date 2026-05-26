@@ -1,5 +1,19 @@
 import { describe, expect, test } from "bun:test";
-import { buildChartPaths } from "./chart";
+import { buildChartPaths, chartPoints } from "./chart";
+
+describe("chartPoints", () => {
+    test("returns viewBox coordinates with an inverted y axis", () => {
+        expect(chartPoints([10, 20, 30], 300, 100, 0)).toEqual([
+            { x: 0, y: 100 },
+            { x: 150, y: 50 },
+            { x: 300, y: 0 },
+        ]);
+    });
+
+    test("empty input yields no points", () => {
+        expect(chartPoints([])).toEqual([]);
+    });
+});
 
 describe("buildChartPaths", () => {
     test("maps values into the viewBox, inverting the y axis", () => {

@@ -1,3 +1,8 @@
+export interface ChartPoint {
+    x: number;
+    y: number;
+}
+
 export interface ChartPaths {
     /** SVG path `d` for the line. */
     line: string;
@@ -6,20 +11,17 @@ export interface ChartPaths {
 }
 
 /**
- * Build line + area SVG paths for a sparkline in a `width` x `height` viewBox.
- * Pair with `preserveAspectRatio="none"` + `vector-effect="non-scaling-stroke"`
- * so it stretches to any width while keeping a crisp 1px line.
+ * Project values into `width` x `height` viewBox coordinates. The y axis is
+ * inverted (min at the bottom); a flat series is centered.
  */
-export function buildChartPaths(
+export function chartPoints(
     values: number[],
     width = 300,
     height = 96,
     padY = 3,
-): ChartPaths {
+): ChartPoint[] {
     const first = values[0];
-    if (values.length === 0 || first === undefined) {
-        return { line: "", area: "" };
-    }
+    if (values.length === 0 || first === undefined) return [];
 
     let min = first;
     let max = first;
@@ -31,14 +33,27 @@ export function buildChartPaths(
     const span = max - min;
     const usable = height - padY * 2;
     const n = values.length;
-    const x = (i: number) => (n === 1 ? width / 2 : (i / (n - 1)) * width);
-    // A flat series (span 0) is centered vertically rather than pinned low.
-    const y = (v: number) =>
-        span === 0 ? height / 2 : padY + (1 - (v - min) / span) * usable;
+    return values.map((v, i) => ({
+        x: n === 1 ? width / 2 : (i / (n - 1)) * width,
+        y: span === 0 ? height / 2 : padY + (1 - (v - min) / span) * usable,
+    }));
+}
 
-    const coords = values.map(
-        (v, i) => `${x(i).toFixed(2)},${y(v).toFixed(2)}`,
-    );
+/**
+ * Build line + area SVG paths for a sparkline. Pair with
+ * `preserveAspectRatio="none"` + `vector-effect="non-scaling-stroke"` so it
+ * stretches to any width while keeping a crisp 1px line.
+ */
+export function buildChartPaths(
+    values: number[],
+    width = 300,
+    height = 96,
+    padY = 3,
+): ChartPaths {
+    const pts = chartPoints(values, width, height, padY);
+    if (pts.length === 0) return { line: "", area: "" };
+
+    const coords = pts.map((p) => `${p.x.toFixed(2)},${p.y.toFixed(2)}`);
     const line = `M${coords.join(" L")}`;
     const area = `${line} L${width.toFixed(2)},${height} L0,${height} Z`;
     return { line, area };
