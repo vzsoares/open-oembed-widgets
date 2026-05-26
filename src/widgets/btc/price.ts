@@ -41,11 +41,11 @@ export const PROVIDERS: PriceProvider[] = [
         url: "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true",
         parse(data) {
             if (!isRecord(data)) throw new Error("bad shape");
-            const b = data["bitcoin"];
+            const b = data.bitcoin;
             if (!isRecord(b)) throw new Error("missing bitcoin");
             return {
-                priceUsd: num(b["usd"]),
-                change24hPct: num(b["usd_24h_change"]),
+                priceUsd: num(b.usd),
+                change24hPct: num(b.usd_24h_change),
             };
         },
     },
@@ -55,8 +55,8 @@ export const PROVIDERS: PriceProvider[] = [
         parse(data) {
             if (!isRecord(data)) throw new Error("bad shape");
             return {
-                priceUsd: num(data["lastPrice"]),
-                change24hPct: num(data["priceChangePercent"]),
+                priceUsd: num(data.lastPrice),
+                change24hPct: num(data.priceChangePercent),
             };
         },
     },
@@ -65,10 +65,10 @@ export const PROVIDERS: PriceProvider[] = [
         url: "https://api.exchange.coinbase.com/products/BTC-USD/stats",
         parse(data) {
             if (!isRecord(data)) throw new Error("bad shape");
-            const last = num(data["last"]);
+            const last = num(data.last);
             return {
                 priceUsd: last,
-                change24hPct: pctChange(last, num(data["open"])),
+                change24hPct: pctChange(last, num(data.open)),
             };
         },
     },
@@ -77,15 +77,15 @@ export const PROVIDERS: PriceProvider[] = [
         url: "https://api.kraken.com/0/public/Ticker?pair=XBTUSD",
         parse(data) {
             if (!isRecord(data)) throw new Error("bad shape");
-            const result = data["result"];
+            const result = data.result;
             if (!isRecord(result)) throw new Error("missing result");
             const ticker = Object.values(result)[0];
             if (!isRecord(ticker)) throw new Error("missing ticker");
-            const close = ticker["c"];
+            const close = ticker.c;
             const last = num(Array.isArray(close) ? close[0] : undefined);
             return {
                 priceUsd: last,
-                change24hPct: pctChange(last, num(ticker["o"])),
+                change24hPct: pctChange(last, num(ticker.o)),
             };
         },
     },

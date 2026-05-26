@@ -54,6 +54,7 @@
     }
 
     [x-cloak] {
+        /* biome-ignore lint/complexity/noImportantStyles: x-cloak must beat any display rule until Alpine initializes */
         display: none !important;
     }
 }

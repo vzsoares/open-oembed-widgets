@@ -5,7 +5,7 @@ import {
     type Theme,
     toggleTheme,
 } from "./lib/theme";
-import { widgets, type WidgetDef } from "./widgets/manifest";
+import { type WidgetDef, widgets } from "./widgets/manifest";
 
 applyThemeFromQuery();
 

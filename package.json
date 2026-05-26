@@ -9,8 +9,8 @@
         "preview": "vite preview",
         "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.tools.json",
         "test": "bun test",
-        "format": "prettier --write .",
-        "format:check": "prettier --check ."
+        "lint": "biome check .",
+        "format": "biome check --write ."
     },
     "keywords": [
         "notion",
@@ -36,11 +36,11 @@
         "alpinejs": "^3.13.0"
     },
     "devDependencies": {
+        "@biomejs/biome": "^2.0.0",
         "@types/alpinejs": "^3.13.11",
         "@types/bun": "^1.1.0",
         "autoprefixer": "^10.4.14",
         "postcss": "^8.4.24",
-        "prettier": "^3.3.0",
         "tailwindcss": "^3.4.0",
         "typescript": "^5.8.2",
         "vite": "^5.4.0"
