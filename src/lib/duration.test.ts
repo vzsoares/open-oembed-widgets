@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { durationSegments, splitDuration } from "./duration";
 
 const SECOND = 1000;

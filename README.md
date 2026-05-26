@@ -91,6 +91,7 @@ Notion's (Iframely) get a proper `rich` embed.
 ├── e2e/                      # Playwright end-to-end specs
 ├── scripts/gen-oembed.ts     # post-build oEmbed JSON generator
 ├── playwright.config.ts
+├── vitest.config.ts
 └── vite.config.js
 ```
 
@@ -101,7 +102,8 @@ Requires [Bun](https://bun.sh).
 ```bash
 bun install
 bun run dev          # http://localhost:5173  (and /btc/)
-bun run test         # unit tests (bun:test, src/)
+bun run test         # unit tests (vitest, src/)
+bun run test:watch   # unit tests in watch mode
 bun run test:e2e     # Playwright e2e (uses your system Chrome locally)
 bun run typecheck    # tsc, both app + tooling configs
 bun run lint         # biome check

@@ -77,7 +77,7 @@ same gate before deploying:
 bun run lint         # biome (lint + format check)
 bun run format       # biome --write (auto-fix)
 bun run typecheck    # tsc (app + tooling)
-bun run test         # unit tests (bun:test, src/)
+bun run test         # unit tests (vitest, src/)
 bun run test:e2e     # Playwright e2e (uses your system Chrome locally)
 bun run build        # vite build + oEmbed generation -> dist/
 ```
