@@ -23,10 +23,9 @@ widgets are monochrome, transparent-background, and support `?theme=light|dark`.
 
 ## Project / repo chores
 
-Non-widget tasks for project health and tooling.
+Non-widget tasks for project health and tooling. All originally listed chores
+are done (template sync / e2e, `CONTRIBUTING.md`, GitHub repo About + topics).
 
-- **Configure the GitHub repo** — set the About description, topics, and enable
-  the wiki.
 - **(Deferred) Major dependency upgrades** — the upstream template has since
   moved to Vite 8, Tailwind 4, TypeScript 6, and vitest. Left for a separate
   pass: Tailwind 3→4 in particular is a breaking migration of the styling setup.
