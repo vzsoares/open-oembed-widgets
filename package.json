@@ -1,6 +1,6 @@
 {
     "name": "notion-oembed-widgets",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "type": "module",
     "description": "Tiny, monochrome, client-side widgets you can embed in Notion via oEmbed. Deployed to GitHub Pages.",
     "scripts": {
