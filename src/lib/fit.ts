@@ -20,8 +20,17 @@ function init(): void {
     const params = Object.fromEntries(
         new URLSearchParams(window.location.search),
     );
-    const { width, height } = dimensionsFor(widget, params);
+    // Optional padding override (?pad=<px>); applies to every widget.
+    const pad = Number(params.pad);
+    if (params.pad !== undefined && Number.isFinite(pad) && pad >= 0) {
+        main.style.padding = `${Math.min(pad, 200)}px`;
+    }
 
+    // Scaling is opt-in: widgets render at natural size unless ?fit=1 is set.
+    // Text-flow widgets (fit:false) never scale, even with ?fit=1.
+    if (widget.fit === false || params.fit !== "1") return;
+
+    const { width, height } = dimensionsFor(widget, params);
     document.body.style.overflow = "hidden";
     main.style.position = "fixed";
     main.style.top = "50%";

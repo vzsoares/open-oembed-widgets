@@ -48,6 +48,12 @@ interface Home {
     setParam(w: WidgetDef, key: string, id: string): void;
     copy(w: WidgetDef): Promise<void>;
     toggle(): void;
+    pad: string;
+    togglePad(): void;
+    readonly padLabel: string;
+    scale: string;
+    toggleScale(): void;
+    readonly scaleLabel: string;
     importError: boolean;
     importUrl(raw: string): void;
     buttonRows: ButtonRow[];
@@ -68,6 +74,8 @@ Alpine.data(
         copiedId: "",
         theme: getResolvedTheme(),
         selected: defaultParams(),
+        pad: "",
+        scale: "",
         importError: false,
         buttonRows: [
             { text: "GitHub", url: "https://github.com/vzsoares", color: "" },
@@ -100,6 +108,9 @@ Alpine.data(
                     if (value !== "") q.set(key, value);
                 }
             }
+            // Global padding / scaling choices apply to every widget.
+            if (this.pad !== "") q.set("pad", this.pad);
+            if (this.scale !== "") q.set("fit", this.scale);
             // The addable button editor feeds its own param (e.g. ?btns=).
             const buttonsParam = w.params?.find((p) => p.type === "buttons");
             if (buttonsParam) {
@@ -144,6 +155,25 @@ Alpine.data(
 
         toggle() {
             this.theme = toggleTheme();
+        },
+
+        // Global padding: "" keeps each widget's default, "0" removes it.
+        togglePad() {
+            this.pad = this.pad === "0" ? "" : "0";
+        },
+
+        get padLabel() {
+            return this.pad === "0" ? "Add padding" : "Remove padding";
+        },
+
+        // Global scaling: "" is natural size (default), "1" scales to fit
+        // (?fit=1).
+        toggleScale() {
+            this.scale = this.scale === "1" ? "" : "1";
+        },
+
+        get scaleLabel() {
+            return this.scale === "1" ? "Disable scaling" : "Enable scaling";
         },
 
         addButtonRow() {

@@ -81,6 +81,12 @@
         background: transparent;
     }
 
+    /* Tailwind v4's preflight sets buttons to cursor:default; restore a pointer
+       on actionable buttons across the gallery, widgets, and help page. */
+    button:not(:disabled) {
+        cursor: pointer;
+    }
+
     [x-cloak] {
         /* biome-ignore lint/complexity/noImportantStyles: x-cloak must beat any display rule until Alpine initializes */
         display: none !important;

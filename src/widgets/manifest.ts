@@ -58,6 +58,12 @@ export interface WidgetDef {
     /** Default embed dimensions in px, advertised via oEmbed. */
     width: number;
     height: number;
+    /**
+     * Whether the widget may scale to fill its box (opt-in per embed via
+     * `?fit=1`). `false` marks text-flow widgets (verses, quotes) that should
+     * never scale — they fill the width and wrap at a readable size instead.
+     */
+    fit?: boolean;
     /** Configurable options (rendered as selectors in the gallery). */
     params?: WidgetParam[];
 }
@@ -186,6 +192,7 @@ export const widgets: WidgetDef[] = [
         description: "A random Bible verse in English or Portuguese.",
         width: 480,
         height: 260,
+        fit: false,
         params: [
             {
                 key: "lang",
@@ -299,6 +306,7 @@ export const widgets: WidgetDef[] = [
             "A notable historical event for today's date, sourced from Wikipedia.",
         width: 480,
         height: 220,
+        fit: false,
         params: [
             {
                 key: "type",
@@ -395,6 +403,7 @@ export const widgets: WidgetDef[] = [
             "A quote from a chosen collection (motivation, wisdom, stoic, tech).",
         width: 480,
         height: 220,
+        fit: false,
         params: [
             {
                 key: "collection",

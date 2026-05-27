@@ -6,7 +6,14 @@ Tiny, monochrome, **client-side** widgets you can embed in any
 [oEmbed](https://oembed.com/) consumer — [Notion](https://notion.so) and others.
 No backend — everything runs in the browser and is hosted on GitHub Pages.
 
-**Live:** https://vzsoares.github.io/open-oembed-widgets/
+**[Open the gallery →](https://vzsoares.github.io/open-oembed-widgets/)** ·
+**[How to use](https://vzsoares.github.io/open-oembed-widgets/help/)**
+
+[![Open oEmbed Widgets gallery](docs/screenshot.png)](https://vzsoares.github.io/open-oembed-widgets/)
+
+Pick a widget, tweak it (theme, options, padding), copy the link, and paste it
+into your tool — no account, no code. Widgets are transparent and scale to fit
+whatever box they're embedded in.
 
 ## Widgets
 
@@ -38,8 +45,18 @@ Notion's (Iframely) get a proper `rich` embed.
 
 ### Config (query params)
 
+Every widget accepts these **global** options (toggled in the gallery header /
+hero, applied to all):
+
 - **Theme** — monochrome, follows the viewer's OS light/dark preference. Pin it
   when the iframe context doesn't inherit it: `?theme=dark` / `?theme=light`.
+- **Padding** — `?pad=<px>` overrides the widget's inner padding (e.g. `?pad=0`
+  for edge-to-edge).
+- **Scaling** — widgets render at their natural size by default; `?fit=1` scales
+  them to fill the embed box (text widgets always flow/wrap regardless).
+
+Per-widget options:
+
 - **Range** (BTC) — initial chart window: `?range=1d|1w|1m|3m|1y` (default `1m`).
   The range buttons inside the widget stay interactive inside the embed too.
 - **Clock** — `?style=flip|analog` (default `flip`), `?show=time|date|both`
