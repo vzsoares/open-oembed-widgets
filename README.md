@@ -1,4 +1,4 @@
-# Open oEmbed Widgets
+# 🧩 Open oEmbed Widgets
 
 ![License](https://img.shields.io/badge/license-MIT-black)
 
@@ -15,23 +15,23 @@ Pick a widget, tweak it (theme, options, padding), copy the link, and paste it
 into your tool — no account, no code. Widgets are transparent and scale to fit
 whatever box they're embedded in.
 
-## Widgets
+## 📦 Widgets
 
-| Widget        | URL          | Description                                          |
-| ------------- | ------------ | ---------------------------------------------------- |
-| Bitcoin Price | `/btc/`      | Live BTC/USD price + sparkline, range 1D–1Y, ~60s.   |
-| Clock         | `/clock/`    | Flip or analog clock with date, timezone & 24h opts. |
-| Timer         | `/timer/`    | Countdown or count-up in days/hours/minutes/seconds. |
-| Image Rotator | `/images/`   | Cross-fades through a list of images on a timer.     |
-| Progress      | `/progress/` | Day / week / year / custom (incl. life) progress bar.|
-| On This Day   | `/onthisday/`| Notable historical events for today (Wikipedia).     |
-| Weather       | `/weather/`  | Current conditions + hi/lo for a place (Open-Meteo).  |
-| GitHub Card   | `/github/`   | A GitHub user or repo card with key stats.           |
-| Button List   | `/links/`    | Link buttons that open in a new tab; custom colors.  |
-| Quote         | `/quote/`    | A quote from a chosen collection (bundled).          |
-| Bible Verse   | `/bible/`    | Random verse in English or Portuguese.               |
+| Widget              | URL           | Description                                          |
+| ------------------- | ------------- | ---------------------------------------------------- |
+| 📈 Bitcoin Price    | `/btc/`       | Live BTC/USD price + sparkline, range 1D–1Y, ~60s.   |
+| 🕒 Clock            | `/clock/`     | Flip or analog clock with date, timezone & 24h opts. |
+| ⏳ Timer            | `/timer/`     | Countdown or count-up in days/hours/minutes/seconds. |
+| 🖼️ Image Rotator    | `/images/`    | Cross-fades through a list of images on a timer.     |
+| 📊 Progress         | `/progress/`  | Day / week / year / custom (incl. life) progress bar.|
+| 📜 On This Day      | `/onthisday/` | Notable historical events for today (Wikipedia).     |
+| 🌤️ Weather          | `/weather/`   | Current conditions + hi/lo for a place (Open-Meteo). |
+| 🐙 GitHub Card      | `/github/`    | A GitHub user or repo card with key stats.           |
+| 🔗 Button List      | `/links/`     | Link buttons that open in a new tab; custom colors.  |
+| 💬 Quote            | `/quote/`     | A quote from a chosen collection (bundled).          |
+| 📖 Bible Verse      | `/bible/`     | Random verse in English or Portuguese.               |
 
-## Embed
+## 🔗 Embed
 
 1. Open the gallery, pick a theme + range, copy the URL
    (e.g. `…/open-oembed-widgets/btc/?theme=dark&range=1w`).
@@ -43,7 +43,7 @@ Each widget page advertises a static oEmbed document via
 `<link rel="alternate" type="application/json+oembed">`, so resolvers like
 Notion's (Iframely) get a proper `rich` embed.
 
-### Config (query params)
+### ⚙️ Config (query params)
 
 Every widget accepts these **global** options (toggled in the gallery header /
 hero, applied to all):
@@ -97,7 +97,7 @@ Per-widget options:
 The gallery also has a **paste-a-URL** box: paste any widget URL above the cards
 to load its theme + options back into the UI for further editing.
 
-## Architecture
+## 🏗️ Architecture
 
 - **Multi-page** Vite build — one HTML entry per widget gives each a stable
   embed URL (`/btc/`).
@@ -144,7 +144,7 @@ to load its theme + options back into the UI for further editing.
 └── vite.config.js
 ```
 
-## Develop
+## 🛠️ Develop
 
 Requires [Bun](https://bun.sh).
 
@@ -164,7 +164,7 @@ bun run preview      # serve the production build
 On push to `main`, CI runs lint, typecheck, unit + e2e tests, and only then
 builds and deploys to GitHub Pages (`.github/workflows/deploy.yml`).
 
-## Add a widget
+## ➕ Add a widget
 
 1. Add an entry to `src/widgets/manifest.ts`.
 2. Create `<id>/index.html` + `src/widgets/<id>/index.ts`.
@@ -174,6 +174,6 @@ oEmbed JSON and the gallery card are generated from the manifest. See
 [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow, config-param types,
 and the quality checks to run.
 
-## License
+## 📄 License
 
 [MIT](LICENSE) · Created by [vzsoares](https://github.com/vzsoares)
