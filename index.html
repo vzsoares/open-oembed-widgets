@@ -33,6 +33,11 @@
                         range, copy the URL, paste it into your tool, and choose
                         “Embed”.
                     </p>
+                    <a
+                        href="help/"
+                        class="mt-3 inline-block text-sm underline underline-offset-4 transition-colors hover:text-fg"
+                        >New here? How to use →</a
+                    >
                 </div>
                 <button
                     type="button"
@@ -193,7 +198,7 @@
 
                         <!-- Live preview of the actual embed. Portrait shapes
                              (width < height) are width-capped and centered; the
-                             rest stay full-width as before. -->
+                             rest stay full-width. -->
                         <div
                             class="mt-4 overflow-hidden rounded-lg border border-border"
                             :class="dims(w).width < dims(w).height && 'mx-auto'"

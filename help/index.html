@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>How to use · Open oEmbed Widgets</title>
+        <meta
+            name="description"
+            content="A no-code guide to customizing and embedding Open oEmbed Widgets in Notion and other tools."
+        />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="stylesheet" href="/src/styles.css" />
+        <script type="module" src="/src/help.ts"></script>
+    </head>
+    <body class="bg-bg font-sans text-fg" x-data="help" x-cloak>
+        <div class="mx-auto max-w-2xl px-6 py-12 sm:py-16">
+            <header class="flex items-start justify-between gap-4">
+                <div>
+                    <a
+                        href="../"
+                        class="text-xs text-muted underline underline-offset-4 transition-colors hover:text-fg"
+                        >← Back to widgets</a
+                    >
+                    <h1 class="mt-2 text-2xl font-semibold tracking-tight">
+                        How to use
+                    </h1>
+                    <p class="mt-2 max-w-prose text-sm leading-relaxed text-muted">
+                        These are tiny widgets you can drop into Notion (and many
+                        other tools) — no account, no code. Here's the whole
+                        flow in four steps.
+                    </p>
+                </div>
+                <button
+                    type="button"
+                    @click="toggle()"
+                    class="shrink-0 rounded-full border border-border px-3 py-1.5 text-xs transition-colors hover:bg-fg hover:text-bg"
+                    aria-label="Toggle theme"
+                    x-text="themeLabel"
+                ></button>
+            </header>
+
+            <ol class="mt-10 space-y-5">
+                <!-- Step 1 -->
+                <li
+                    class="rounded-xl border border-border p-5"
+                >
+                    <div class="flex items-start gap-4">
+                        <span
+                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-fg text-sm font-semibold text-bg"
+                            >1</span
+                        >
+                        <div class="min-w-0 flex-1">
+                            <h2 class="text-base font-medium">
+                                Pick a widget
+                            </h2>
+                            <p class="mt-1 text-sm text-muted">
+                                On the home page, scroll the cards and find one
+                                you like — clock, weather, a countdown, a button
+                                list, and more.
+                            </p>
+                            <!-- mock card -->
+                            <div
+                                class="mt-3 max-w-xs rounded-lg border border-border p-3"
+                            >
+                                <div class="text-sm font-medium">Clock</div>
+                                <div
+                                    class="mt-2 flex items-center justify-center gap-1 rounded border border-border py-3"
+                                >
+                                    <span
+                                        class="rounded bg-fg px-2 py-1 font-mono text-bg"
+                                        >07</span
+                                    >
+                                    <span class="font-mono">:</span>
+                                    <span
+                                        class="rounded bg-fg px-2 py-1 font-mono text-bg"
+                                        >04</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Step 2 -->
+                <li class="rounded-xl border border-border p-5">
+                    <div class="flex items-start gap-4">
+                        <span
+                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-fg text-sm font-semibold text-bg"
+                            >2</span
+                        >
+                        <div class="min-w-0 flex-1">
+                            <h2 class="text-base font-medium">Make it yours</h2>
+                            <p class="mt-1 text-sm text-muted">
+                                Tap the option buttons to change how it looks and
+                                switch light/dark. The preview updates as you go.
+                            </p>
+                            <div
+                                class="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-border p-3"
+                            >
+                                <span class="text-xs text-muted">Style</span>
+                                <span
+                                    class="rounded bg-fg px-2 py-1 font-mono text-[0.7rem] uppercase text-bg"
+                                    >Flip</span
+                                >
+                                <span
+                                    class="rounded border border-border px-2 py-1 font-mono text-[0.7rem] uppercase text-muted"
+                                    >Analog</span
+                                >
+                                <!-- arrow + callout -->
+                                <span
+                                    class="flex items-center gap-1 text-xs text-muted"
+                                >
+                                    <svg
+                                        class="h-5 w-5 -scale-x-100"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="M5 12h14" />
+                                        <path d="m13 6 6 6-6 6" />
+                                    </svg>
+                                    tap to change
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Step 3 -->
+                <li class="rounded-xl border border-border p-5">
+                    <div class="flex items-start gap-4">
+                        <span
+                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-fg text-sm font-semibold text-bg"
+                            >3</span
+                        >
+                        <div class="min-w-0 flex-1">
+                            <h2 class="text-base font-medium">Copy it</h2>
+                            <p class="mt-1 text-sm text-muted">
+                                Hit <strong class="text-fg">Copy</strong> to grab
+                                the widget's link. That's the only thing you need
+                                to paste into your tool.
+                            </p>
+                            <div
+                                class="mt-3 space-y-2 rounded-lg border border-border p-3"
+                            >
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="flex-1 truncate rounded border border-border px-2.5 py-1.5 font-mono text-xs text-muted"
+                                        >…/clock/?theme=light&style=flip</span
+                                    >
+                                    <span
+                                        class="rounded border border-fg px-3 py-1.5 text-xs"
+                                        >Copy</span
+                                    >
+                                </div>
+                                <div class="flex items-center gap-1 pl-1">
+                                    <svg
+                                        class="h-5 w-5 rotate-90 text-muted"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="M5 12h14" />
+                                        <path d="m13 6 6 6-6 6" />
+                                    </svg>
+                                    <span class="text-xs text-muted"
+                                        >click to copy</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Step 4 -->
+                <li class="rounded-xl border border-border p-5">
+                    <div class="flex items-start gap-4">
+                        <span
+                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-fg text-sm font-semibold text-bg"
+                            >4</span
+                        >
+                        <div class="min-w-0 flex-1">
+                            <h2 class="text-base font-medium">
+                                Paste where you want it
+                            </h2>
+                            <p class="mt-1 text-sm text-muted">
+                                In <strong class="text-fg">Notion</strong>: type
+                                <code
+                                    class="rounded border border-border px-1 font-mono text-xs"
+                                    >/embed</code
+                                >, paste your link, and click
+                                <strong class="text-fg">Embed link</strong>. Most
+                                other tools accept the same link in their embed
+                                block.
+                            </p>
+                            <div
+                                class="mt-3 rounded-lg border border-border p-3"
+                            >
+                                <div
+                                    class="flex items-center gap-2 rounded border border-border px-2.5 py-1.5"
+                                >
+                                    <span class="font-mono text-xs text-muted"
+                                        >/embed</span
+                                    >
+                                    <span class="text-xs text-muted"
+                                        >→ paste link →</span
+                                    >
+                                    <span
+                                        class="rounded bg-fg px-2 py-0.5 text-xs text-bg"
+                                        >Embed link</span
+                                    >
+                                </div>
+                                <p class="mt-2 text-xs text-muted">
+                                    Your widget appears, with a transparent
+                                    background that blends right in.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+
+            <!-- Good to know -->
+            <section class="mt-10">
+                <h2 class="text-base font-medium">Good to know</h2>
+                <ul
+                    class="mt-3 space-y-2 text-sm text-muted [&_strong]:text-fg"
+                >
+                    <li>
+                        <strong>Theme.</strong> Widgets are monochrome and follow
+                        light/dark automatically. Pin one with the theme button
+                        if your tool doesn't pass it through.
+                    </li>
+                    <li>
+                        <strong>Editing later.</strong> Paste any widget link
+                        back into the box at the top of the home page to tweak it
+                        again.
+                    </li>
+                    <li>
+                        <strong>Privacy.</strong> No account or keys — everything
+                        runs in your browser.
+                    </li>
+                </ul>
+            </section>
+
+            <footer
+                class="mt-12 border-t border-border pt-6 text-xs text-muted"
+            >
+                <a
+                    href="../"
+                    class="underline underline-offset-4 transition-colors hover:text-fg"
+                    >← Back to widgets</a
+                >
+            </footer>
+        </div>
+    </body>
+</html>
