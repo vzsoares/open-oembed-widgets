@@ -43,10 +43,29 @@
                 ></button>
             </header>
 
+            <!-- Paste an existing widget URL to load it back in for editing -->
+            <div class="mt-8">
+                <input
+                    type="url"
+                    @change="importUrl($event.target.value)"
+                    placeholder="Paste a widget URL to edit it…"
+                    aria-label="Paste a widget URL to edit it"
+                    class="w-full rounded-lg border border-border bg-transparent px-3 py-2 text-sm text-fg placeholder:text-muted"
+                    :class="importError && 'border-fg'"
+                />
+                <p
+                    x-show="importError"
+                    class="mt-1 text-xs text-muted"
+                >
+                    That doesn't look like one of these widgets' URLs.
+                </p>
+            </div>
+
             <section class="mt-10 space-y-6">
                 <template x-for="w in widgets" :key="w.id">
                     <article
-                        class="rounded-xl border border-border p-5 transition-colors hover:border-muted"
+                        :id="'w-' + w.id"
+                        class="scroll-mt-4 rounded-xl border border-border p-5 transition-colors hover:border-muted"
                     >
                         <div class="flex items-baseline justify-between gap-3">
                             <h2
@@ -98,19 +117,74 @@
                                                 </template>
                                             </span>
                                         </template>
-                                        <!-- datetime / text: a free input.
+                                        <!-- datetime / date / text: a free input.
                                              Commit on change (not per keystroke)
                                              so the preview doesn't reload mid-edit. -->
                                         <template
-                                            x-if="param.type === 'datetime' || param.type === 'text'"
+                                            x-if="['datetime','date','text'].includes(param.type)"
                                         >
                                             <input
-                                                :type="param.type === 'datetime' ? 'datetime-local' : 'text'"
+                                                :type="param.type === 'datetime' ? 'datetime-local' : param.type === 'date' ? 'date' : 'text'"
                                                 :value="paramValue(w, param.key)"
                                                 :placeholder="param.placeholder ?? ''"
                                                 @change="setParam(w, param.key, $event.target.value)"
                                                 class="min-w-0 flex-1 rounded border border-border bg-transparent px-2 py-1 font-mono text-[0.7rem] text-fg placeholder:text-muted"
                                             />
+                                        </template>
+                                        <!-- buttons: an addable list of rows -->
+                                        <template x-if="param.type === 'buttons'">
+                                            <div class="w-full space-y-1.5">
+                                                <template
+                                                    x-for="(row, i) in buttonRows"
+                                                    :key="i"
+                                                >
+                                                    <div
+                                                        class="flex items-center gap-1.5"
+                                                    >
+                                                        <input
+                                                            type="text"
+                                                            x-model.lazy="row.text"
+                                                            placeholder="Label"
+                                                            class="w-20 rounded border border-border bg-transparent px-2 py-1 text-[0.7rem] text-fg placeholder:text-muted"
+                                                        />
+                                                        <input
+                                                            type="url"
+                                                            x-model.lazy="row.url"
+                                                            placeholder="https://…"
+                                                            class="min-w-0 flex-1 rounded border border-border bg-transparent px-2 py-1 font-mono text-[0.7rem] text-fg placeholder:text-muted"
+                                                        />
+                                                        <input
+                                                            type="color"
+                                                            :value="row.color || '#2563eb'"
+                                                            @change="row.color = $event.target.value"
+                                                            aria-label="Pick a color"
+                                                            class="h-7 w-7 shrink-0 cursor-pointer rounded border border-border bg-transparent p-0.5"
+                                                        />
+                                                        <input
+                                                            type="text"
+                                                            x-model.lazy="row.color"
+                                                            placeholder="#hex"
+                                                            aria-label="Hex color"
+                                                            class="w-14 rounded border border-border bg-transparent px-2 py-1 font-mono text-[0.7rem] text-fg placeholder:text-muted"
+                                                        />
+                                                        <button
+                                                            type="button"
+                                                            @click="removeButtonRow(i)"
+                                                            aria-label="Remove button"
+                                                            class="shrink-0 rounded border border-border px-2 py-1 text-xs text-muted transition-colors hover:bg-fg hover:text-bg"
+                                                        >
+                                                            ×
+                                                        </button>
+                                                    </div>
+                                                </template>
+                                                <button
+                                                    type="button"
+                                                    @click="addButtonRow()"
+                                                    class="rounded border border-border px-2.5 py-1 text-xs text-muted transition-colors hover:bg-fg hover:text-bg"
+                                                >
+                                                    + Add button
+                                                </button>
+                                            </div>
                                         </template>
                                     </div>
                                 </template>

@@ -3,12 +3,21 @@ export type Show = "time" | "date" | "both";
 
 export interface ClockConfig {
     show: Show;
-    /** Include a seconds tile (and tick every second). */
+    /** Include a seconds tile/hand (and tick every second). */
     seconds: boolean;
     /** IANA timezone (e.g. "America/Sao_Paulo"); undefined = viewer's local. */
     tz: string | undefined;
     /** Force a 24-hour clock; undefined = follow the locale. */
     h24: boolean | undefined;
+    /** Visual style: flip-clock tiles (default) or an analog face. */
+    style: "flip" | "analog";
+}
+
+export interface ClockHands {
+    /** Degrees clockwise from 12 o'clock. */
+    hour: number;
+    minute: number;
+    second: number;
 }
 
 export interface ClockParts {
@@ -30,6 +39,35 @@ export function parseClockConfig(search: string): ClockConfig {
         seconds: p.get("seconds") === "1",
         tz: tz ?? undefined,
         h24: p.get("h24") === "1" ? true : undefined,
+        style: p.get("style") === "analog" ? "analog" : "flip",
+    };
+}
+
+/**
+ * Hand angles (degrees clockwise from 12) for an analog face, timezone-aware.
+ * `locale` only affects the numeric extraction and defaults to a stable one.
+ */
+export function clockAngles(
+    now: Date,
+    config: ClockConfig,
+    locale = "en-US",
+): ClockHands {
+    const tz = safeTimeZone(config.tz);
+    const opts: Intl.DateTimeFormatOptions = {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hourCycle: "h23",
+    };
+    if (tz) opts.timeZone = tz;
+    const parts = new Intl.DateTimeFormat(locale, opts).formatToParts(now);
+    const h = Number(part(parts, "hour")) % 12;
+    const m = Number(part(parts, "minute"));
+    const s = Number(part(parts, "second"));
+    return {
+        hour: (h + m / 60) * 30,
+        minute: (m + s / 60) * 6,
+        second: s * 6,
     };
 }
 

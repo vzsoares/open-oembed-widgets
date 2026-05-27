@@ -50,3 +50,34 @@ test("a param selector is baked into the embed URL", async ({ page }) => {
     await page.getByRole("button", { name: "1W", exact: true }).click();
     await expect(page.getByText(/\/btc\/\?.*range=1w/)).toBeVisible();
 });
+
+test("pasting a widget URL loads its theme + params for editing", async ({
+    page,
+}) => {
+    await page.goto("/");
+
+    const input = page.getByRole("textbox", {
+        name: "Paste a widget URL to edit it",
+    });
+    await input.fill(
+        "https://x.test/open-oembed-widgets/btc/?theme=dark&range=1w",
+    );
+    await input.blur();
+
+    // Theme applied to the document, and the BTC card now reflects range=1w.
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await expect(page.getByText(/\/btc\/\?.*range=1w/)).toBeVisible();
+});
+
+test("the button-list editor serializes its rows into ?btns=", async ({
+    page,
+}) => {
+    await page.goto("/");
+
+    // The demo rows are baked into the Button List card's embed URL.
+    await expect(page.getByText(/\/links\/\?.*btns=GitHub/)).toBeVisible();
+    // And the list is addable.
+    await expect(
+        page.getByRole("button", { name: "+ Add button" }),
+    ).toBeVisible();
+});

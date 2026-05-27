@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>GitHub Card · Open oEmbed Widget</title>
+        <meta
+            name="description"
+            content="A GitHub user or repository card with key stats — a monochrome widget you can embed in Notion or any oEmbed consumer."
+        />
+        <link rel="icon" href="/favicon.ico" />
+
+        <!-- oEmbed discovery: consumers (e.g. Notion via Iframely) fetch this -->
+        <link
+            rel="alternate"
+            type="application/json+oembed"
+            href="https://vzsoares.github.io/open-oembed-widgets/github/oembed.json"
+            title="GitHub Card"
+        />
+
+        <!-- Open Graph fallback for consumers that don't use oEmbed -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="GitHub Card" />
+        <meta
+            property="og:description"
+            content="A GitHub user or repository card with key stats."
+        />
+        <meta
+            property="og:url"
+            content="https://vzsoares.github.io/open-oembed-widgets/github/"
+        />
+        <meta name="twitter:card" content="summary" />
+
+        <link rel="stylesheet" href="/src/styles.css" />
+        <script type="module" src="/src/widgets/github/index.ts"></script>
+    </head>
+    <body class="font-sans">
+        <main
+            x-data="githubWidget"
+            x-cloak
+            class="flex min-h-screen w-full items-center justify-center p-5 text-fg"
+        >
+            <section class="w-full max-w-md" aria-live="polite">
+                <!-- Loading -->
+                <template x-if="loading">
+                    <div class="flex animate-pulse items-center gap-4">
+                        <div class="h-14 w-14 rounded-full bg-border"></div>
+                        <div class="flex-1 space-y-2">
+                            <div class="h-4 w-32 rounded bg-border"></div>
+                            <div class="h-3 w-24 rounded bg-border"></div>
+                            <div class="h-3 w-40 rounded bg-border"></div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Error -->
+                <template x-if="!loading && failed">
+                    <div class="space-y-3">
+                        <p class="text-sm text-muted">
+                            Couldn't load from GitHub (it may be rate-limited).
+                        </p>
+                        <button
+                            type="button"
+                            @click="load()"
+                            class="rounded border border-border px-3 py-1.5 text-sm transition-colors hover:bg-fg hover:text-bg"
+                        >
+                            Retry
+                        </button>
+                    </div>
+                </template>
+
+                <!-- Card -->
+                <template x-if="!loading && card">
+                    <!-- biome-ignore lint/a11y/useAnchorContent: title/stats are set at runtime via x-text -->
+                    <a
+                        :href="card.url"
+                        target="_blank"
+                        rel="noreferrer"
+                        class="flex items-center gap-4 no-underline"
+                    >
+                        <img
+                            :src="card.avatarUrl"
+                            alt=""
+                            class="h-14 w-14 shrink-0 rounded-full border border-border object-cover grayscale"
+                        />
+                        <div class="min-w-0 flex-1">
+                            <p
+                                class="truncate text-base font-semibold"
+                                x-text="card.title"
+                            ></p>
+                            <p
+                                class="truncate text-sm text-muted"
+                                x-text="card.subtitle"
+                            ></p>
+                            <div
+                                class="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs tabular-nums"
+                            >
+                                <template x-for="s in card.stats" :key="s.label">
+                                    <span>
+                                        <span
+                                            class="font-semibold"
+                                            x-text="s.value"
+                                        ></span>
+                                        <span
+                                            class="text-muted"
+                                            x-text="' ' + s.label"
+                                        ></span>
+                                    </span>
+                                </template>
+                                <span
+                                    x-show="card.tag"
+                                    class="rounded-full border border-border px-2 py-0.5"
+                                    x-text="card.tag"
+                                ></span>
+                            </div>
+                        </div>
+                    </a>
+                </template>
+            </section>
+        </main>
+    </body>
+</html>

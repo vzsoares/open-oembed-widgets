@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Button List · Open oEmbed Widget</title>
+        <meta
+            name="description"
+            content="A list of link buttons that open in a new tab — a widget you can embed in Notion or any oEmbed consumer."
+        />
+        <link rel="icon" href="/favicon.ico" />
+
+        <!-- oEmbed discovery: consumers (e.g. Notion via Iframely) fetch this -->
+        <link
+            rel="alternate"
+            type="application/json+oembed"
+            href="https://vzsoares.github.io/open-oembed-widgets/links/oembed.json"
+            title="Button List"
+        />
+
+        <!-- Open Graph fallback for consumers that don't use oEmbed -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Button List" />
+        <meta
+            property="og:description"
+            content="A list of link buttons that open in a new tab."
+        />
+        <meta
+            property="og:url"
+            content="https://vzsoares.github.io/open-oembed-widgets/links/"
+        />
+        <meta name="twitter:card" content="summary" />
+
+        <link rel="stylesheet" href="/src/styles.css" />
+        <script type="module" src="/src/widgets/links/index.ts"></script>
+    </head>
+    <body class="font-sans">
+        <main
+            x-data="linksWidget"
+            x-cloak
+            class="flex min-h-screen w-full items-center justify-center p-5 text-fg"
+        >
+            <nav
+                class="flex w-full max-w-md gap-3"
+                :class="config.layout === 'row' ? 'flex-row' : 'flex-col'"
+            >
+                <template x-for="(b, i) in config.buttons" :key="i">
+                    <!-- biome-ignore lint/a11y/useAnchorContent: text is set at runtime via x-text -->
+                    <a
+                        :href="b.url"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        :style="styleFor(b)"
+                        :class="config.layout === 'row' ? 'flex-1' : 'w-full'"
+                        class="block rounded-lg border border-border px-4 py-2.5 text-center text-sm font-semibold no-underline transition-colors hover:bg-fg hover:text-bg"
+                        x-text="b.text"
+                    ></a>
+                </template>
+            </nav>
+        </main>
+    </body>
+</html>

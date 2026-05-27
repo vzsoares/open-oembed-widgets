@@ -2,6 +2,7 @@ import Alpine from "alpinejs";
 import {
     applyThemeFromQuery,
     getResolvedTheme,
+    setTheme,
     type Theme,
     toggleTheme,
 } from "./lib/theme";
@@ -16,6 +17,12 @@ applyThemeFromQuery();
 
 /** widgetId -> { paramKey: selectedOptionId } */
 type ParamMap = Record<string, Record<string, string>>;
+
+interface ButtonRow {
+    text: string;
+    url: string;
+    color: string;
+}
 
 function defaultParams(): ParamMap {
     const map: ParamMap = {};
@@ -41,6 +48,12 @@ interface Home {
     setParam(w: WidgetDef, key: string, id: string): void;
     copy(w: WidgetDef): Promise<void>;
     toggle(): void;
+    importError: boolean;
+    importUrl(raw: string): void;
+    buttonRows: ButtonRow[];
+    addButtonRow(): void;
+    removeButtonRow(index: number): void;
+    serializeButtons(): string;
     readonly themeLabel: string;
 }
 
@@ -51,6 +64,15 @@ Alpine.data(
         copiedId: "",
         theme: getResolvedTheme(),
         selected: defaultParams(),
+        importError: false,
+        buttonRows: [
+            { text: "GitHub", url: "https://github.com/vzsoares", color: "" },
+            {
+                text: "Website",
+                url: "https://vzsoares.github.io/open-oembed-widgets/",
+                color: "",
+            },
+        ],
 
         paramValue(w, key) {
             return this.selected[w.id]?.[key] ?? "";
@@ -72,6 +94,13 @@ Alpine.data(
                     // its own default rather than receiving an empty param.
                     if (value !== "") q.set(key, value);
                 }
+            }
+            // The addable button editor feeds its own param (e.g. ?btns=).
+            const buttonsParam = w.params?.find((p) => p.type === "buttons");
+            if (buttonsParam) {
+                const serialized = this.serializeButtons();
+                if (serialized) q.set(buttonsParam.key, serialized);
+                else q.delete(buttonsParam.key);
             }
             return q.toString();
         },
@@ -103,6 +132,66 @@ Alpine.data(
 
         toggle() {
             this.theme = toggleTheme();
+        },
+
+        addButtonRow() {
+            this.buttonRows.push({ text: "", url: "", color: "" });
+        },
+
+        removeButtonRow(index) {
+            this.buttonRows.splice(index, 1);
+        },
+
+        // Build the `?btns=` value: `text|url|color` rows joined by ";",
+        // skipping rows missing text or URL.
+        serializeButtons() {
+            return this.buttonRows
+                .filter((r) => r.text.trim() !== "" && r.url.trim() !== "")
+                .map((r) => {
+                    const fields = [r.text.trim(), r.url.trim()];
+                    if (r.color.trim() !== "") fields.push(r.color.trim());
+                    return fields.join("|");
+                })
+                .join(";");
+        },
+
+        // Parse a previously-built widget URL back into the gallery: detect the
+        // widget, apply its theme + params, and scroll to its card to edit.
+        importUrl(raw) {
+            this.importError = false;
+            if (!raw.trim()) return;
+            let url: URL;
+            try {
+                url = new URL(raw, window.location.href);
+            } catch {
+                this.importError = true;
+                return;
+            }
+            const segments = url.pathname.split("/").filter(Boolean);
+            const id = segments
+                .reverse()
+                .find((s) => this.widgets.some((w) => w.id === s));
+            const widget = this.widgets.find((w) => w.id === id);
+            if (!widget) {
+                this.importError = true;
+                return;
+            }
+            const q = url.searchParams;
+            const theme = q.get("theme");
+            if (theme === "light" || theme === "dark") {
+                this.theme = theme;
+                setTheme(theme);
+            }
+            const group = this.selected[widget.id];
+            if (group && widget.params) {
+                for (const p of widget.params) {
+                    const value = q.get(p.key);
+                    if (value !== null) group[p.key] = value;
+                }
+            }
+            document
+                .getElementById(`w-${widget.id}`)
+                ?.scrollIntoView({ behavior: "smooth", block: "start" });
         },
 
         get themeLabel() {

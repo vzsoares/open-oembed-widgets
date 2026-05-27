@@ -3,7 +3,9 @@ import { alignedInterval } from "../../lib/interval";
 import { applyThemeFromQuery } from "../../lib/theme";
 import {
     type ClockConfig,
+    type ClockHands,
     type ClockParts,
+    clockAngles,
     clockParts,
     parseClockConfig,
 } from "./time";
@@ -19,6 +21,7 @@ interface ClockWidget {
     init(): void;
     destroy(): void;
     readonly parts: ClockParts;
+    readonly angles: ClockHands;
     readonly showTime: boolean;
     readonly showDate: boolean;
 }
@@ -45,6 +48,10 @@ Alpine.data(
 
         get parts() {
             return clockParts(this.now, this.config);
+        },
+
+        get angles() {
+            return clockAngles(this.now, this.config);
         },
 
         get showTime() {

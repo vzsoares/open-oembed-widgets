@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Weather · Open oEmbed Widget</title>
+        <meta
+            name="description"
+            content="Current weather and today's high/low for any place — a monochrome widget you can embed in Notion or any oEmbed consumer."
+        />
+        <link rel="icon" href="/favicon.ico" />
+
+        <!-- oEmbed discovery: consumers (e.g. Notion via Iframely) fetch this -->
+        <link
+            rel="alternate"
+            type="application/json+oembed"
+            href="https://vzsoares.github.io/open-oembed-widgets/weather/oembed.json"
+            title="Weather"
+        />
+
+        <!-- Open Graph fallback for consumers that don't use oEmbed -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Weather" />
+        <meta
+            property="og:description"
+            content="Current weather and today's high/low for any place."
+        />
+        <meta
+            property="og:url"
+            content="https://vzsoares.github.io/open-oembed-widgets/weather/"
+        />
+        <meta name="twitter:card" content="summary" />
+
+        <link rel="stylesheet" href="/src/styles.css" />
+        <script type="module" src="/src/widgets/weather/index.ts"></script>
+    </head>
+    <body class="font-sans">
+        <main
+            x-data="weatherWidget"
+            x-cloak
+            class="flex min-h-screen w-full items-center justify-center p-5 text-fg"
+        >
+            <section class="w-full max-w-md" aria-live="polite">
+                <!-- Loading -->
+                <template x-if="loading">
+                    <div class="flex animate-pulse items-center gap-4">
+                        <div class="h-16 w-16 rounded-full bg-border"></div>
+                        <div class="flex-1 space-y-2">
+                            <div class="h-3 w-24 rounded bg-border"></div>
+                            <div class="h-9 w-28 rounded bg-border"></div>
+                            <div class="h-3 w-32 rounded bg-border"></div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Error -->
+                <template x-if="!loading && failed">
+                    <div class="space-y-3">
+                        <p class="text-sm text-muted">
+                            Couldn't load the weather.
+                        </p>
+                        <button
+                            type="button"
+                            @click="load()"
+                            class="rounded border border-border px-3 py-1.5 text-sm transition-colors hover:bg-fg hover:text-bg"
+                        >
+                            Retry
+                        </button>
+                    </div>
+                </template>
+
+                <!-- Ready -->
+                <template x-if="!loading && forecast">
+                    <div class="flex items-center gap-4">
+                        <!-- Condition icon (monochrome, currentColor) -->
+                        <svg
+                            class="h-16 w-16 shrink-0 text-fg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <g x-show="category === 'clear'">
+                                <circle cx="12" cy="12" r="5" />
+                                <line x1="12" y1="1" x2="12" y2="3" />
+                                <line x1="12" y1="21" x2="12" y2="23" />
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                                <line x1="1" y1="12" x2="3" y2="12" />
+                                <line x1="21" y1="12" x2="23" y2="12" />
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                            </g>
+                            <g x-show="category === 'clouds'">
+                                <path
+                                    d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"
+                                />
+                            </g>
+                            <g x-show="category === 'rain'">
+                                <line x1="16" y1="13" x2="16" y2="21" />
+                                <line x1="8" y1="13" x2="8" y2="21" />
+                                <line x1="12" y1="15" x2="12" y2="23" />
+                                <path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25" />
+                            </g>
+                            <g x-show="category === 'snow'">
+                                <path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25" />
+                                <line x1="8" y1="16" x2="8.01" y2="16" />
+                                <line x1="8" y1="20" x2="8.01" y2="20" />
+                                <line x1="12" y1="18" x2="12.01" y2="18" />
+                                <line x1="12" y1="22" x2="12.01" y2="22" />
+                                <line x1="16" y1="16" x2="16.01" y2="16" />
+                                <line x1="16" y1="20" x2="16.01" y2="20" />
+                            </g>
+                            <g x-show="category === 'storm'">
+                                <path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9" />
+                                <polyline points="13 11 9 17 15 17 11 23" />
+                            </g>
+                            <g x-show="category === 'fog'">
+                                <line x1="3" y1="8" x2="21" y2="8" />
+                                <line x1="3" y1="12" x2="21" y2="12" />
+                                <line x1="3" y1="16" x2="17" y2="16" />
+                            </g>
+                        </svg>
+
+                        <div class="min-w-0">
+                            <p
+                                class="truncate font-mono text-[0.7rem] uppercase tracking-[0.16em] text-muted"
+                                x-text="place"
+                            ></p>
+                            <p class="flex items-start font-mono font-semibold leading-none tabular-nums">
+                                <span class="text-5xl" x-text="forecast.temp + '°'"></span>
+                                <span class="mt-1 ml-0.5 text-base" x-text="unitLabel"></span>
+                            </p>
+                            <p class="mt-1 text-sm">
+                                <span x-text="forecast.conditions.label"></span>
+                                <span class="text-muted">
+                                    ·
+                                    <span x-text="'H ' + forecast.hi + '° L ' + forecast.lo + '°'"></span>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </template>
+            </section>
+        </main>
+    </body>
+</html>

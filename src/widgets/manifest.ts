@@ -22,10 +22,11 @@ export interface ParamOption {
 
 /**
  * How a param is rendered in the gallery: a row of option buttons (`select`,
- * the default), a free `datetime-local` picker (`datetime`), or a free
- * `text` field (`text`).
+ * the default), a `datetime-local` picker (`datetime`), a `date` picker
+ * (`date`), a free `text` field (`text`), or an addable rows editor
+ * (`buttons`, for the link-button list).
  */
-export type ParamType = "select" | "datetime" | "text";
+export type ParamType = "select" | "datetime" | "date" | "text" | "buttons";
 
 /** A configurable widget option surfaced as a query param + gallery selector. */
 export interface WidgetParam {
@@ -96,10 +97,19 @@ export const widgets: WidgetDef[] = [
         id: "clock",
         title: "Clock",
         description:
-            "A flip-clock showing the current time and date, with timezone and 24-hour options.",
+            "A flip-clock or analog clock showing the current time and date, with timezone and 24-hour options.",
         width: 360,
         height: 160,
         params: [
+            {
+                key: "style",
+                label: "Style",
+                options: [
+                    { id: "flip", label: "Flip" },
+                    { id: "analog", label: "Analog" },
+                ],
+                default: "flip",
+            },
             {
                 key: "show",
                 label: "Show",
@@ -233,6 +243,164 @@ export const widgets: WidgetDef[] = [
                     { id: "contain", label: "Contain" },
                 ],
                 default: "cover",
+            },
+        ],
+    },
+    {
+        id: "progress",
+        title: "Progress",
+        description:
+            "A progress bar for the day, week, year, or a custom value (?value=&max=) or range (?from=&to=).",
+        width: 360,
+        height: 120,
+        params: [
+            {
+                key: "mode",
+                label: "Mode",
+                options: [
+                    { id: "day", label: "Day" },
+                    { id: "week", label: "Week" },
+                    { id: "year", label: "Year" },
+                    { id: "custom", label: "Custom" },
+                ],
+                default: "year",
+            },
+            {
+                key: "from",
+                label: "From / birthday",
+                type: "date",
+                default: "",
+            },
+            {
+                key: "years",
+                label: "Years",
+                type: "text",
+                placeholder: "lifespan, e.g. 80",
+                default: "",
+            },
+            {
+                key: "label",
+                label: "Label",
+                type: "text",
+                placeholder: "e.g. 2026 goal",
+                default: "",
+            },
+        ],
+    },
+    {
+        id: "onthisday",
+        title: "On This Day",
+        description:
+            "A notable historical event for today's date, sourced from Wikipedia.",
+        width: 480,
+        height: 220,
+        params: [
+            {
+                key: "type",
+                label: "Feed",
+                options: [
+                    { id: "selected", label: "Featured" },
+                    { id: "events", label: "Events" },
+                    { id: "births", label: "Births" },
+                    { id: "deaths", label: "Deaths" },
+                ],
+                default: "selected",
+            },
+        ],
+    },
+    {
+        id: "weather",
+        title: "Weather",
+        description:
+            "Current weather + today's high/low for a place (?city= or ?lat=&lon=).",
+        width: 360,
+        height: 160,
+        params: [
+            {
+                key: "city",
+                label: "City",
+                type: "text",
+                placeholder: "e.g. Tokyo",
+                default: "",
+            },
+            {
+                key: "unit",
+                label: "Unit",
+                options: [
+                    { id: "c", label: "°C" },
+                    { id: "f", label: "°F" },
+                ],
+                default: "c",
+            },
+        ],
+    },
+    {
+        id: "github",
+        title: "GitHub Card",
+        description:
+            "A GitHub user or repository card with key stats (?user= or ?repo=owner/name).",
+        width: 380,
+        height: 110,
+        params: [
+            {
+                key: "user",
+                label: "User",
+                type: "text",
+                placeholder: "e.g. vzsoares",
+                default: "",
+            },
+            {
+                key: "repo",
+                label: "Repo",
+                type: "text",
+                placeholder: "e.g. vzsoares/open-oembed-widgets",
+                default: "",
+            },
+        ],
+    },
+    {
+        id: "links",
+        title: "Button List",
+        description:
+            "Link buttons that open in a new tab — set ?btns=Text|https://url|hex; separated by ';'.",
+        width: 320,
+        height: 200,
+        params: [
+            {
+                key: "btns",
+                label: "Buttons",
+                type: "buttons",
+                default: "",
+            },
+            {
+                key: "layout",
+                label: "Layout",
+                options: [
+                    { id: "list", label: "List" },
+                    { id: "row", label: "Row" },
+                ],
+                default: "list",
+            },
+        ],
+    },
+    {
+        id: "quote",
+        title: "Quote",
+        description:
+            "A quote from a chosen collection (motivation, wisdom, stoic, tech).",
+        width: 480,
+        height: 220,
+        params: [
+            {
+                key: "collection",
+                label: "Collection",
+                options: [
+                    { id: "motivation", label: "Motivation" },
+                    { id: "wisdom", label: "Wisdom" },
+                    { id: "stoic", label: "Stoic" },
+                    { id: "tech", label: "Tech" },
+                ],
+                default: "motivation",
             },
         ],
     },

@@ -20,3 +20,13 @@ test("?show=date hides the tiles and shows the caption", async ({ page }) => {
     // e.g. "Tuesday | May 26, 2026"
     await expect(page.getByText(/^\w+ \| \w+ \d+, \d{4}$/)).toBeVisible();
 });
+
+test("?style=analog shows the SVG face and hides the flip tiles", async ({
+    page,
+}) => {
+    await page.goto("/clock/?style=analog&show=time&seconds=1");
+    await expect(page.locator("svg")).toBeVisible();
+    // 12 ticks + hour/minute/second hands.
+    await expect(page.locator("svg line")).toHaveCount(15);
+    await expect(page.locator(".clock-num").first()).toBeHidden();
+});

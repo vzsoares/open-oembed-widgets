@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>On This Day · Open oEmbed Widget</title>
+        <meta
+            name="description"
+            content="A notable historical event for today's date, from Wikipedia — a monochrome widget you can embed in Notion or any oEmbed consumer."
+        />
+        <link rel="icon" href="/favicon.ico" />
+
+        <!-- oEmbed discovery: consumers (e.g. Notion via Iframely) fetch this -->
+        <link
+            rel="alternate"
+            type="application/json+oembed"
+            href="https://vzsoares.github.io/open-oembed-widgets/onthisday/oembed.json"
+            title="On This Day"
+        />
+
+        <!-- Open Graph fallback for consumers that don't use oEmbed -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="On This Day" />
+        <meta
+            property="og:description"
+            content="A notable historical event for today's date, from Wikipedia."
+        />
+        <meta
+            property="og:url"
+            content="https://vzsoares.github.io/open-oembed-widgets/onthisday/"
+        />
+        <meta name="twitter:card" content="summary" />
+
+        <link rel="stylesheet" href="/src/styles.css" />
+        <script type="module" src="/src/widgets/onthisday/index.ts"></script>
+    </head>
+    <body class="font-sans">
+        <main
+            x-data="onThisDayWidget"
+            x-cloak
+            class="flex min-h-screen w-full items-center justify-center p-5 text-fg"
+        >
+            <section class="w-full max-w-md" aria-live="polite">
+                <div class="flex items-center justify-between gap-3">
+                    <h1
+                        class="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-muted"
+                    >
+                        On this day · <span x-text="dateText"></span>
+                    </h1>
+                    <button
+                        type="button"
+                        @click="shuffle()"
+                        x-show="events.length > 1"
+                        class="rounded-full border border-border px-2.5 py-1 text-xs transition-colors hover:bg-fg hover:text-bg"
+                        aria-label="Another event"
+                        title="Another event"
+                    >
+                        ↻
+                    </button>
+                </div>
+
+                <!-- Loading -->
+                <template x-if="loading">
+                    <div class="mt-5 animate-pulse space-y-2.5">
+                        <div class="h-7 w-16 rounded bg-border"></div>
+                        <div class="h-4 w-full rounded bg-border"></div>
+                        <div class="h-4 w-10/12 rounded bg-border"></div>
+                    </div>
+                </template>
+
+                <!-- Error -->
+                <template x-if="!loading && failed">
+                    <div class="mt-5 space-y-3">
+                        <p class="text-sm text-muted">
+                            Couldn't load today's events.
+                        </p>
+                        <button
+                            type="button"
+                            @click="load()"
+                            class="rounded border border-border px-3 py-1.5 text-sm transition-colors hover:bg-fg hover:text-bg"
+                        >
+                            Retry
+                        </button>
+                    </div>
+                </template>
+
+                <!-- Event -->
+                <template x-if="!loading && current">
+                    <figure class="mt-4">
+                        <span
+                            x-show="yearText"
+                            class="font-mono text-3xl font-semibold tabular-nums"
+                            x-text="yearText"
+                        ></span>
+                        <blockquote
+                            class="mt-1 text-base leading-snug"
+                            x-text="current.text"
+                        ></blockquote>
+                    </figure>
+                </template>
+            </section>
+        </main>
+    </body>
+</html>
