@@ -99,7 +99,7 @@ export const widgets: WidgetDef[] = [
         description:
             "A flip-clock or analog clock showing the current time and date, with timezone and 24-hour options.",
         width: 360,
-        height: 160,
+        height: 200,
         params: [
             {
                 key: "style",

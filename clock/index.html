@@ -109,10 +109,13 @@
             </div>
 
             <!-- Time (analog): SVG face with hour/minute/second hands -->
-            <div x-show="showTime && config.style === 'analog'">
+            <div
+                x-show="showTime && config.style === 'analog'"
+                class="flex min-h-0 w-full flex-1 items-center justify-center"
+            >
                 <svg
                     viewBox="0 0 100 100"
-                    class="h-40 w-40 text-fg"
+                    class="aspect-square h-full max-h-48 w-auto text-fg"
                     aria-hidden="true"
                 >
                     <circle

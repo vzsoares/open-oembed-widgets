@@ -1,4 +1,5 @@
 import Alpine from "alpinejs";
+import "../../lib/fit";
 import { durationSegments, type Segment } from "../../lib/duration";
 import { alignedInterval } from "../../lib/interval";
 import { applyThemeFromQuery } from "../../lib/theme";

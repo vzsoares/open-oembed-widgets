@@ -1,4 +1,5 @@
 import Alpine from "alpinejs";
+import "../../lib/fit";
 import { alignedInterval } from "../../lib/interval";
 import { applyThemeFromQuery } from "../../lib/theme";
 import {

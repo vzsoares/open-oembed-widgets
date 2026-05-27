@@ -1,4 +1,5 @@
 import Alpine from "alpinejs";
+import "../../lib/fit";
 import { applyThemeFromQuery } from "../../lib/theme";
 import { fetchVerse, type Lang, type Verse } from "./verse";
 

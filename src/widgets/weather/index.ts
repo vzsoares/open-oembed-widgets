@@ -1,4 +1,5 @@
 import Alpine from "alpinejs";
+import "../../lib/fit";
 import { applyThemeFromQuery } from "../../lib/theme";
 import {
     type Forecast,
