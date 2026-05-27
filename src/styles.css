@@ -9,6 +9,8 @@
     --color-fg: var(--fg);
     --color-muted: var(--muted);
     --color-border: var(--border);
+    /* A hair off the background, for inputs and quiet panels (gallery only). */
+    --color-surface: var(--surface);
 }
 
 @theme {
@@ -26,6 +28,7 @@
         --fg: #0a0a0a;
         --muted: #737373;
         --border: #e5e5e5;
+        --surface: #f7f7f5;
         color-scheme: light;
     }
 
@@ -35,6 +38,7 @@
             --fg: #fafafa;
             --muted: #a3a3a3;
             --border: #262626;
+            --surface: #141414;
             color-scheme: dark;
         }
     }
@@ -45,6 +49,7 @@
         --fg: #0a0a0a;
         --muted: #737373;
         --border: #e5e5e5;
+        --surface: #f7f7f5;
         color-scheme: light;
     }
 
@@ -53,6 +58,7 @@
         --fg: #fafafa;
         --muted: #a3a3a3;
         --border: #262626;
+        --surface: #141414;
         color-scheme: dark;
     }
 

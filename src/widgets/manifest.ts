@@ -26,7 +26,13 @@ export interface ParamOption {
  * (`date`), a free `text` field (`text`), or an addable rows editor
  * (`buttons`, for the link-button list).
  */
-export type ParamType = "select" | "datetime" | "date" | "text" | "buttons";
+export type ParamType =
+    | "select"
+    | "datetime"
+    | "date"
+    | "text"
+    | "buttons"
+    | "urls";
 
 /** A configurable widget option surfaced as a query param + gallery selector. */
 export interface WidgetParam {
@@ -203,8 +209,7 @@ export const widgets: WidgetDef[] = [
             {
                 key: "src",
                 label: "Images",
-                type: "text",
-                placeholder: "https://…/a.jpg, https://…/b.jpg",
+                type: "urls",
                 default: "",
             },
             {

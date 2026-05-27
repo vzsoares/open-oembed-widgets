@@ -54,6 +54,10 @@ interface Home {
     addButtonRow(): void;
     removeButtonRow(index: number): void;
     serializeButtons(): string;
+    imageRows: { url: string }[];
+    addImageRow(): void;
+    removeImageRow(index: number): void;
+    serializeImages(): string;
     readonly themeLabel: string;
 }
 
@@ -73,6 +77,7 @@ Alpine.data(
                 color: "",
             },
         ],
+        imageRows: [{ url: "" }],
 
         paramValue(w, key) {
             return this.selected[w.id]?.[key] ?? "";
@@ -101,6 +106,13 @@ Alpine.data(
                 const serialized = this.serializeButtons();
                 if (serialized) q.set(buttonsParam.key, serialized);
                 else q.delete(buttonsParam.key);
+            }
+            // The addable image-URL editor feeds its param (e.g. ?src=).
+            const urlsParam = w.params?.find((p) => p.type === "urls");
+            if (urlsParam) {
+                const serialized = this.serializeImages();
+                if (serialized) q.set(urlsParam.key, serialized);
+                else q.delete(urlsParam.key);
             }
             return q.toString();
         },
@@ -153,6 +165,22 @@ Alpine.data(
                     return fields.join("|");
                 })
                 .join(";");
+        },
+
+        addImageRow() {
+            this.imageRows.push({ url: "" });
+        },
+
+        removeImageRow(index) {
+            this.imageRows.splice(index, 1);
+        },
+
+        // Build the `?src=` value: image URLs joined by "," (blanks skipped).
+        serializeImages() {
+            return this.imageRows
+                .map((r) => r.url.trim())
+                .filter((u) => u !== "")
+                .join(",");
         },
 
         // Parse a previously-built widget URL back into the gallery: detect the

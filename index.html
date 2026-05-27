@@ -21,56 +21,78 @@
         <script type="module" src="/src/home.ts"></script>
     </head>
     <body class="bg-bg font-sans text-fg" x-data="home" x-cloak>
-        <div class="mx-auto max-w-2xl px-6 py-12 sm:py-16">
-            <header class="flex items-start justify-between gap-4">
-                <div>
-                    <h1 class="text-2xl font-semibold tracking-tight">
-                        Open oEmbed Widgets
-                    </h1>
-                    <p class="mt-2 max-w-prose text-sm leading-relaxed text-muted">
-                        Tiny, monochrome, client-side widgets you can embed in
-                        any oEmbed consumer (Notion, and more). Pick a theme and
-                        range, copy the URL, paste it into your tool, and choose
-                        “Embed”.
-                    </p>
+        <!-- Sticky top bar -->
+        <header
+            class="sticky top-0 z-20 border-b border-border bg-bg/80 backdrop-blur"
+        >
+            <div
+                class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3"
+            >
+                <span class="font-semibold tracking-tight"
+                    >Open oEmbed Widgets</span
+                >
+                <nav class="flex items-center gap-2">
                     <a
                         href="help/"
-                        class="mt-3 inline-block text-sm underline underline-offset-4 transition-colors hover:text-fg"
-                        >New here? How to use →</a
+                        class="rounded-md border border-border px-3 py-1.5 text-xs transition-colors hover:bg-fg hover:text-bg"
+                        >How to use</a
                     >
-                </div>
-                <button
-                    type="button"
-                    @click="toggle()"
-                    class="shrink-0 rounded-full border border-border px-3 py-1.5 text-xs transition-colors hover:bg-fg hover:text-bg"
-                    aria-label="Toggle theme"
-                    x-text="themeLabel"
-                ></button>
-            </header>
+                    <button
+                        type="button"
+                        @click="toggle()"
+                        class="rounded-md border border-border px-3 py-1.5 text-xs transition-colors hover:bg-fg hover:text-bg"
+                        aria-label="Toggle theme"
+                        x-text="themeLabel"
+                    ></button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Hero -->
+        <section class="mx-auto max-w-2xl px-6 pt-16 pb-10 text-center sm:pt-24">
+            <h1 class="text-4xl font-semibold tracking-tight sm:text-5xl">
+                Open oEmbed Widgets
+            </h1>
+            <p
+                class="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted sm:text-lg"
+            >
+                Tiny, monochrome, client-side widgets for Notion and any oEmbed
+                tool. Pick one, make it yours, and paste the link — no account,
+                no code.
+            </p>
 
             <!-- Paste an existing widget URL to load it back in for editing -->
-            <div class="mt-8">
+            <div class="mx-auto mt-8 max-w-md">
                 <input
                     type="url"
                     @change="importUrl($event.target.value)"
                     placeholder="Paste a widget URL to edit it…"
                     aria-label="Paste a widget URL to edit it"
-                    class="w-full rounded-lg border border-border bg-transparent px-3 py-2 text-sm text-fg placeholder:text-muted"
+                    class="h-11 w-full rounded-md border border-border bg-surface px-4 text-sm text-fg transition-colors placeholder:text-muted focus:border-fg focus:outline-none"
                     :class="importError && 'border-fg'"
                 />
-                <p
-                    x-show="importError"
-                    class="mt-1 text-xs text-muted"
-                >
+                <p x-show="importError" class="mt-1.5 text-xs text-muted">
                     That doesn't look like one of these widgets' URLs.
                 </p>
             </div>
 
-            <section class="mt-10 space-y-6">
+            <p
+                class="mt-6 font-mono text-xs uppercase tracking-[0.15em] text-muted"
+            >
+                <span x-text="widgets.length"></span> widgets · oEmbed ·
+                client-side
+            </p>
+        </section>
+
+        <!-- Widget showcase: 1 / 2 / 3 columns as the screen grows -->
+        <section class="mx-auto max-w-6xl px-6 pb-20">
+            <div
+                class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3"
+            >
                 <template x-for="w in widgets" :key="w.id">
                     <article
                         :id="'w-' + w.id"
-                        class="scroll-mt-4 rounded-xl border border-border p-5 transition-colors hover:border-muted"
+                        class="flex scroll-mt-20 flex-col rounded-xl border border-border p-5 transition hover:border-muted hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)]"
                     >
                         <div class="flex items-baseline justify-between gap-3">
                             <h2
@@ -191,6 +213,41 @@
                                                 </button>
                                             </div>
                                         </template>
+                                        <!-- urls: an addable list of image URLs -->
+                                        <template x-if="param.type === 'urls'">
+                                            <div class="w-full space-y-1.5">
+                                                <template
+                                                    x-for="(row, i) in imageRows"
+                                                    :key="i"
+                                                >
+                                                    <div
+                                                        class="flex items-center gap-1.5"
+                                                    >
+                                                        <input
+                                                            type="url"
+                                                            x-model.lazy="row.url"
+                                                            placeholder="https://…/image.jpg"
+                                                            class="min-w-0 flex-1 rounded border border-border bg-transparent px-2 py-1 font-mono text-[0.7rem] text-fg placeholder:text-muted"
+                                                        />
+                                                        <button
+                                                            type="button"
+                                                            @click="removeImageRow(i)"
+                                                            aria-label="Remove image"
+                                                            class="shrink-0 rounded border border-border px-2 py-1 text-xs text-muted transition-colors hover:bg-fg hover:text-bg"
+                                                        >
+                                                            ×
+                                                        </button>
+                                                    </div>
+                                                </template>
+                                                <button
+                                                    type="button"
+                                                    @click="addImageRow()"
+                                                    class="rounded border border-border px-2.5 py-1 text-xs text-muted transition-colors hover:bg-fg hover:text-bg"
+                                                >
+                                                    + Add image
+                                                </button>
+                                            </div>
+                                        </template>
                                     </div>
                                 </template>
                             </div>
@@ -214,6 +271,10 @@
                             ></iframe>
                         </div>
 
+                        <!-- Spacer pushes the copy row to the card bottom so
+                             cards in a row share height with aligned actions. -->
+                        <div class="flex-1"></div>
+
                         <!-- Copyable embed URL -->
                         <div class="mt-4 flex items-center gap-2">
                             <code
@@ -229,19 +290,92 @@
                         </div>
                     </article>
                 </template>
-            </section>
+            </div>
+        </section>
 
-            <footer
-                class="mt-12 border-t border-border pt-6 text-xs text-muted"
-            >
-                <a
-                    href="https://github.com/vzsoares/open-oembed-widgets"
-                    target="_blank"
-                    class="underline underline-offset-4 transition-colors hover:text-fg"
-                    >Source on GitHub</a
+        <!-- How to use (on-page recap; full walkthrough at /help/) -->
+        <section class="mx-auto max-w-6xl px-6 pb-16">
+            <div class="rounded-xl border border-border p-6 sm:p-8">
+                <div class="flex items-baseline justify-between gap-4">
+                    <h2 class="text-lg font-semibold tracking-tight">
+                        How to use
+                    </h2>
+                    <a
+                        href="help/"
+                        class="text-xs text-muted underline underline-offset-4 transition-colors hover:text-fg"
+                        >Full guide →</a
+                    >
+                </div>
+                <ol
+                    class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
                 >
-                · oEmbed-compliant · client-side only
-            </footer>
-        </div>
+                    <li class="flex gap-3">
+                        <span
+                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-fg text-sm font-semibold text-bg"
+                            >1</span
+                        >
+                        <div>
+                            <h3 class="text-sm font-medium">Pick a widget</h3>
+                            <p class="mt-1 text-sm text-muted">
+                                Browse the cards and choose one you like.
+                            </p>
+                        </div>
+                    </li>
+                    <li class="flex gap-3">
+                        <span
+                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-fg text-sm font-semibold text-bg"
+                            >2</span
+                        >
+                        <div>
+                            <h3 class="text-sm font-medium">Make it yours</h3>
+                            <p class="mt-1 text-sm text-muted">
+                                Tap the options and switch light or dark.
+                            </p>
+                        </div>
+                    </li>
+                    <li class="flex gap-3">
+                        <span
+                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-fg text-sm font-semibold text-bg"
+                            >3</span
+                        >
+                        <div>
+                            <h3 class="text-sm font-medium">Copy the link</h3>
+                            <p class="mt-1 text-sm text-muted">
+                                Hit <strong class="text-fg">Copy</strong> on the
+                                card.
+                            </p>
+                        </div>
+                    </li>
+                    <li class="flex gap-3">
+                        <span
+                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-fg text-sm font-semibold text-bg"
+                            >4</span
+                        >
+                        <div>
+                            <h3 class="text-sm font-medium">Paste it</h3>
+                            <p class="mt-1 text-sm text-muted">
+                                In Notion: type
+                                <code
+                                    class="rounded border border-border px-1 font-mono text-xs"
+                                    >/embed</code
+                                >, paste, Embed link.
+                            </p>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <footer
+            class="mx-auto max-w-6xl border-t border-border px-6 py-8 text-xs text-muted"
+        >
+            <a
+                href="https://github.com/vzsoares/open-oembed-widgets"
+                target="_blank"
+                class="underline underline-offset-4 transition-colors hover:text-fg"
+                >Source on GitHub</a
+            >
+            · oEmbed-compliant · client-side only
+        </footer>
     </body>
 </html>
