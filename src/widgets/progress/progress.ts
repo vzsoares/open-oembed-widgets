@@ -126,7 +126,7 @@ function defaultLabel(config: ProgressConfig, nowMs: number): string {
         case "week":
             return "This week";
         case "custom":
-            return "";
+            return "Life";
         default:
             return String(new Date(nowMs).getFullYear());
     }

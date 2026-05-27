@@ -103,7 +103,9 @@ describe("progressView", () => {
         expect(progressView({ ...base, mode: "week" }, now).label).toBe(
             "This week",
         );
-        expect(progressView({ ...base, mode: "custom" }, now).label).toBe("");
+        expect(progressView({ ...base, mode: "custom" }, now).label).toBe(
+            "Life",
+        );
     });
 
     test("explicit label wins and percent is rounded", () => {
