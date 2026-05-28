@@ -187,6 +187,39 @@ export const widgets: WidgetDef[] = [
         ],
     },
     {
+        id: "counter",
+        title: "Day Counter",
+        description:
+            "Counts the whole days since or until a date (set ?date=2026-01-01).",
+        width: 360,
+        height: 160,
+        params: [
+            {
+                key: "mode",
+                label: "Mode",
+                options: [
+                    { id: "auto", label: "Auto" },
+                    { id: "until", label: "Until" },
+                    { id: "since", label: "Since" },
+                ],
+                default: "auto",
+            },
+            {
+                key: "date",
+                label: "Date",
+                type: "date",
+                default: "",
+            },
+            {
+                key: "label",
+                label: "Label",
+                type: "text",
+                placeholder: "e.g. New Year",
+                default: "",
+            },
+        ],
+    },
+    {
         id: "bible",
         title: "Bible Verse",
         description: "A random Bible verse in English or Portuguese.",

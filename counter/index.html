@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Day Counter · Open oEmbed Widget</title>
+        <meta
+            name="description"
+            content="Counts the whole days since or until a date — a monochrome widget you can embed in Notion or any oEmbed consumer."
+        />
+        <link rel="icon" href="/favicon.ico" />
+
+        <!-- oEmbed discovery: consumers (e.g. Notion via Iframely) fetch this -->
+        <link
+            rel="alternate"
+            type="application/json+oembed"
+            href="https://vzsoares.github.io/open-oembed-widgets/counter/oembed.json"
+            title="Day Counter"
+        />
+
+        <!-- Open Graph fallback for consumers that don't use oEmbed -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Day Counter" />
+        <meta
+            property="og:description"
+            content="Counts the whole days since or until a date."
+        />
+        <meta
+            property="og:url"
+            content="https://vzsoares.github.io/open-oembed-widgets/counter/"
+        />
+        <meta name="twitter:card" content="summary" />
+
+        <link rel="stylesheet" href="/src/styles.css" />
+        <script type="module" src="/src/widgets/counter/index.ts"></script>
+    </head>
+    <body class="font-sans">
+        <main
+            x-data="counterWidget"
+            x-cloak
+            class="flex min-h-screen w-full select-none flex-col items-center justify-center gap-2 p-5 text-fg"
+            aria-live="polite"
+        >
+            <span
+                class="text-7xl font-bold leading-none tabular-nums"
+                x-text="view.days"
+            ></span>
+            <span
+                class="mt-1 font-mono text-[0.7rem] uppercase tracking-[0.18em] text-muted"
+                x-text="view.caption"
+            ></span>
+            <p
+                x-show="view.label"
+                class="mt-1 text-[15px] font-bold tracking-tight"
+                x-text="view.label"
+            ></p>
+        </main>
+    </body>
+</html>

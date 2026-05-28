@@ -1,9 +1,9 @@
 # Backlog
 
-Ideas and enhancements for the project. Shipped so far: 11 widgets (btc, clock,
-timer, images, progress, onthisday, weather, github, links, quote, bible), a
-redesigned gallery, a `/help/` guide, fit-to-box scaling, padding/scaling
-controls, e2e + CI, and a DESIGN.md.
+Ideas and enhancements for the project. Shipped so far: 12 widgets (btc, clock,
+timer, counter, images, progress, onthisday, weather, github, links, quote,
+bible), a redesigned gallery, a `/showcase/` live-demos page, a `/help/` guide,
+fit-to-box scaling, padding/scaling controls, e2e + CI, and a DESIGN.md.
 
 New widgets are **client-side only** and follow the existing pattern:
 
@@ -31,12 +31,6 @@ are monochrome, transparent-background, and support `?theme=light|dark`.
 - **Name day — `nameday`.** Today's name day(s) for a locale
   (`?lang=cz|pl|hu|…`). Needs a **bundled per-locale dataset** (like
   `bible/fallback.json`); name-day calendars are country-specific. No API.
-- **Habit / streak — `streak`.** ⚠️ A true check-in tracker needs **mutable,
-  persisted state**, which we can't do without a backend. Feasible version: a
-  passive **"streak since a date"** counter — `?since=2026-01-01` auto-counts
-  days (like the timer's count-up, reusing `src/lib/duration.ts`), shown with a
-  flame/number. Real check-ins would require `localStorage` (per-browser,
-  iframe-storage-partitioned, not synced across devices/embeds) or a backend.
 
 ---
 
@@ -62,7 +56,7 @@ are monochrome, transparent-background, and support `?theme=light|dark`.
 
 ## Shared building blocks (available to reuse)
 
-- `src/lib/duration.ts` — d/h/m/s splitting + display segments (timer, future streak).
+- `src/lib/duration.ts` — d/h/m/s splitting + display segments (timer).
 - `src/lib/interval.ts` — a self-correcting tick that survives tab throttling.
 - `src/lib/fit.ts` — scale-to-fit (`?fit=1`) + padding (`?pad=`) for all widgets.
 - `src/lib/theme.ts` — `?theme=light|dark` resolution.

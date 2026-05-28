@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Showcase · Open oEmbed Widgets</title>
+        <meta
+            name="description"
+            content="Every Open oEmbed Widget rendered live — see the monochrome, client-side widgets in action before you embed them."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Showcase · Open oEmbed Widgets" />
+        <meta
+            property="og:description"
+            content="Every Open oEmbed Widget rendered live, in action."
+        />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="stylesheet" href="/src/styles.css" />
+        <script type="module" src="/src/showcase.ts"></script>
+    </head>
+    <body class="bg-bg font-sans text-fg" x-data="showcase" x-cloak>
+        <!-- Sticky top bar -->
+        <header
+            class="sticky top-0 z-20 border-b border-border bg-bg/80 backdrop-blur"
+        >
+            <div
+                class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3"
+            >
+                <a href="../" class="font-semibold tracking-tight">
+                    Open oEmbed Widgets
+                </a>
+                <nav class="flex items-center gap-2">
+                    <a
+                        href="../"
+                        class="rounded-md border border-border px-3 py-1.5 text-xs transition-colors hover:bg-fg hover:text-bg"
+                        >Customize</a
+                    >
+                    <a
+                        href="../help/"
+                        class="rounded-md border border-border px-3 py-1.5 text-xs transition-colors hover:bg-fg hover:text-bg"
+                        >How to use</a
+                    >
+                    <button
+                        type="button"
+                        @click="toggle()"
+                        class="rounded-md border border-border px-3 py-1.5 text-xs transition-colors hover:bg-fg hover:text-bg"
+                        aria-label="Toggle theme"
+                        x-text="themeLabel"
+                    ></button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Hero -->
+        <section class="mx-auto max-w-2xl px-6 pt-16 pb-10 text-center sm:pt-20">
+            <h1 class="text-4xl font-semibold tracking-tight sm:text-5xl">
+                Showcase
+            </h1>
+            <p
+                class="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted sm:text-lg"
+            >
+                Every widget, rendered live. Each frame below is a real embed —
+                the exact thing you'd drop into Notion. Like one?
+                <a
+                    href="../"
+                    class="underline underline-offset-4 transition-colors hover:text-fg"
+                    >Customize it</a
+                >.
+            </p>
+        </section>
+
+        <!-- Live demos: 1 / 2 / 3 columns as the screen grows -->
+        <section class="mx-auto max-w-7xl px-6 pb-20">
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+                <template x-for="w in widgets" :key="w.id">
+                    <article
+                        :id="'demo-' + w.id"
+                        class="flex flex-col rounded-xl border border-border p-5 transition hover:border-muted"
+                    >
+                        <div class="flex items-baseline justify-between gap-3">
+                            <h2
+                                class="text-base font-medium"
+                                x-text="w.title"
+                            ></h2>
+                            <a
+                                :href="'../' + w.id + '/'"
+                                target="_blank"
+                                class="text-xs text-muted underline underline-offset-4 transition-colors hover:text-fg"
+                                >Open ↗</a
+                            >
+                        </div>
+                        <p
+                            class="mt-1 text-sm text-muted"
+                            x-text="w.description"
+                        ></p>
+
+                        <!-- Live embed, full-width inside the card. -->
+                        <div
+                            class="mt-4 overflow-hidden rounded-lg border border-border"
+                        >
+                            <iframe
+                                title="Widget demo"
+                                :src="demoUrl(w)"
+                                :title="w.title + ' demo'"
+                                :height="dims(w).height"
+                                class="block w-full"
+                                loading="lazy"
+                            ></iframe>
+                        </div>
+                    </article>
+                </template>
+            </div>
+        </section>
+    </body>
+</html>

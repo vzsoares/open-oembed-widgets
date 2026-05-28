@@ -102,9 +102,11 @@
                             </span>
                         </div>
 
-                        <!-- Sparkline + hover -->
+                        <!-- Sparkline + hover. `overflow-x-clip` keeps the
+                             hover tooltip from spilling past the chart edges and
+                             scrolling the embed; vertical stays visible. -->
                         <div
-                            class="relative mt-4 h-24"
+                            class="relative mt-4 h-24 overflow-x-clip"
                             @mousemove="onHover($event)"
                             @mouseleave="hoverIndex = null"
                         >
@@ -141,9 +143,14 @@
                                         class="absolute h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-fg"
                                         :style="`left: ${hover.xPct}%; top: ${hover.yPct}%`"
                                     ></div>
+                                    <!-- Anchor shifts the tooltip's own
+                                         reference point from left edge (0%) to
+                                         centered (50%) to right edge (100%), so
+                                         it tracks the cursor yet always stays
+                                         fully inside the chart. -->
                                     <div
-                                        class="absolute top-0 -translate-x-1/2 whitespace-nowrap rounded border border-border bg-bg px-1.5 py-0.5 font-mono text-[0.65rem] leading-tight tabular-nums"
-                                        :style="`left: clamp(2.75rem, ${hover.xPct}%, calc(100% - 2.75rem))`"
+                                        class="absolute top-0 whitespace-nowrap rounded border border-border bg-bg px-1.5 py-0.5 font-mono text-[0.65rem] leading-tight tabular-nums"
+                                        :style="`left: ${hover.xPct}%; transform: translateX(-${hover.xPct}%)`"
                                     >
                                         <span x-text="hover.priceText"></span>
                                         <span

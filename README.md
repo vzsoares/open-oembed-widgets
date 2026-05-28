@@ -7,6 +7,7 @@ Tiny, monochrome, **client-side** widgets you can embed in any
 No backend — everything runs in the browser and is hosted on GitHub Pages.
 
 **[Open the gallery →](https://vzsoares.github.io/open-oembed-widgets/)** ·
+**[Showcase](https://vzsoares.github.io/open-oembed-widgets/showcase/)** ·
 **[How to use](https://vzsoares.github.io/open-oembed-widgets/help/)**
 
 [![Open oEmbed Widgets gallery](docs/screenshot.png)](https://vzsoares.github.io/open-oembed-widgets/)
@@ -22,6 +23,7 @@ whatever box they're embedded in.
 | 📈 Bitcoin Price    | `/btc/`       | Live BTC/USD price + sparkline, range 1D–1Y, ~60s.   |
 | 🕒 Clock            | `/clock/`     | Flip or analog clock with date, timezone & 24h opts. |
 | ⏳ Timer            | `/timer/`     | Countdown or count-up in days/hours/minutes/seconds. |
+| 📅 Day Counter      | `/counter/`   | Whole days since or until a date (e.g. a deadline).  |
 | 🖼️ Image Rotator    | `/images/`    | Cross-fades through a list of images on a timer.     |
 | 📊 Progress         | `/progress/`  | Day / week / year / custom (incl. life) progress bar.|
 | 📜 On This Day      | `/onthisday/` | Notable historical events for today (Wikipedia).     |
@@ -68,6 +70,9 @@ Per-widget options:
   New Year if unset. The gallery's date picker emits the mode-neutral `?date=ISO`
   (used when `?to`/`?from` are absent). Also `?units=dhms|dhm`, `?label=...`
   caption, and `?done=...` text shown when a countdown hits zero.
+- **Day Counter** — `?date=2026-01-01` (a bare date counts in local time) and
+  `?mode=auto|until|since` (default `auto` picks the direction from the date).
+  `?label=` adds a caption. Defaults to counting down to the New Year if unset.
 - **Image Rotator** — `?src=url1,url2,url3` (comma-separated image URLs; falls
   back to bundled demo images if unset), `?mode=sequential|random` (default
   `sequential`), `?every=8` seconds per image, and `?fit=cover|contain`
@@ -114,14 +119,15 @@ to load its theme + options back into the UI for further editing.
 ```
 /
 ├── index.html                # widget gallery (home)
-# one <id>/index.html per widget: btc, clock, timer, images, progress,
-# onthisday, weather, github, links, bible (all embeddable pages)
+# one <id>/index.html per widget: btc, clock, timer, counter, images, progress,
+# onthisday, weather, github, links, quote, bible (all embeddable pages)
 ├── btc/index.html
 ├── clock/index.html
 ├── …                         # progress/, onthisday/, weather/, github/, links/, …
 ├── public/demo/              # bundled demo images for the rotator
 ├── src/
 │   ├── home.ts               # gallery logic (incl. paste-URL import)
+│   ├── showcase.ts           # /showcase/ live-demos page logic
 │   ├── styles.css            # Tailwind + monochrome theme vars
 │   ├── lib/                  # theme.ts, duration.ts, interval.ts (+ *.test.ts)
 │   └── widgets/
@@ -129,6 +135,7 @@ to load its theme + options back into the UI for further editing.
 │       ├── btc/              # index.ts, price.ts, chart.ts, *.test.ts
 │       ├── clock/            # index.ts, time.ts, time.test.ts
 │       ├── timer/            # index.ts, config.ts, config.test.ts
+│       ├── counter/          # index.ts, counter.ts, counter.test.ts
 │       ├── images/           # index.ts, config.ts, config.test.ts
 │       ├── progress/         # index.ts, progress.ts, progress.test.ts
 │       ├── onthisday/        # index.ts, events.ts, events.test.ts

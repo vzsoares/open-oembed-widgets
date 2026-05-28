@@ -18,8 +18,10 @@ export default defineConfig(({ command }) => ({
             input: {
                 home: resolve(process.cwd(), "index.html"),
                 help: resolve(process.cwd(), "help/index.html"),
+                showcase: resolve(process.cwd(), "showcase/index.html"),
                 clock: resolve(process.cwd(), "clock/index.html"),
                 timer: resolve(process.cwd(), "timer/index.html"),
+                counter: resolve(process.cwd(), "counter/index.html"),
                 images: resolve(process.cwd(), "images/index.html"),
                 progress: resolve(process.cwd(), "progress/index.html"),
                 onthisday: resolve(process.cwd(), "onthisday/index.html"),
