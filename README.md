@@ -21,6 +21,7 @@ whatever box they're embedded in.
 | Widget              | URL           | Description                                          |
 | ------------------- | ------------- | ---------------------------------------------------- |
 | 📈 Bitcoin Price    | `/btc/`       | Live BTC/USD price + sparkline, range 1D–1Y, ~60s.   |
+| 💹 Crypto Ticker    | `/ticker/`    | Live price + chart for any coin (`?coin=ethereum`).  |
 | 🕒 Clock            | `/clock/`     | Flip or analog clock with date, timezone & 24h opts. |
 | 🌍 World Clock      | `/worldclock/`| Current time across several timezones at once.       |
 | ⏳ Timer            | `/timer/`     | Countdown or count-up in days/hours/minutes/seconds. |
@@ -34,6 +35,7 @@ whatever box they're embedded in.
 | 🔗 Button List      | `/links/`     | Link buttons that open in a new tab; custom colors.  |
 | 💬 Quote            | `/quote/`     | A quote from a chosen collection (bundled).          |
 | 📖 Bible Verse      | `/bible/`     | Random verse in English or Portuguese.               |
+| 🗓️ Name Day         | `/nameday/`   | Today's name day(s); 6 locales (CZ/SK/FR/IT/ES/EN).  |
 
 ## 🔗 Embed
 
@@ -63,6 +65,9 @@ Per-widget options:
 
 - **Range** (BTC) — initial chart window: `?range=1d|1w|1m|3m|1y` (default `1m`).
   The range buttons inside the widget stay interactive inside the embed too.
+- **Crypto Ticker** — `?coin=ethereum` (any CoinGecko id; default `bitcoin`) and
+  `?vs=usd` (vs-currency). Same chart/range UI as BTC. Known coins
+  (BTC/ETH/SOL/…) get Binance + Coinbase fallbacks; any other id is CoinGecko-only.
 - **Clock** — `?style=flip|analog` (default `flip`), `?show=time|date|both`
   (default `both`), `?seconds=1` for a seconds tile/hand, `?h24=1` for a
   24-hour clock (default: locale), and `?tz=Area/City` for an IANA timezone
@@ -106,6 +111,10 @@ Per-widget options:
   quotes are bundled (no API). Hit ↻ for another.
 - **Language** (Bible) — `?lang=en|pt` (default: viewer's locale). EN/PT buttons
   stay interactive in the embed.
+- **Name Day** — `?lang=cz|sk|fr|it|es|en` (default `cz`). Shows today's name
+  day(s) from a bundled calendar (no API); the date renders in the locale's own
+  language. fr/it/es are sanctorale-based (a few days show a feast rather than
+  personal names); `en` is a loose anglicized set.
 
 The gallery also has a **paste-a-URL** box: paste any widget URL above the cards
 to load its theme + options back into the UI for further editing.
@@ -116,10 +125,16 @@ to load its theme + options back into the UI for further editing.
   embed URL (`/btc/`).
 - **Static oEmbed** — `scripts/gen-oembed.ts` reads `src/widgets/manifest.ts`
   and writes `dist/<id>/oembed.json` after the Vite build.
-- **Resilient data** — the BTC chart tries CoinGecko → Binance → Coinbase
+- **Resilient data** — the BTC/ticker chart tries CoinGecko → Binance → Coinbase
   (all public, key-less, CORS-enabled) and uses the first that answers. The
   Bible widget uses bible-api.com and falls back to a bundled verse list if the
   API is unreachable, so it always renders.
+- **Bundled datasets** — Name Day ships an offline `MM-DD → names` calendar
+  (`src/widgets/nameday/data.json`) built from the MIT-licensed
+  [namedays-cs](https://github.com/OzzyCzech/namedays-cs) (cz),
+  [name-day-calendar](https://github.com/peterknezek/name-day-calendar) (sk), and
+  [nameday-api](https://github.com/xnekv03/nameday-api) / [nameday.abalin.net](https://nameday.abalin.net)
+  (fr/it/es/en).
 - **No-dependency chart** — a hand-built SVG sparkline (`chart.ts`), monochrome.
 - **Config via manifest** — each widget declares `params` (range, language, …);
   the gallery renders selectors and bakes them into the embed URL.
@@ -127,8 +142,9 @@ to load its theme + options back into the UI for further editing.
 ```
 /
 ├── index.html                # widget gallery (home)
-# one <id>/index.html per widget: btc, clock, worldclock, timer, counter, moon,
-# images, progress, onthisday, weather, github, links, quote, bible (embeddable)
+# one <id>/index.html per widget: btc, ticker, clock, worldclock, timer, counter,
+# moon, images, progress, onthisday, weather, github, links, quote, bible,
+# nameday (all embeddable pages)
 ├── btc/index.html
 ├── clock/index.html
 ├── …                         # progress/, onthisday/, weather/, github/, links/, …
@@ -140,7 +156,8 @@ to load its theme + options back into the UI for further editing.
 │   ├── lib/                  # theme.ts, duration.ts, interval.ts (+ *.test.ts)
 │   └── widgets/
 │       ├── manifest.ts       # widgets + params (single source)
-│       ├── btc/              # index.ts, price.ts, chart.ts, *.test.ts
+│       ├── btc/              # index.ts, price.ts, chart.ts, widget.ts, *.test.ts
+│       ├── ticker/           # index.ts (reuses btc/price + btc/widget)
 │       ├── clock/            # index.ts, time.ts, time.test.ts
 │       ├── worldclock/       # index.ts, worldclock.ts, worldclock.test.ts
 │       ├── timer/            # index.ts, config.ts, config.test.ts
@@ -153,7 +170,8 @@ to load its theme + options back into the UI for further editing.
 │       ├── github/           # index.ts, github.ts, github.test.ts
 │       ├── links/            # index.ts, links.ts, links.test.ts
 │       ├── quote/            # index.ts, quote.ts, quotes.json, quote.test.ts
-│       └── bible/            # index.ts, verse.ts, fallback.json, *.test.ts
+│       ├── bible/            # index.ts, verse.ts, fallback.json, *.test.ts
+│       └── nameday/          # index.ts, nameday.ts, data.json, nameday.test.ts
 ├── e2e/                      # Playwright end-to-end specs
 ├── scripts/gen-oembed.ts     # post-build oEmbed JSON generator
 ├── playwright.config.ts

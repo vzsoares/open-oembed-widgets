@@ -47,10 +47,12 @@ test("theme toggle flips the document theme and its label", async ({
 test("a param selector is baked into the embed URL", async ({ page }) => {
     await page.goto("/");
 
-    // The BTC card starts on the default 1M range.
+    // The BTC card starts on the default 1M range. Scope to its card — the
+    // ticker card carries an identical range selector.
+    const btcCard = page.locator("#w-btc");
     await expect(page.getByText(/\/btc\/\?.*range=1m/)).toBeVisible();
 
-    await page.getByRole("button", { name: "1W", exact: true }).click();
+    await btcCard.getByRole("button", { name: "1W", exact: true }).click();
     await expect(page.getByText(/\/btc\/\?.*range=1w/)).toBeVisible();
 });
 

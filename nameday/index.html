@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Name Day · Open oEmbed Widget</title>
+        <meta
+            name="description"
+            content="Today's name day(s) for a locale, from a bundled calendar — a monochrome widget you can embed in Notion or any oEmbed consumer."
+        />
+        <link rel="icon" href="/favicon.ico" />
+
+        <!-- oEmbed discovery: consumers (e.g. Notion via Iframely) fetch this -->
+        <link
+            rel="alternate"
+            type="application/json+oembed"
+            href="https://vzsoares.github.io/open-oembed-widgets/nameday/oembed.json"
+            title="Name Day"
+        />
+
+        <!-- Open Graph fallback for consumers that don't use oEmbed -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Name Day" />
+        <meta
+            property="og:description"
+            content="Today's name day(s) for a locale (Czech or Slovak)."
+        />
+        <meta
+            property="og:url"
+            content="https://vzsoares.github.io/open-oembed-widgets/nameday/"
+        />
+        <meta
+            property="og:image"
+            content="https://vzsoares.github.io/open-oembed-widgets/og.png"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+            name="twitter:image"
+            content="https://vzsoares.github.io/open-oembed-widgets/og.png"
+        />
+
+        <link rel="stylesheet" href="/src/styles.css" />
+        <script type="module" src="/src/widgets/nameday/index.ts"></script>
+    </head>
+    <body class="font-sans">
+        <main
+            x-data="nameDayWidget"
+            x-cloak
+            class="flex min-h-screen w-full select-none flex-col items-center justify-center gap-1.5 p-5 text-fg"
+            aria-live="polite"
+        >
+            <p
+                class="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-muted"
+                x-text="view.dateText"
+            ></p>
+
+            <!-- Name(s) celebrated today. Wraps + balances so long
+                 multi-name days and feast titles stay inside the box. -->
+            <template x-if="view.names.length">
+                <p
+                    class="max-w-full text-center text-2xl font-bold leading-tight tracking-tight text-balance [overflow-wrap:anywhere]"
+                    x-text="view.names.join(' · ')"
+                ></p>
+            </template>
+
+            <!-- Days without a name day -->
+            <template x-if="!view.names.length">
+                <p class="text-center text-xl font-medium text-muted">
+                    No name day
+                </p>
+            </template>
+
+            <p
+                class="mt-1 font-mono text-[0.6rem] uppercase tracking-[0.18em] text-muted"
+                x-text="view.localeName"
+            ></p>
+        </main>
+    </body>
+</html>

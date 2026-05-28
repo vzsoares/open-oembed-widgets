@@ -54,14 +54,14 @@
             <img
                 :src="slots[0]"
                 :class="layerClass(0)"
-                class="absolute inset-0 h-full w-full transition-opacity duration-700 ease-in-out"
+                class="absolute inset-0 h-full w-full transition-opacity duration-700 ease-in-out motion-reduce:transition-none"
                 alt=""
                 draggable="false"
             />
             <img
                 :src="slots[1]"
                 :class="layerClass(1)"
-                class="absolute inset-0 h-full w-full transition-opacity duration-700 ease-in-out"
+                class="absolute inset-0 h-full w-full transition-opacity duration-700 ease-in-out motion-reduce:transition-none"
                 alt=""
                 draggable="false"
             />

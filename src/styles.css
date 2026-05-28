@@ -87,6 +87,16 @@
         cursor: pointer;
     }
 
+    /* A consistent, monochrome keyboard-focus ring across every page. Only
+       shows for keyboard/AT focus (:focus-visible), never on mouse click.
+       Elements with their own focus treatment (e.g. the gallery's URL input,
+       which uses focus:outline-none) keep theirs via higher specificity. */
+    :focus-visible {
+        outline: 2px solid var(--fg);
+        outline-offset: 2px;
+        border-radius: 2px;
+    }
+
     [x-cloak] {
         /* biome-ignore lint/complexity/noImportantStyles: x-cloak must beat any display rule until Alpine initializes */
         display: none !important;

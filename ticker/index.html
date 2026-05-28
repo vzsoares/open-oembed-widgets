@@ -3,10 +3,10 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Bitcoin Price · Open oEmbed Widget</title>
+        <title>Crypto Ticker · Open oEmbed Widget</title>
         <meta
             name="description"
-            content="Live BTC/USD price with a configurable chart — a monochrome widget you can embed in Notion or any oEmbed consumer."
+            content="Live price + chart for any coin — a monochrome widget you can embed in Notion or any oEmbed consumer."
         />
         <link rel="icon" href="/favicon.ico" />
 
@@ -14,20 +14,20 @@
         <link
             rel="alternate"
             type="application/json+oembed"
-            href="https://vzsoares.github.io/open-oembed-widgets/btc/oembed.json"
-            title="Bitcoin Price"
+            href="https://vzsoares.github.io/open-oembed-widgets/ticker/oembed.json"
+            title="Crypto Ticker"
         />
 
         <!-- Open Graph fallback for consumers that don't use oEmbed -->
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Bitcoin Price" />
+        <meta property="og:title" content="Crypto Ticker" />
         <meta
             property="og:description"
-            content="Live BTC/USD price with a configurable chart."
+            content="Live price + chart for any coin (set ?coin=ethereum)."
         />
         <meta
             property="og:url"
-            content="https://vzsoares.github.io/open-oembed-widgets/btc/"
+            content="https://vzsoares.github.io/open-oembed-widgets/ticker/"
         />
         <meta
             property="og:image"
@@ -40,11 +40,11 @@
         />
 
         <link rel="stylesheet" href="/src/styles.css" />
-        <script type="module" src="/src/widgets/btc/index.ts"></script>
+        <script type="module" src="/src/widgets/ticker/index.ts"></script>
     </head>
     <body class="font-sans">
         <main
-            x-data="btcWidget"
+            x-data="tickerWidget"
             x-cloak
             class="flex min-h-screen w-full select-none items-center justify-center p-5 text-fg"
         >
@@ -66,7 +66,8 @@
                 <template x-if="!series && failed">
                     <div class="space-y-3">
                         <p class="text-sm text-muted">
-                            Couldn't load the Bitcoin price.
+                            Couldn't load the price. Check the
+                            <code class="font-mono">?coin=</code> id.
                         </p>
                         <button
                             type="button"

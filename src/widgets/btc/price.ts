@@ -1,7 +1,7 @@
 export interface SeriesPoint {
     /** Epoch ms. */
     t: number;
-    /** Price in USD. */
+    /** Price in the requested vs-currency. */
     p: number;
 }
 
@@ -14,10 +14,49 @@ export interface BtcSeries {
     fetchedAt: number;
 }
 
+/** Alias used by the generalized ticker; same shape as a BTC series. */
+export type CoinSeries = BtcSeries;
+
+/** A coin to chart: a CoinGecko id plus the ticker symbol used by fallbacks. */
+export interface Coin {
+    /** CoinGecko coin id, e.g. "bitcoin", "ethereum". */
+    id: string;
+    /** Ticker symbol, e.g. "BTC" — drives the Binance/Coinbase pair. */
+    symbol: string;
+}
+
+export const BITCOIN: Coin = { id: "bitcoin", symbol: "BTC" };
+
+/**
+ * Known coins get reliable Binance/Coinbase fallbacks (their symbols are
+ * curated). Any other CoinGecko id still works — it just relies on CoinGecko
+ * alone, since we can't be sure the derived symbol matches the exchanges.
+ */
+export const COINS: Record<string, Coin> = {
+    bitcoin: BITCOIN,
+    ethereum: { id: "ethereum", symbol: "ETH" },
+    solana: { id: "solana", symbol: "SOL" },
+    dogecoin: { id: "dogecoin", symbol: "DOGE" },
+    cardano: { id: "cardano", symbol: "ADA" },
+    ripple: { id: "ripple", symbol: "XRP" },
+    litecoin: { id: "litecoin", symbol: "LTC" },
+    polkadot: { id: "polkadot", symbol: "DOT" },
+    chainlink: { id: "chainlink", symbol: "LINK" },
+    binancecoin: { id: "binancecoin", symbol: "BNB" },
+    "avalanche-2": { id: "avalanche-2", symbol: "AVAX" },
+    tron: { id: "tron", symbol: "TRX" },
+};
+
+/** Resolve a coin id to its metadata, falling back to a CoinGecko-only coin. */
+export function coinFor(id: string): Coin {
+    const key = id.trim().toLowerCase();
+    return COINS[key] ?? { id: key, symbol: key.toUpperCase() };
+}
+
 export interface SeriesProvider {
     name: string;
-    /** Build the request URL for a given history window in days. */
-    url(days: number): string;
+    /** Build the request URL for a coin, vs-currency and history window. */
+    url(days: number, coin: Coin, vs: string): string;
     /** Normalize a provider's JSON into time/price points. */
     parse(data: unknown): SeriesPoint[];
 }
@@ -52,15 +91,23 @@ function coinbaseGranularity(days: number): number {
     return 86400;
 }
 
+/** Binance quotes USD markets in USDT; other vs-currencies pass through. */
+function binancePair(coin: Coin, vs: string): string {
+    const quote = vs === "usd" ? "USDT" : vs.toUpperCase();
+    return `${coin.symbol}${quote}`;
+}
+
 /**
  * Providers are tried in order; the first success wins. All are public,
- * key-less and CORS-enabled so they work from a static page.
+ * key-less and CORS-enabled so they work from a static page. Only CoinGecko
+ * is guaranteed for arbitrary coins; the exchange fallbacks rely on the
+ * curated symbol and quietly fail through for unknown coins.
  */
 export const SERIES_PROVIDERS: SeriesProvider[] = [
     {
         name: "CoinGecko",
-        url: (days) =>
-            `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=${days}`,
+        url: (days, coin, vs) =>
+            `https://api.coingecko.com/api/v3/coins/${coin.id}/market_chart?vs_currency=${vs}&days=${days}`,
         parse(data) {
             if (!isRecord(data)) throw new Error("bad shape");
             const prices = data.prices;
@@ -73,9 +120,9 @@ export const SERIES_PROVIDERS: SeriesProvider[] = [
     },
     {
         name: "Binance",
-        url: (days) => {
+        url: (days, coin, vs) => {
             const { interval, limit } = binanceParams(days);
-            return `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${interval}&limit=${limit}`;
+            return `https://api.binance.com/api/v3/klines?symbol=${binancePair(coin, vs)}&interval=${interval}&limit=${limit}`;
         },
         parse(data) {
             if (!Array.isArray(data)) throw new Error("bad shape");
@@ -88,8 +135,8 @@ export const SERIES_PROVIDERS: SeriesProvider[] = [
     },
     {
         name: "Coinbase",
-        url: (days) =>
-            `https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=${coinbaseGranularity(days)}`,
+        url: (days, coin, vs) =>
+            `https://api.exchange.coinbase.com/products/${coin.symbol}-${vs.toUpperCase()}/candles?granularity=${coinbaseGranularity(days)}`,
         parse(data) {
             if (!Array.isArray(data)) throw new Error("bad shape");
             // [time(seconds), low, high, open, close, volume]
@@ -134,14 +181,22 @@ export interface FetchOptions {
     timeoutMs?: number;
 }
 
+export interface CoinFetchOptions extends FetchOptions {
+    coin: Coin;
+    /** vs-currency, e.g. "usd" (default), "eur". */
+    vs?: string;
+    days: number;
+}
+
 /**
- * Fetch the BTC/USD price series for a window, walking the provider chain
- * until one returns a usable series. Points are returned ascending by time.
+ * Fetch a coin's price series for a window, walking the provider chain until
+ * one returns a usable series. Points are returned ascending by time.
  */
-export async function fetchBtcSeries(
-    days: number,
-    opts: FetchOptions = {},
-): Promise<BtcSeries> {
+export async function fetchCoinSeries(
+    opts: CoinFetchOptions,
+): Promise<CoinSeries> {
+    const { coin, days } = opts;
+    const vs = (opts.vs ?? "usd").toLowerCase();
     const providers = opts.providers ?? SERIES_PROVIDERS;
     const fetchImpl = opts.fetchImpl ?? fetch.bind(globalThis);
     const timeoutMs = opts.timeoutMs ?? DEFAULT_TIMEOUT_MS;
@@ -150,7 +205,7 @@ export async function fetchBtcSeries(
     for (const provider of providers) {
         try {
             const data = await fetchJson(
-                provider.url(days),
+                provider.url(days, coin, vs),
                 timeoutMs,
                 fetchImpl,
             );
@@ -163,4 +218,15 @@ export async function fetchBtcSeries(
         }
     }
     throw new Error(`all series providers failed — ${failures.join("; ")}`);
+}
+
+/**
+ * Fetch the BTC/USD price series — a thin wrapper over {@link fetchCoinSeries}
+ * kept for the bitcoin widget and its tests.
+ */
+export function fetchBtcSeries(
+    days: number,
+    opts: FetchOptions = {},
+): Promise<BtcSeries> {
+    return fetchCoinSeries({ ...opts, coin: BITCOIN, vs: "usd", days });
 }

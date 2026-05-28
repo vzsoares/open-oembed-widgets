@@ -21,6 +21,7 @@ applyThemeFromQuery();
  */
 const EXAMPLES: Record<string, string> = {
     btc: "range=1m",
+    ticker: "coin=ethereum&vs=usd&range=1m",
     clock: "style=flip&show=both",
     worldclock: "tz=America/Sao_Paulo,Europe/London,Asia/Tokyo",
     timer: "mode=down&to=2027-01-01T00:00:00&units=dhm&label=New%20Year",
@@ -34,6 +35,7 @@ const EXAMPLES: Record<string, string> = {
     github: "user=vzsoares",
     links: "btns=GitHub|https://github.com/vzsoares;Website|https://vzsoares.github.io/open-oembed-widgets/",
     quote: "collection=motivation",
+    nameday: "lang=cz",
 };
 
 interface Showcase {

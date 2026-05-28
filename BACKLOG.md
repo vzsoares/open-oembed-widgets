@@ -1,10 +1,12 @@
 # Backlog
 
-Ideas and enhancements for the project. Shipped so far: 14 widgets (btc, clock,
-worldclock, timer, counter, moon, images, progress, onthisday, weather, github,
-links, quote, bible), a redesigned gallery, a `/showcase/` live-demos page, a
-`/help/` guide, fit-to-box scaling, padding/scaling controls, link/social
-previews (og:image + oEmbed `thumbnail_url`), e2e + CI, and a DESIGN.md.
+Ideas and enhancements for the project. Shipped so far: 16 widgets (btc, ticker,
+clock, worldclock, timer, counter, moon, images, progress, onthisday, weather,
+github, links, quote, bible, nameday), a redesigned gallery, a `/showcase/`
+live-demos page, a `/help/` guide, fit-to-box scaling, padding/scaling controls,
+link/social previews (og:image + oEmbed `thumbnail_url`), a `prefers-reduced-motion`
++ keyboard-focus accessibility pass, e2e + CI, and a DESIGN.md. `nameday` ships
+six locales (cz, sk, fr, it, es, en).
 
 New widgets are **client-side only** and follow the existing pattern:
 
@@ -19,32 +21,27 @@ are monochrome, transparent-background, and support `?theme=light|dark`.
 
 ## Widget ideas
 
-- **Crypto/stock ticker — `ticker`.** Generalize the BTC widget to any coin via
-  `?coin=ethereum` (CoinGecko is keyless + CORS, already used by `btc`). Same
-  chart/price UI; possibly fold `btc` into it as `?coin=bitcoin`.
-- **Name day — `nameday`.** Today's name day(s) for a locale
-  (`?lang=cz|pl|hu|…`). Needs a **bundled per-locale dataset** (like
-  `bible/fallback.json`); name-day calendars are country-specific. No API.
+_Nothing outstanding._
+
+### Considered & declined
+
+- **Stock-index ticker (Ibovespa, Nasdaq, …).** Not viable as a pure client-side
+  widget: no keyless **and** CORS-enabled price source exists. Stooq sends no
+  `Access-Control-Allow-Origin` (and gates history behind an API key); Yahoo's
+  chart API returns the data but also sends no CORS header, so a browser fetch
+  from the embed is blocked. Every free stock API needs a key (unsafe to embed
+  in a public static page) or a proxy/backend — which breaks the no-account,
+  GitHub-Pages model. Crypto works only because CoinGecko sends `ACAO: *`.
+  Revisit if the project ever adds a tiny proxy/backend.
+- **Portuguese name day.** No standard Portuguese name-day tradition or dataset
+  exists (Portugal/Brazil share the Catholic *santoral* but don't observe name
+  days); nothing clean to bundle, so `pt` was left out rather than fabricated.
 
 ---
 
 ## Enhancements
 
-- **API caching / resilience.** ⚠️ Re-scoped after measuring. A short-TTL
-  `localStorage` cache does **almost nothing for a lone embed**: each iframe
-  fetches once per load, most network widgets don't even refresh, and modern
-  browsers **partition** third-party storage per top-level site (so a Notion
-  embed can't reuse anything, and may have storage blocked entirely). Where it
-  *is* measurable: our own multi-widget pages — the gallery and `/showcase/`
-  each fire **6 external API calls per visit** (coingecko, github, 2× open-meteo,
-  bible, wikipedia), and a reload fires 6 more; a same-origin TTL cache collapses
-  the reload to ~0. It also protects the **GitHub 60-req/hr** budget (hit on both
-  pages + every reload). Net: only worth it if scoped to first-party pages +
-  GitHub, not "for embeds". Decide before building.
-- **Accessibility & polish.** `focus-visible` focus rings on buttons/links,
-  consistent `aria-live` on async widgets, a `prefers-reduced-motion` audit
-  (covered: clock flip; check the image cross-fade and progress-bar transition),
-  and keyboard navigation through the gallery.
+_Nothing outstanding._
 
 ---
 

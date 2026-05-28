@@ -106,6 +106,36 @@ export const widgets: WidgetDef[] = [
         ],
     },
     {
+        id: "ticker",
+        title: "Crypto Ticker",
+        description:
+            "Live price + chart for any coin (set ?coin=ethereum&vs=usd).",
+        width: 480,
+        height: 280,
+        params: [
+            {
+                key: "coin",
+                label: "Coin",
+                type: "text",
+                placeholder: "e.g. ethereum, solana",
+                default: "ethereum",
+            },
+            {
+                key: "vs",
+                label: "Currency",
+                type: "text",
+                placeholder: "usd",
+                default: "usd",
+            },
+            {
+                key: "range",
+                label: "Range",
+                options: btcRanges.map((r) => ({ id: r.id, label: r.label })),
+                default: "1m",
+            },
+        ],
+    },
+    {
         id: "clock",
         title: "Clock",
         description:
@@ -267,6 +297,29 @@ export const widgets: WidgetDef[] = [
                 label: "Date",
                 type: "date",
                 default: "",
+            },
+        ],
+    },
+    {
+        id: "nameday",
+        title: "Name Day",
+        description:
+            "Today's name day(s) for a locale, from a bundled calendar (no API).",
+        width: 360,
+        height: 180,
+        params: [
+            {
+                key: "lang",
+                label: "Locale",
+                options: [
+                    { id: "cz", label: "CZ" },
+                    { id: "sk", label: "SK" },
+                    { id: "fr", label: "FR" },
+                    { id: "it", label: "IT" },
+                    { id: "es", label: "ES" },
+                    { id: "en", label: "EN" },
+                ],
+                default: "cz",
             },
         ],
     },

@@ -32,6 +32,8 @@ export default defineConfig(({ command }) => ({
                 links: resolve(process.cwd(), "links/index.html"),
                 quote: resolve(process.cwd(), "quote/index.html"),
                 btc: resolve(process.cwd(), "btc/index.html"),
+                ticker: resolve(process.cwd(), "ticker/index.html"),
+                nameday: resolve(process.cwd(), "nameday/index.html"),
                 bible: resolve(process.cwd(), "bible/index.html"),
             },
         },
