@@ -1,3 +1,11 @@
+## v2.7.1
+
+### Bug Fixes
+- increase widget height to 180
+
+### Chores
+- bump version to 2.7.1
+
 ## v2.7.0
 
 ### Features
