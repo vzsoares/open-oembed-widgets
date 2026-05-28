@@ -227,7 +227,7 @@ export const widgets: WidgetDef[] = [
         description:
             "Counts the whole days since or until a date (set ?date=2026-01-01).",
         width: 360,
-        height: 160,
+        height: 180,
         params: [
             {
                 key: "mode",
