@@ -153,6 +153,41 @@ export const widgets: WidgetDef[] = [
         ],
     },
     {
+        id: "worldclock",
+        title: "World Clock",
+        description:
+            "Several timezones at once (set ?tz=America/Sao_Paulo,Europe/London,Asia/Tokyo).",
+        width: 360,
+        height: 260,
+        params: [
+            {
+                key: "tz",
+                label: "Zones",
+                type: "text",
+                placeholder: "Area/City,Area/City,…",
+                default: "",
+            },
+            {
+                key: "h24",
+                label: "Hours",
+                options: [
+                    { id: "0", label: "12H" },
+                    { id: "1", label: "24H" },
+                ],
+                default: "0",
+            },
+            {
+                key: "seconds",
+                label: "Seconds",
+                options: [
+                    { id: "0", label: "Off" },
+                    { id: "1", label: "On" },
+                ],
+                default: "0",
+            },
+        ],
+    },
+    {
         id: "timer",
         title: "Timer",
         description:
@@ -215,6 +250,22 @@ export const widgets: WidgetDef[] = [
                 label: "Label",
                 type: "text",
                 placeholder: "e.g. New Year",
+                default: "",
+            },
+        ],
+    },
+    {
+        id: "moon",
+        title: "Moon Phase",
+        description:
+            "The current moon phase + illumination, computed from the date (no API).",
+        width: 260,
+        height: 280,
+        params: [
+            {
+                key: "date",
+                label: "Date",
+                type: "date",
                 default: "",
             },
         ],

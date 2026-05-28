@@ -22,8 +22,10 @@ applyThemeFromQuery();
 const EXAMPLES: Record<string, string> = {
     btc: "range=1m",
     clock: "style=flip&show=both",
+    worldclock: "tz=America/Sao_Paulo,Europe/London,Asia/Tokyo",
     timer: "mode=down&to=2027-01-01T00:00:00&units=dhm&label=New%20Year",
     counter: "mode=until&date=2027-01-01&label=New%20Year",
+    moon: "",
     bible: "lang=en",
     images: "src=https://picsum.photos/seed/oow1/480/270,https://picsum.photos/seed/oow2/480/270,https://picsum.photos/seed/oow3/480/270&every=4",
     progress: "mode=year",

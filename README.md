@@ -22,8 +22,10 @@ whatever box they're embedded in.
 | ------------------- | ------------- | ---------------------------------------------------- |
 | 📈 Bitcoin Price    | `/btc/`       | Live BTC/USD price + sparkline, range 1D–1Y, ~60s.   |
 | 🕒 Clock            | `/clock/`     | Flip or analog clock with date, timezone & 24h opts. |
+| 🌍 World Clock      | `/worldclock/`| Current time across several timezones at once.       |
 | ⏳ Timer            | `/timer/`     | Countdown or count-up in days/hours/minutes/seconds. |
 | 📅 Day Counter      | `/counter/`   | Whole days since or until a date (e.g. a deadline).  |
+| 🌙 Moon Phase       | `/moon/`      | Current moon phase + illumination, no API.           |
 | 🖼️ Image Rotator    | `/images/`    | Cross-fades through a list of images on a timer.     |
 | 📊 Progress         | `/progress/`  | Day / week / year / custom (incl. life) progress bar.|
 | 📜 On This Day      | `/onthisday/` | Notable historical events for today (Wikipedia).     |
@@ -65,6 +67,10 @@ Per-widget options:
   (default `both`), `?seconds=1` for a seconds tile/hand, `?h24=1` for a
   24-hour clock (default: locale), and `?tz=Area/City` for an IANA timezone
   (default: viewer's local).
+- **World Clock** — `?tz=America/Sao_Paulo,Europe/London,Asia/Tokyo` (a
+  comma-separated list; `local` for the viewer's zone). Labels derive from the
+  zone's city. Also `?h24=1` and `?seconds=1`. Defaults to São Paulo / London /
+  Tokyo if unset.
 - **Timer** — `?mode=down|up` (default `down`). Down counts to `?to=ISO`, up
   counts from `?from=ISO` (e.g. `?to=2026-12-31T23:59:59Z`); both default to the
   New Year if unset. The gallery's date picker emits the mode-neutral `?date=ISO`
@@ -73,6 +79,8 @@ Per-widget options:
 - **Day Counter** — `?date=2026-01-01` (a bare date counts in local time) and
   `?mode=auto|until|since` (default `auto` picks the direction from the date).
   `?label=` adds a caption. Defaults to counting down to the New Year if unset.
+- **Moon Phase** — current phase + illumination, computed from the date (no API).
+  `?date=2026-06-29` pins a specific date for testing/showcase.
 - **Image Rotator** — `?src=url1,url2,url3` (comma-separated image URLs; falls
   back to bundled demo images if unset), `?mode=sequential|random` (default
   `sequential`), `?every=8` seconds per image, and `?fit=cover|contain`
@@ -119,8 +127,8 @@ to load its theme + options back into the UI for further editing.
 ```
 /
 ├── index.html                # widget gallery (home)
-# one <id>/index.html per widget: btc, clock, timer, counter, images, progress,
-# onthisday, weather, github, links, quote, bible (all embeddable pages)
+# one <id>/index.html per widget: btc, clock, worldclock, timer, counter, moon,
+# images, progress, onthisday, weather, github, links, quote, bible (embeddable)
 ├── btc/index.html
 ├── clock/index.html
 ├── …                         # progress/, onthisday/, weather/, github/, links/, …
@@ -134,8 +142,10 @@ to load its theme + options back into the UI for further editing.
 │       ├── manifest.ts       # widgets + params (single source)
 │       ├── btc/              # index.ts, price.ts, chart.ts, *.test.ts
 │       ├── clock/            # index.ts, time.ts, time.test.ts
+│       ├── worldclock/       # index.ts, worldclock.ts, worldclock.test.ts
 │       ├── timer/            # index.ts, config.ts, config.test.ts
 │       ├── counter/          # index.ts, counter.ts, counter.test.ts
+│       ├── moon/             # index.ts, moon.ts, moon.test.ts
 │       ├── images/           # index.ts, config.ts, config.test.ts
 │       ├── progress/         # index.ts, progress.ts, progress.test.ts
 │       ├── onthisday/        # index.ts, events.ts, events.test.ts

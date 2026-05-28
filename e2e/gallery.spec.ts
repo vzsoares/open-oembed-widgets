@@ -13,11 +13,14 @@ test("gallery lists every widget", async ({ page }) => {
     for (const title of [
         "Bitcoin Price",
         "Clock",
+        "World Clock",
         "Timer",
-        "Image Rotator",
+        "Moon Phase",
         "Bible Verse",
     ]) {
-        await expect(page.getByRole("heading", { name: title })).toBeVisible();
+        await expect(
+            page.getByRole("heading", { name: title, exact: true }),
+        ).toBeVisible();
     }
 });
 

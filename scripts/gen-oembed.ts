@@ -24,6 +24,11 @@ for (const w of widgets) {
         html,
         width: w.width,
         height: w.height,
+        // Shared preview card, so consumers that show a thumbnail (and link
+        // unfurlers) have something to render. 1200×630 social ratio.
+        thumbnail_url: `${SITE_URL}/og.png`,
+        thumbnail_width: 1200,
+        thumbnail_height: 630,
         cache_age: 300,
     };
 

@@ -7,9 +7,9 @@ test("renders a live demo frame for every widget", async ({ page }) => {
         page.getByRole("heading", { name: "Showcase", exact: true }),
     ).toBeVisible();
 
-    // One iframe per widget (12 widgets in the manifest).
+    // One iframe per widget (14 widgets in the manifest).
     const frames = page.locator("iframe");
-    await expect(frames).toHaveCount(12);
+    await expect(frames).toHaveCount(14);
 
     // The Day Counter demo points at the counter widget with curated params.
     await expect(

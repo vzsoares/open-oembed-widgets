@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Moon Phase · Open oEmbed Widget</title>
+        <meta
+            name="description"
+            content="The current moon phase and illumination, computed from the date — a monochrome widget you can embed in Notion or any oEmbed consumer."
+        />
+        <link rel="icon" href="/favicon.ico" />
+
+        <!-- oEmbed discovery: consumers (e.g. Notion via Iframely) fetch this -->
+        <link
+            rel="alternate"
+            type="application/json+oembed"
+            href="https://vzsoares.github.io/open-oembed-widgets/moon/oembed.json"
+            title="Moon Phase"
+        />
+
+        <!-- Open Graph fallback for consumers that don't use oEmbed -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Moon Phase" />
+        <meta
+            property="og:description"
+            content="The current moon phase and illumination, computed from the date."
+        />
+        <meta
+            property="og:url"
+            content="https://vzsoares.github.io/open-oembed-widgets/moon/"
+        />
+        <meta
+            property="og:image"
+            content="https://vzsoares.github.io/open-oembed-widgets/og.png"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+            name="twitter:image"
+            content="https://vzsoares.github.io/open-oembed-widgets/og.png"
+        />
+
+        <link rel="stylesheet" href="/src/styles.css" />
+        <script type="module" src="/src/widgets/moon/index.ts"></script>
+    </head>
+    <body class="font-sans">
+        <main
+            x-data="moonWidget"
+            x-cloak
+            class="flex min-h-screen w-full select-none flex-col items-center justify-center gap-3 p-5 text-fg"
+            aria-live="polite"
+        >
+            <svg
+                viewBox="0 0 100 100"
+                class="aspect-square h-full max-h-40 w-auto text-fg"
+                role="img"
+                aria-label="Moon phase"
+                :aria-label="view.name"
+            >
+                <!-- The dark disc: a faint outlined circle. -->
+                <circle
+                    cx="50"
+                    cy="50"
+                    r="40"
+                    fill="none"
+                    stroke-width="1.5"
+                    style="stroke: var(--border)"
+                />
+                <!-- The lit portion, redrawn each tick. -->
+                <path
+                    :d="lit"
+                    transform="translate(50 50)"
+                    fill="currentColor"
+                />
+                <!-- Outline on top so the rim reads at new moon too. -->
+                <circle
+                    cx="50"
+                    cy="50"
+                    r="40"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    class="opacity-30"
+                />
+            </svg>
+
+            <p
+                class="text-[17px] font-bold tracking-tight"
+                x-text="view.name"
+            ></p>
+            <p
+                class="font-mono text-xs uppercase tracking-[0.15em] text-muted"
+                x-text="illumText"
+            ></p>
+        </main>
+    </body>
+</html>
