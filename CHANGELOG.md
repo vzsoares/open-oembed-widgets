@@ -1,3 +1,11 @@
+## v2.8.0
+
+### Features
+- add ticker and nameday widgets (16 total)
+
+### Chores
+- bump version to 2.8.0
+
 ## v2.7.1
 
 ### Bug Fixes
