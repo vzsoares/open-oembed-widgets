@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Stocks Ticker · Open oEmbed Widget</title>
+        <meta
+            name="description"
+            content="Live stock prices with up/down indicators — a monochrome widget you can embed in Notion or any oEmbed consumer."
+        />
+        <link rel="icon" href="/favicon.ico" />
+
+        <link
+            rel="alternate"
+            type="application/json+oembed"
+            href="https://vzsoares.github.io/open-oembed-widgets/stocks/oembed.json"
+            title="Stocks Ticker"
+        />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Stocks Ticker" />
+        <meta
+            property="og:description"
+            content="Live stock prices with up/down indicators (?symbols=NVDA,AAPL,MSFT,SPY&apikey=…)."
+        />
+        <meta
+            property="og:url"
+            content="https://vzsoares.github.io/open-oembed-widgets/stocks/"
+        />
+        <meta
+            property="og:image"
+            content="https://vzsoares.github.io/open-oembed-widgets/og.png"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+            name="twitter:image"
+            content="https://vzsoares.github.io/open-oembed-widgets/og.png"
+        />
+
+        <link rel="stylesheet" href="/src/styles.css" />
+        <script type="module" src="/src/widgets/stocks/index.ts"></script>
+    </head>
+    <body class="font-sans">
+        <main
+            x-data="stocksWidget"
+            x-cloak
+            class="flex min-h-screen w-full select-none items-center justify-center p-5 text-fg"
+        >
+            <section class="w-full max-w-sm" aria-live="polite">
+                <!-- Setup: no API key -->
+                <template x-if="!hasKey">
+                    <div class="space-y-3">
+                        <h1
+                            class="text-[0.7rem] font-medium uppercase tracking-[0.18em] text-muted"
+                        >
+                            Stocks Ticker · Setup
+                        </h1>
+                        <p class="text-sm">A free API key is required.</p>
+                        <ol
+                            class="list-inside list-decimal space-y-1.5 text-sm text-muted"
+                        >
+                            <li>
+                                Sign up at
+                                <span class="font-mono text-fg">finnhub.io</span>
+                                — free, no credit card
+                            </li>
+                            <li>Copy your API key from the dashboard</li>
+                            <li>
+                                Add
+                                <span class="font-mono text-fg"
+                                    >?apikey=YOUR_KEY</span
+                                >
+                                to the embed URL
+                            </li>
+                        </ol>
+                        <p class="text-[0.65rem] text-muted">
+                            Free tier: 60 req/min · your key is visible in the
+                            embed URL (fine for personal use)
+                        </p>
+                    </div>
+                </template>
+
+                <!-- Loading skeleton -->
+                <template x-if="hasKey && !quotes && !failed">
+                    <div class="animate-pulse space-y-3">
+                        <div class="flex justify-between">
+                            <div class="h-2.5 w-14 rounded bg-border"></div>
+                            <div class="h-2.5 w-16 rounded bg-border"></div>
+                        </div>
+                        <template x-for="_ in [1, 2, 3, 4]" :key="_">
+                            <div class="flex items-center justify-between gap-3">
+                                <div class="h-3.5 w-10 rounded bg-border"></div>
+                                <div class="h-3.5 grow rounded bg-border"></div>
+                                <div class="h-3.5 w-14 rounded bg-border"></div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- Error -->
+                <template x-if="hasKey && !quotes && failed">
+                    <div class="space-y-3">
+                        <p class="text-sm text-muted">
+                            Couldn't load stock prices. Check your API key.
+                        </p>
+                        <button
+                            type="button"
+                            @click="load()"
+                            class="rounded border border-border px-3 py-1.5 text-sm transition-colors hover:bg-fg hover:text-bg"
+                        >
+                            Retry
+                        </button>
+                    </div>
+                </template>
+
+                <!-- Ready -->
+                <template x-if="quotes">
+                    <div :class="loading && 'opacity-60'">
+                        <div class="mb-3 flex items-baseline justify-between">
+                            <h1
+                                class="text-[0.7rem] font-medium uppercase tracking-[0.18em] text-muted"
+                            >
+                                Stocks
+                            </h1>
+                            <span
+                                class="font-mono text-[0.7rem] tabular-nums text-muted"
+                                >Finnhub · live</span
+                            >
+                        </div>
+                        <div class="space-y-2.5">
+                            <template x-for="q in quotes" :key="q.symbol">
+                                <div class="flex items-center gap-3">
+                                    <span
+                                        class="w-12 shrink-0 font-mono text-xs font-semibold uppercase tracking-wide"
+                                        x-text="q.symbol"
+                                    ></span>
+                                    <span
+                                        class="grow font-mono text-sm tabular-nums"
+                                        x-text="priceText(q)"
+                                    ></span>
+                                    <span
+                                        class="inline-flex shrink-0 items-center gap-0.5 font-mono text-xs tabular-nums"
+                                        :class="{
+                                            'text-fg': direction(q) === 'up',
+                                            'text-muted': direction(q) !== 'up'
+                                        }"
+                                    >
+                                        <span
+                                            class="text-[0.55rem] leading-none"
+                                            x-text="arrow(q)"
+                                        ></span>
+                                        <span x-text="changeText(q)"></span>
+                                    </span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </section>
+        </main>
+    </body>
+</html>

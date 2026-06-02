@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Stock Chart · Open oEmbed Widget</title>
+        <meta
+            name="description"
+            content="Live stock price chart with configurable range — a monochrome widget you can embed in Notion or any oEmbed consumer."
+        />
+        <link rel="icon" href="/favicon.ico" />
+
+        <link
+            rel="alternate"
+            type="application/json+oembed"
+            href="https://vzsoares.github.io/open-oembed-widgets/stock/oembed.json"
+            title="Stock Chart"
+        />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Stock Chart" />
+        <meta
+            property="og:description"
+            content="Live price chart for any stock or ETF with a configurable range (?symbol=AAPL&apikey=…)."
+        />
+        <meta
+            property="og:url"
+            content="https://vzsoares.github.io/open-oembed-widgets/stock/"
+        />
+        <meta
+            property="og:image"
+            content="https://vzsoares.github.io/open-oembed-widgets/og.png"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+            name="twitter:image"
+            content="https://vzsoares.github.io/open-oembed-widgets/og.png"
+        />
+
+        <link rel="stylesheet" href="/src/styles.css" />
+        <script type="module" src="/src/widgets/stock/index.ts"></script>
+    </head>
+    <body class="font-sans">
+        <main
+            x-data="stockWidget"
+            x-cloak
+            class="flex min-h-screen w-full select-none items-center justify-center p-5 text-fg"
+        >
+            <section class="w-full max-w-md" aria-live="polite">
+                <!-- Setup: no API key -->
+                <template x-if="!hasKey">
+                    <div class="space-y-3">
+                        <h1
+                            class="text-[0.7rem] font-medium uppercase tracking-[0.18em] text-muted"
+                        >
+                            Stock Chart · Setup
+                        </h1>
+                        <p class="text-sm">A free API key is required.</p>
+                        <ol
+                            class="list-inside list-decimal space-y-1.5 text-sm text-muted"
+                        >
+                            <li>
+                                Sign up at
+                                <span class="font-mono text-fg">finnhub.io</span>
+                                — free, no credit card
+                            </li>
+                            <li>Copy your API key from the dashboard</li>
+                            <li>
+                                Add
+                                <span class="font-mono text-fg"
+                                    >?apikey=YOUR_KEY&amp;symbol=AAPL</span
+                                >
+                                to the embed URL
+                            </li>
+                        </ol>
+                        <p class="text-[0.65rem] text-muted">
+                            Free tier: 60 req/min · your key is visible in the
+                            embed URL (fine for personal use)
+                        </p>
+                    </div>
+                </template>
+
+                <!-- Loading skeleton -->
+                <template x-if="hasKey && !series && !failed">
+                    <div class="animate-pulse">
+                        <div class="flex justify-between">
+                            <div class="h-3 w-20 rounded bg-border"></div>
+                            <div class="h-3 w-16 rounded bg-border"></div>
+                        </div>
+                        <div class="mt-3 h-9 w-44 rounded bg-border"></div>
+                        <div class="mt-1.5 h-3 w-32 rounded bg-border"></div>
+                        <div class="mt-4 h-24 w-full rounded bg-border"></div>
+                        <div class="mt-3 h-6 w-44 rounded bg-border"></div>
+                    </div>
+                </template>
+
+                <!-- Error -->
+                <template x-if="hasKey && !series && failed">
+                    <div class="space-y-3">
+                        <p class="text-sm text-muted">
+                            Couldn't load
+                            <span class="font-mono" x-text="symbol"></span>.
+                            Check the symbol and your API key.
+                        </p>
+                        <button
+                            type="button"
+                            @click="load()"
+                            class="rounded border border-border px-3 py-1.5 text-sm transition-colors hover:bg-fg hover:text-bg"
+                        >
+                            Retry
+                        </button>
+                    </div>
+                </template>
+
+                <!-- Ready -->
+                <template x-if="series">
+                    <div :class="loading && 'opacity-60'">
+                        <div class="flex items-baseline justify-between gap-3">
+                            <h1
+                                class="text-[0.7rem] font-medium uppercase tracking-[0.18em] text-muted"
+                                x-text="symbol"
+                            ></h1>
+                            <span
+                                class="font-mono text-[0.7rem] tabular-nums text-muted"
+                                x-text="updatedText"
+                            ></span>
+                        </div>
+
+                        <div class="mt-2 flex items-end justify-between gap-3">
+                            <p
+                                class="font-mono text-[clamp(1.25rem,7.5vw,2.25rem)] font-semibold leading-none tabular-nums"
+                                x-text="priceText"
+                            ></p>
+                            <span
+                                class="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full border border-fg px-2 py-0.5 font-mono text-xs tabular-nums"
+                                :class="direction === 'up' && 'bg-fg text-bg'"
+                            >
+                                <span
+                                    class="text-[0.6rem] leading-none"
+                                    x-text="arrow"
+                                ></span>
+                                <span x-text="changeText"></span>
+                            </span>
+                        </div>
+
+                        <p
+                            class="mt-1 font-mono text-[0.65rem] tabular-nums text-muted"
+                            x-text="highLowText"
+                        ></p>
+
+                        <!-- Sparkline + hover -->
+                        <div
+                            class="relative mt-3 h-24 overflow-x-clip"
+                            @mousemove="onHover($event)"
+                            @mouseleave="hoverIndex = null"
+                        >
+                            <svg
+                                class="h-full w-full overflow-visible text-fg"
+                                viewBox="0 0 300 96"
+                                preserveAspectRatio="none"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    :d="chart.area"
+                                    fill="currentColor"
+                                    class="opacity-[0.08]"
+                                />
+                                <path
+                                    :d="chart.line"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linejoin="round"
+                                    stroke-linecap="round"
+                                    vector-effect="non-scaling-stroke"
+                                />
+                            </svg>
+
+                            <template x-if="hover">
+                                <div class="pointer-events-none absolute inset-0">
+                                    <div
+                                        class="absolute top-0 bottom-0 w-px bg-muted"
+                                        :style="`left: ${hover.xPct}%`"
+                                    ></div>
+                                    <div
+                                        class="absolute h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-fg"
+                                        :style="`left: ${hover.xPct}%; top: ${hover.yPct}%`"
+                                    ></div>
+                                    <div
+                                        class="absolute top-0 whitespace-nowrap rounded border border-border bg-bg px-1.5 py-0.5 font-mono text-[0.65rem] leading-tight tabular-nums"
+                                        :style="`left: ${hover.xPct}%; transform: translateX(-${hover.xPct}%)`"
+                                    >
+                                        <span x-text="hover.priceText"></span>
+                                        <span
+                                            class="ml-1 text-muted"
+                                            x-text="hover.dateText"
+                                        ></span>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- Range selector -->
+                        <div class="mt-3 flex gap-1">
+                            <template x-for="r in ranges" :key="r.id">
+                                <button
+                                    type="button"
+                                    @click="setRange(r.id)"
+                                    class="rounded px-2 py-1 font-mono text-[0.7rem] uppercase tracking-wide transition-colors"
+                                    :class="r.id === range ? 'bg-fg text-bg' : 'text-muted hover:text-fg'"
+                                    x-text="r.label"
+                                ></button>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </section>
+        </main>
+    </body>
+</html>

@@ -555,4 +555,58 @@ export const widgets: WidgetDef[] = [
             },
         ],
     },
+    {
+        id: "stocks",
+        title: "Stocks Ticker",
+        description:
+            "Live prices for multiple stocks/ETFs with up/down indicators. Requires a free Finnhub API key (?symbols=NVDA,AAPL,MSFT,SPY&apikey=…).",
+        width: 380,
+        height: 220,
+        params: [
+            {
+                key: "symbols",
+                label: "Symbols",
+                type: "text",
+                placeholder: "e.g. NVDA,AAPL,MSFT,SPY",
+                default: "NVDA,AAPL,MSFT,SPY",
+            },
+            {
+                key: "apikey",
+                label: "API Key",
+                type: "text",
+                placeholder: "finnhub.io free key",
+                default: "",
+            },
+        ],
+    },
+    {
+        id: "stock",
+        title: "Stock Chart",
+        description:
+            "Live price chart for any stock or ETF with a configurable range. Requires a free Finnhub API key (?symbol=AAPL&apikey=…).",
+        width: 480,
+        height: 280,
+        params: [
+            {
+                key: "symbol",
+                label: "Symbol",
+                type: "text",
+                placeholder: "e.g. AAPL, NVDA, SPY",
+                default: "AAPL",
+            },
+            {
+                key: "range",
+                label: "Range",
+                options: btcRanges.map((r) => ({ id: r.id, label: r.label })),
+                default: "1m",
+            },
+            {
+                key: "apikey",
+                label: "API Key",
+                type: "text",
+                placeholder: "finnhub.io free key",
+                default: "",
+            },
+        ],
+    },
 ];
