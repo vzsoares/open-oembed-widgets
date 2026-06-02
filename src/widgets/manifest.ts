@@ -575,8 +575,8 @@ export const widgets: WidgetDef[] = [
                 key: "symbols",
                 label: "Symbols",
                 type: "text",
-                placeholder: "e.g. NVDA,AAPL,MSFT,SPY",
-                default: "NVDA,AAPL,MSFT,SPY",
+                placeholder: "e.g. VOO,EWZ,NVDA,AAPL",
+                default: "VOO,EWZ,NVDA,AAPL",
             },
             {
                 key: "apikey",

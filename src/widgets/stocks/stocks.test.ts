@@ -24,7 +24,7 @@ const MOCK_QUOTE = {
 describe("parseStocksConfig", () => {
     test("defaults when empty", () => {
         const c = parseStocksConfig("");
-        expect(c.symbols).toEqual(["NVDA", "AAPL", "MSFT", "SPY"]);
+        expect(c.symbols).toEqual(["VOO", "EWZ", "NVDA", "AAPL"]);
         expect(c.apikey).toBe("");
     });
 
@@ -41,7 +41,7 @@ describe("parseStocksConfig", () => {
 
     test("falls back to defaults on empty symbols param", () => {
         const c = parseStocksConfig("?symbols=");
-        expect(c.symbols).toEqual(["NVDA", "AAPL", "MSFT", "SPY"]);
+        expect(c.symbols).toEqual(["VOO", "EWZ", "NVDA", "AAPL"]);
     });
 });
 

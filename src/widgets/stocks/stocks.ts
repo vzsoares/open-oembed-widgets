@@ -25,7 +25,7 @@ export interface StocksConfig {
 
 const BASE = "https://finnhub.io/api/v1";
 const DEFAULT_TIMEOUT_MS = 8000;
-const DEFAULT_SYMBOLS = ["NVDA", "AAPL", "MSFT", "SPY"];
+const DEFAULT_SYMBOLS = ["VOO", "EWZ", "NVDA", "AAPL"];
 
 export function parseStocksConfig(search: string): StocksConfig {
     const p = new URLSearchParams(search);
