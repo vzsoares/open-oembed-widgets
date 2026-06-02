@@ -1,3 +1,11 @@
+## v2.8.1
+
+### Bug Fixes
+- prevent price badge shrinking and text wrapping
+
+### Chores
+- bump version to 2.8.1
+
 ## v2.8.0
 
 ### Features
