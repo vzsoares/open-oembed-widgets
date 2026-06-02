@@ -36,6 +36,7 @@ function defaultParams(): ParamMap {
 }
 
 interface Home {
+    version: string;
     widgets: WidgetDef[];
     copiedId: string;
     theme: Theme;
@@ -70,6 +71,7 @@ interface Home {
 Alpine.data(
     "home",
     (): Home => ({
+        version: __APP_VERSION__,
         widgets,
         copiedId: "",
         theme: getResolvedTheme(),

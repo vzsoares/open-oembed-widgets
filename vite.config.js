@@ -1,11 +1,15 @@
 import { resolve } from "node:path";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, searchForWorkspaceRoot } from "vite";
+import pkg from "./package.json" with { type: "json" };
 
 // Deployed under https://vzsoares.github.io/open-oembed-widgets/
 const REPO_BASE = "/open-oembed-widgets/";
 
 export default defineConfig(({ command }) => ({
+    define: {
+        __APP_VERSION__: JSON.stringify(pkg.version),
+    },
     plugins: [tailwindcss()],
     // Each widget is its own page, so dev/preview must serve real files
     // instead of falling back to index.html.
