@@ -51,17 +51,23 @@
                 <template x-if="!hasKey">
                     <div class="space-y-3">
                         <h1
-                            class="text-[0.7rem] font-medium uppercase tracking-[0.18em] text-muted"
+                            class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-muted"
                         >
                             Stocks Ticker · Setup
                         </h1>
-                        <p class="text-sm">A free API key is required.</p>
+                        <p class="text-sm font-bold">A free API key is required.</p>
                         <ol
                             class="list-inside list-decimal space-y-1.5 text-sm text-muted"
                         >
                             <li>
                                 Sign up at
-                                <span class="font-mono text-fg">finnhub.io</span>
+                                <a
+                                    href="https://finnhub.io/register"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="font-mono text-fg underline underline-offset-2"
+                                    >finnhub.io</a
+                                >
                                 — free, no credit card
                             </li>
                             <li>Copy your API key from the dashboard</li>
