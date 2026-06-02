@@ -133,9 +133,15 @@
                                 >Finnhub · live</span
                             >
                         </div>
-                        <div class="space-y-2.5">
+                        <div class="space-y-1.5">
                             <template x-for="q in quotes" :key="q.symbol">
-                                <div class="flex items-center gap-3">
+                                <div
+                                    class="flex items-center gap-3 rounded px-2 py-1"
+                                    :class="{
+                                        'bg-green-500/10': direction(q) === 'up',
+                                        'bg-red-500/10': direction(q) === 'down'
+                                    }"
+                                >
                                     <span
                                         class="w-12 shrink-0 font-mono text-xs font-semibold uppercase tracking-wide"
                                         x-text="q.symbol"
@@ -147,8 +153,9 @@
                                     <span
                                         class="inline-flex shrink-0 items-center gap-0.5 font-mono text-xs tabular-nums"
                                         :class="{
-                                            'text-fg': direction(q) === 'up',
-                                            'text-muted': direction(q) !== 'up'
+                                            'text-green-600': direction(q) === 'up',
+                                            'text-red-500': direction(q) === 'down',
+                                            'text-muted': direction(q) === 'flat'
                                         }"
                                     >
                                         <span

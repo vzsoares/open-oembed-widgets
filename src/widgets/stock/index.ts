@@ -2,7 +2,7 @@ import Alpine from "alpinejs";
 import "../../lib/fit";
 import { applyThemeFromQuery } from "../../lib/theme";
 import { buildChartPaths, type ChartPaths, chartPoints } from "../btc/chart";
-import { btcRanges, type RangeOption } from "../manifest";
+import { type RangeOption, stockRanges } from "../manifest";
 import type { SeriesPoint, StockSeries } from "./stock";
 import { fetchStockSeries, parseStockConfig } from "./stock";
 
@@ -11,7 +11,7 @@ applyThemeFromQuery();
 const config = parseStockConfig(window.location.search);
 const rangeParam =
     new URLSearchParams(window.location.search).get("range") ?? "1m";
-const initialRange = btcRanges.some((r) => r.id === rangeParam)
+const initialRange = stockRanges.some((r) => r.id === rangeParam)
     ? rangeParam
     : "1m";
 
@@ -32,9 +32,9 @@ const dateFmt = new Intl.DateTimeFormat([], {
 });
 
 Alpine.data("stockWidget", () => ({
-    hasKey: config.apikey.length > 0,
+    hasKey: config.avkey.length > 0 || config.tdkey.length > 0,
     symbol: config.symbol,
-    ranges: btcRanges as RangeOption[],
+    ranges: stockRanges as RangeOption[],
     range: initialRange,
     series: null as StockSeries | null,
     loading: true,
@@ -48,7 +48,7 @@ Alpine.data("stockWidget", () => ({
             return;
         }
         void this.load();
-        this.timer = setInterval(() => void this.load(), 60_000);
+        this.timer = setInterval(() => void this.load(), 3_600_000);
     },
 
     destroy() {
@@ -58,11 +58,7 @@ Alpine.data("stockWidget", () => ({
     async load() {
         this.loading = true;
         try {
-            this.series = await fetchStockSeries(
-                config.symbol,
-                this.range,
-                config.apikey,
-            );
+            this.series = await fetchStockSeries(config, this.range);
             this.failed = false;
         } catch {
             if (this.series === null) this.failed = true;

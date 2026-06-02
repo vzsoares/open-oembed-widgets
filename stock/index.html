@@ -55,33 +55,37 @@
                         >
                             Stock Chart · Setup
                         </h1>
-                        <p class="text-sm font-bold">A free API key is required.</p>
-                        <ol
-                            class="list-inside list-decimal space-y-1.5 text-sm text-muted"
-                        >
-                            <li>
-                                Sign up at
+                        <p class="text-sm font-bold">
+                            Set at least one free API key.
+                        </p>
+                        <div class="space-y-2 text-sm text-muted">
+                            <div>
                                 <a
-                                    href="https://finnhub.io/register"
+                                    href="https://www.alphavantage.co/support/#api-key"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     class="font-mono text-fg underline underline-offset-2"
-                                    >finnhub.io</a
+                                    >alphavantage.co</a
                                 >
-                                — free, no credit card
-                            </li>
-                            <li>Copy your API key from the dashboard</li>
-                            <li>
-                                Add
-                                <span class="font-mono text-fg"
-                                    >?apikey=YOUR_KEY&amp;symbol=AAPL</span
+                                — 25 req/day · add
+                                <span class="font-mono text-fg">?avkey=KEY</span>
+                            </div>
+                            <div>
+                                <a
+                                    href="https://twelvedata.com/pricing"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="font-mono text-fg underline underline-offset-2"
+                                    >twelvedata.com</a
                                 >
-                                to the embed URL
-                            </li>
-                        </ol>
+                                — 800 credits/day · add
+                                <span class="font-mono text-fg">?tdkey=KEY</span>
+                            </div>
+                        </div>
                         <p class="text-[0.65rem] text-muted">
-                            Free tier: 60 req/min · your key is visible in the
-                            embed URL (fine for personal use)
+                            Both can be set — Alpha Vantage is tried first, Twelve
+                            Data is the fallback. Keys are visible in the embed URL
+                            (fine for personal use).
                         </p>
                     </div>
                 </template>

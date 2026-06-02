@@ -15,6 +15,14 @@ export const btcRanges: RangeOption[] = [
     { id: "1y", label: "1Y", days: 365 },
 ];
 
+/** Stock ranges — only daily/weekly resolutions (Finnhub free tier). */
+export const stockRanges: RangeOption[] = [
+    { id: "1w", label: "1W", days: 7 },
+    { id: "1m", label: "1M", days: 30 },
+    { id: "3m", label: "3M", days: 90 },
+    { id: "1y", label: "1Y", days: 365 },
+];
+
 export interface ParamOption {
     id: string;
     label: string;
@@ -583,7 +591,7 @@ export const widgets: WidgetDef[] = [
         id: "stock",
         title: "Stock Chart",
         description:
-            "Live price chart for any stock or ETF with a configurable range. Requires a free Finnhub API key (?symbol=AAPL&apikey=…).",
+            "Live price chart for any stock or ETF with a configurable range. Tries Alpha Vantage then Twelve Data — set at least one key (?symbol=AAPL&avkey=…&tdkey=…).",
         width: 480,
         height: 280,
         params: [
@@ -597,14 +605,21 @@ export const widgets: WidgetDef[] = [
             {
                 key: "range",
                 label: "Range",
-                options: btcRanges.map((r) => ({ id: r.id, label: r.label })),
+                options: stockRanges.map((r) => ({ id: r.id, label: r.label })),
                 default: "1m",
             },
             {
-                key: "apikey",
-                label: "API Key",
+                key: "avkey",
+                label: "AV Key",
                 type: "text",
-                placeholder: "finnhub.io free key",
+                placeholder: "alphavantage.co key",
+                default: "",
+            },
+            {
+                key: "tdkey",
+                label: "TD Key",
+                type: "text",
+                placeholder: "twelvedata.com key",
                 default: "",
             },
         ],
