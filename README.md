@@ -36,6 +36,8 @@ whatever box they're embedded in.
 | 💬 Quote            | `/quote/`     | A quote from a chosen collection (bundled).          |
 | 📖 Bible Verse      | `/bible/`     | Random verse in English or Portuguese.               |
 | 🗓️ Name Day         | `/nameday/`   | Today's name day(s); 6 locales (CZ/SK/FR/IT/ES/EN).  |
+| 📉 Stocks Ticker    | `/stocks/`    | Live prices for multiple stocks/ETFs with ▲/▼ and daily % change. Requires a free [Finnhub](https://finnhub.io/register) key. |
+| 📈 Stock Chart      | `/stock/`     | Live price chart for any stock or ETF, range 1D–1Y, with hover tooltip and H/L. Requires a free [Finnhub](https://finnhub.io/register) key. |
 
 ## 🔗 Embed
 
@@ -115,6 +117,17 @@ Per-widget options:
   day(s) from a bundled calendar (no API); the date renders in the locale's own
   language. fr/it/es are sanctorale-based (a few days show a feast rather than
   personal names); `en` is a loose anglicized set.
+- **Stocks Ticker** — `?symbols=NVDA,AAPL,MSFT,SPY` (comma-separated ticker
+  symbols, default `NVDA,AAPL,MSFT,SPY`) and `?apikey=YOUR_KEY` (required; get a
+  free key at [finnhub.io](https://finnhub.io/register), no credit card). Shows
+  symbol · price · ▲/▼ · daily % change. Refreshes every 60s. When no key is
+  set the widget shows setup instructions. Note: the key is visible in the embed
+  URL — the free tier (60 req/min) is fine for personal use.
+- **Stock Chart** — `?symbol=AAPL` (default `AAPL`) and `?apikey=YOUR_KEY`
+  (required; same Finnhub free key). Same chart UI as BTC: large price, change
+  badge (computed over the selected range), sparkline with hover tooltip, range
+  buttons 1D–1Y, and a today's H/L row. Also `?range=1d|1w|1m|3m|1y` (default
+  `1m`). Works with any US stock or ETF symbol (e.g. `SPY`, `QQQ`, `TSLA`).
 
 The gallery also has a **paste-a-URL** box: paste any widget URL above the cards
 to load its theme + options back into the UI for further editing.
@@ -171,7 +184,9 @@ to load its theme + options back into the UI for further editing.
 │       ├── links/            # index.ts, links.ts, links.test.ts
 │       ├── quote/            # index.ts, quote.ts, quotes.json, quote.test.ts
 │       ├── bible/            # index.ts, verse.ts, fallback.json, *.test.ts
-│       └── nameday/          # index.ts, nameday.ts, data.json, nameday.test.ts
+│       ├── nameday/          # index.ts, nameday.ts, data.json, nameday.test.ts
+│       ├── stocks/           # index.ts, stocks.ts, stocks.test.ts
+│       └── stock/            # index.ts, stock.ts, stock.test.ts
 ├── e2e/                      # Playwright end-to-end specs
 ├── scripts/gen-oembed.ts     # post-build oEmbed JSON generator
 ├── playwright.config.ts

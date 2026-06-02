@@ -17,6 +17,8 @@ test("gallery lists every widget", async ({ page }) => {
         "Timer",
         "Moon Phase",
         "Bible Verse",
+        "Stocks Ticker",
+        "Stock Chart",
     ]) {
         await expect(
             page.getByRole("heading", { name: title, exact: true }),
