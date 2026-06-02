@@ -1,3 +1,12 @@
+## v2.9.0
+
+### Features
+- improve setup instructions with bold typography and direct signup link
+- add stock chart and stocks ticker widgets
+
+### Chores
+- bump version to 2.9.0
+
 ## v2.8.3
 
 ### Bug Fixes
