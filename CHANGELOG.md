@@ -1,3 +1,11 @@
+## v2.10.0
+
+### Features
+- support multiple stock data providers with fallback chain
+
+### Chores
+- bump version to 2.10.0
+
 ## v2.9.1
 
 ### Documentation
