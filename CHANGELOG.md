@@ -1,3 +1,11 @@
+## v2.8.3
+
+### Bug Fixes
+- make price text responsive with clamp()
+
+### Chores
+- bump version to 2.8.3
+
 ## v2.8.2
 
 ### Features
