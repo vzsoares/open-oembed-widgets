@@ -1,3 +1,9 @@
+## v2.10.1
+
+### Chores
+- bump version to 2.10.1
+- update default stock symbols in stocks widget
+
 ## v2.10.0
 
 ### Features
