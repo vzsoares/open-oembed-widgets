@@ -1,3 +1,11 @@
+## v2.9.1
+
+### Documentation
+- document stocks ticker and chart widgets
+
+### Chores
+- bump version to 2.9.1
+
 ## v2.9.0
 
 ### Features
